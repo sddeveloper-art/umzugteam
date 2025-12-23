@@ -12,13 +12,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>DéménagementPro - Service de Déménagement Professionnel | Devis Gratuit</title>
+        <title>UmzugTeam365 - Professioneller Umzugsservice | Kostenloses Angebot</title>
         <meta 
           name="description" 
-          content="DéménagementPro : votre expert en déménagement résidentiel et professionnel. Plus de 25 ans d'expérience, devis gratuit, assurance complète. Demandez votre estimation en 2 minutes." 
+          content="UmzugTeam365: Ihr Experte für Privat- und Firmenumzüge. Über 25 Jahre Erfahrung, kostenloses Angebot, Vollversicherung. Fordern Sie Ihre Schätzung in 2 Minuten an." 
         />
-        <meta name="keywords" content="déménagement, déménageur, déménagement professionnel, garde-meubles, emballage, transport meubles" />
-        <link rel="canonical" href="https://demenagement-pro.fr" />
+        <meta name="keywords" content="Umzug, Umzugsunternehmen, professioneller Umzug, Möbellagerung, Verpackung, Möbeltransport, Berlin, Deutschland" />
+        <link rel="canonical" href="https://umzugteam365.de" />
+        <html lang="de" />
       </Helmet>
 
       <Header />

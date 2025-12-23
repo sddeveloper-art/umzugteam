@@ -2,49 +2,49 @@ import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Marie Dupont",
-    location: "Paris → Lyon",
+    name: "Maria Schmidt",
+    location: "Berlin → München",
     rating: 5,
-    text: "Équipe exceptionnelle ! Ils ont géré notre déménagement familial avec un professionnalisme remarquable. Tout était parfaitement emballé et rien n'a été endommagé. Je recommande vivement !",
-    date: "Novembre 2024",
+    text: "Außergewöhnliches Team! Sie haben unseren Familienumzug mit bemerkenswerter Professionalität abgewickelt. Alles war perfekt verpackt und nichts wurde beschädigt. Ich empfehle sie wärmstens!",
+    date: "November 2024",
   },
   {
-    name: "Jean-Pierre Martin",
-    location: "Marseille → Bordeaux",
+    name: "Hans-Peter Müller",
+    location: "Hamburg → Frankfurt",
     rating: 5,
-    text: "Déménagement d'entreprise réalisé un week-end. Équipe ponctuelle, efficace et très organisée. Le bureau était opérationnel dès le lundi matin. Service impeccable !",
-    date: "Octobre 2024",
+    text: "Firmenumzug an einem Wochenende durchgeführt. Pünktliches, effizientes und sehr organisiertes Team. Das Büro war am Montagmorgen betriebsbereit. Tadelloser Service!",
+    date: "Oktober 2024",
   },
   {
-    name: "Sophie Bernard",
-    location: "Toulouse → Nice",
+    name: "Sophie Weber",
+    location: "Köln → Stuttgart",
     rating: 5,
-    text: "Premier déménagement et vraiment une excellente expérience. L'équipe m'a guidée à chaque étape, le devis était précis et sans surprise. Merci pour ce service de qualité !",
-    date: "Septembre 2024",
+    text: "Erster Umzug und wirklich eine ausgezeichnete Erfahrung. Das Team hat mich bei jedem Schritt begleitet, das Angebot war präzise und ohne Überraschungen. Danke für diesen Qualitätsservice!",
+    date: "September 2024",
   },
   {
-    name: "Thomas Lefebvre",
-    location: "Lille → Strasbourg",
+    name: "Thomas Fischer",
+    location: "Düsseldorf → Dresden",
     rating: 5,
-    text: "Transport de mon piano à queue effectué avec une expertise rare. Emballage spécialisé, équipe dédiée et piano arrivé en parfait état. Professionnels jusqu'au bout !",
-    date: "Décembre 2024",
+    text: "Transport meines Flügels mit seltener Fachkenntnis durchgeführt. Spezialverpackung, engagiertes Team und Klavier in perfektem Zustand angekommen. Profis bis ins Detail!",
+    date: "Dezember 2024",
   },
 ];
 
 const TestimonialsSection = () => {
   return (
-    <section id="temoignages" className="py-24 bg-secondary">
+    <section id="bewertungen" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-accent font-semibold mb-4">
-            Témoignages
+            Kundenbewertungen
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Ce Que Disent Nos Clients
+            Was Unsere Kunden Sagen
           </h2>
           <p className="text-lg text-muted-foreground">
-            La satisfaction de nos clients est notre plus belle récompense. 
-            Découvrez leurs expériences avec notre équipe.
+            Die Zufriedenheit unserer Kunden ist unsere größte Auszeichnung. 
+            Entdecken Sie ihre Erfahrungen mit unserem Team.
           </p>
         </div>
 

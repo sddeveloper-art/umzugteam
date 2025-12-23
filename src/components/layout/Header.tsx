@@ -6,12 +6,12 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: "Accueil", href: "#accueil" },
-    { label: "Services", href: "#services" },
-    { label: "Avantages", href: "#avantages" },
-    { label: "Témoignages", href: "#temoignages" },
+    { label: "Startseite", href: "#startseite" },
+    { label: "Leistungen", href: "#leistungen" },
+    { label: "Vorteile", href: "#vorteile" },
+    { label: "Bewertungen", href: "#bewertungen" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "#contact" },
+    { label: "Kontakt", href: "#kontakt" },
   ];
 
   return (
@@ -20,17 +20,17 @@ const Header = () => {
       <div className="bg-primary text-primary-foreground py-2">
         <div className="container mx-auto px-4 flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm">
           <div className="flex items-center gap-6">
-            <a href="tel:+33123456789" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="tel:+4915166532563" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Phone className="w-4 h-4" />
-              <span>01 23 45 67 89</span>
+              <span>+49 151 66532563</span>
             </a>
-            <a href="mailto:contact@demenagement-pro.fr" className="flex items-center gap-2 hover:text-accent transition-colors">
+            <a href="mailto:office@umzugteam365.de" className="flex items-center gap-2 hover:text-accent transition-colors">
               <Mail className="w-4 h-4" />
-              <span>contact@demenagement-pro.fr</span>
+              <span>office@umzugteam365.de</span>
             </a>
           </div>
           <div className="text-primary-foreground/80">
-            Devis gratuit en 2 minutes
+            Kostenloses Angebot in 2 Minuten
           </div>
         </div>
       </div>
@@ -38,12 +38,12 @@ const Header = () => {
       {/* Main navigation */}
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <a href="#accueil" className="flex items-center gap-2">
+          <a href="#startseite" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-xl">D</span>
+              <span className="text-accent-foreground font-bold text-xl">U</span>
             </div>
             <span className="text-xl font-bold text-foreground">
-              Déménagement<span className="text-accent">Pro</span>
+              Umzug<span className="text-accent">Team365</span>
             </span>
           </a>
 
@@ -62,7 +62,7 @@ const Header = () => {
 
           <div className="hidden lg:block">
             <Button variant="accent" size="lg">
-              Devis Gratuit
+              Kostenloses Angebot
             </Button>
           </div>
 
@@ -70,7 +70,7 @@ const Header = () => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
+            aria-label="Menü umschalten"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -91,7 +91,7 @@ const Header = () => {
                 </a>
               ))}
               <Button variant="accent" className="mt-2">
-                Devis Gratuit
+                Kostenloses Angebot
               </Button>
             </div>
           </div>

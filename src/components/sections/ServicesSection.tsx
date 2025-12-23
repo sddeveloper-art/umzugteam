@@ -12,55 +12,55 @@ import {
 const services = [
   {
     icon: Truck,
-    title: "Déménagement Résidentiel",
-    description: "Service complet pour votre déménagement privé, du studio à la grande maison.",
-    features: ["Chargement & déchargement", "Transport sécurisé", "Équipe qualifiée"],
+    title: "Privatumzug",
+    description: "Komplettservice für Ihren privaten Umzug, vom Studio bis zum großen Haus.",
+    features: ["Be- & Entladen", "Sicherer Transport", "Qualifiziertes Team"],
   },
   {
     icon: Building,
-    title: "Déménagement Entreprise",
-    description: "Solutions sur mesure pour les bureaux, commerces et entreprises.",
-    features: ["Planification stratégique", "Minimum d'interruption", "Week-end possible"],
+    title: "Firmenumzug",
+    description: "Maßgeschneiderte Lösungen für Büros, Geschäfte und Unternehmen.",
+    features: ["Strategische Planung", "Minimale Unterbrechung", "Wochenende möglich"],
   },
   {
     icon: Package,
-    title: "Service d'Emballage",
-    description: "Emballage professionnel de vos biens avec matériaux de qualité.",
-    features: ["Cartons renforcés", "Protection bulles", "Étiquetage organisé"],
+    title: "Verpackungsservice",
+    description: "Professionelles Verpacken Ihrer Güter mit hochwertigen Materialien.",
+    features: ["Verstärkte Kartons", "Luftpolsterschutz", "Organisierte Beschriftung"],
   },
   {
     icon: Warehouse,
-    title: "Stockage & Garde-Meubles",
-    description: "Espaces de stockage sécurisés pour vos meubles et effets personnels.",
-    features: ["Sécurité 24/7", "Climat contrôlé", "Accès flexible"],
+    title: "Lagerung & Einlagerung",
+    description: "Sichere Lagerräume für Ihre Möbel und persönlichen Gegenstände.",
+    features: ["24/7 Sicherheit", "Klimakontrolle", "Flexibler Zugang"],
   },
   {
     icon: Sparkles,
-    title: "Nettoyage & Remise en État",
-    description: "Nettoyage complet de votre ancien ou nouveau logement.",
-    features: ["Nettoyage profond", "Produits écologiques", "État des lieux"],
+    title: "Reinigung & Renovierung",
+    description: "Komplette Reinigung Ihrer alten oder neuen Wohnung.",
+    features: ["Grundreinigung", "Umweltfreundliche Produkte", "Übergabeprotokoll"],
   },
   {
     icon: Piano,
-    title: "Objets Spéciaux",
-    description: "Transport spécialisé pour pianos, œuvres d'art et objets fragiles.",
-    features: ["Équipement adapté", "Équipe spécialisée", "Assurance renforcée"],
+    title: "Spezialtransporte",
+    description: "Spezialtransport für Klaviere, Kunstwerke und empfindliche Gegenstände.",
+    features: ["Spezialausrüstung", "Fachpersonal", "Erweiterte Versicherung"],
   },
 ];
 
 const ServicesSection = () => {
   return (
-    <section id="services" className="py-24 bg-secondary">
+    <section id="leistungen" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-accent font-semibold mb-4">
-            Nos Services
+            Unsere Leistungen
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Des Solutions Complètes Pour Votre Déménagement
+            Komplettlösungen Für Ihren Umzug
           </h2>
           <p className="text-lg text-muted-foreground">
-            De l'emballage au stockage, nous vous accompagnons à chaque étape avec professionnalisme et efficacité.
+            Von der Verpackung bis zur Lagerung begleiten wir Sie bei jedem Schritt mit Professionalität und Effizienz.
           </p>
         </div>
 
@@ -99,10 +99,10 @@ const ServicesSection = () => {
         <div className="mt-20 bg-primary rounded-2xl p-8 md:p-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: "15 000+", label: "Déménagements" },
-              { value: "98%", label: "Clients Satisfaits" },
-              { value: "25+", label: "Années d'Expérience" },
-              { value: "24/7", label: "Support Client" },
+              { value: "15.000+", label: "Umzüge" },
+              { value: "98%", label: "Zufriedene Kunden" },
+              { value: "25+", label: "Jahre Erfahrung" },
+              { value: "24/7", label: "Kundenservice" },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-3xl md:text-4xl font-bold text-accent mb-2">

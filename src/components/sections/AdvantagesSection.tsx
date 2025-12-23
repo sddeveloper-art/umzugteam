@@ -10,53 +10,53 @@ import {
 const advantages = [
   {
     icon: ShieldCheck,
-    title: "Assurance Complète",
-    description: "Tous vos biens sont assurés pendant le transport. Tranquillité d'esprit garantie.",
+    title: "Vollversicherung",
+    description: "Alle Ihre Güter sind während des Transports versichert. Garantierte Sicherheit.",
   },
   {
     icon: Wallet,
-    title: "Prix Transparents",
-    description: "Devis détaillé sans frais cachés. Vous savez exactement ce que vous payez.",
+    title: "Transparente Preise",
+    description: "Detailliertes Angebot ohne versteckte Kosten. Sie wissen genau, was Sie bezahlen.",
   },
   {
     icon: Clock,
-    title: "Ponctualité",
-    description: "Respect strict des horaires convenus. Votre temps est précieux.",
+    title: "Pünktlichkeit",
+    description: "Strikte Einhaltung der vereinbarten Zeiten. Ihre Zeit ist wertvoll.",
   },
   {
     icon: Users,
-    title: "Équipe Expérimentée",
-    description: "Personnel formé et qualifié pour manipuler vos biens avec le plus grand soin.",
+    title: "Erfahrenes Team",
+    description: "Geschultes und qualifiziertes Personal für sorgfältigen Umgang mit Ihren Gütern.",
   },
   {
     icon: HeartHandshake,
-    title: "Service Personnalisé",
-    description: "Chaque déménagement est unique. Nous adaptons nos services à vos besoins.",
+    title: "Persönlicher Service",
+    description: "Jeder Umzug ist einzigartig. Wir passen unsere Leistungen an Ihre Bedürfnisse an.",
   },
   {
     icon: Award,
-    title: "Qualité Certifiée",
-    description: "Entreprise certifiée avec plus de 25 ans d'expérience dans le secteur.",
+    title: "Zertifizierte Qualität",
+    description: "Zertifiziertes Unternehmen mit über 25 Jahren Erfahrung in der Branche.",
   },
 ];
 
 const AdvantagesSection = () => {
   return (
-    <section id="avantages" className="py-24 bg-background">
+    <section id="vorteile" className="py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left content */}
           <div>
             <span className="inline-block text-accent font-semibold mb-4">
-              Pourquoi Nous Choisir
+              Warum Uns Wählen
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              L'Excellence Au Service De Votre Déménagement
+              Exzellenz Im Dienste Ihres Umzugs
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Depuis plus de 25 ans, nous mettons notre expertise au service des particuliers 
-              et des entreprises pour des déménagements réussis. Notre engagement : 
-              votre satisfaction totale.
+              Seit über 25 Jahren stellen wir unsere Expertise in den Dienst von Privatkunden 
+              und Unternehmen für erfolgreiche Umzüge. Unser Versprechen: 
+              Ihre vollständige Zufriedenheit.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">
@@ -88,21 +88,21 @@ const AdvantagesSection = () => {
               <div className="space-y-4">
                 <div className="bg-primary rounded-2xl p-8 text-primary-foreground">
                   <div className="text-4xl font-bold mb-2">25+</div>
-                  <div className="text-primary-foreground/80">Années d'expérience</div>
+                  <div className="text-primary-foreground/80">Jahre Erfahrung</div>
                 </div>
                 <div className="bg-accent rounded-2xl p-8 text-accent-foreground">
                   <Award className="w-10 h-10 mb-4" />
-                  <div className="font-semibold">Certifié Qualité</div>
+                  <div className="font-semibold">Qualitätszertifiziert</div>
                 </div>
               </div>
               <div className="space-y-4 mt-8">
                 <div className="bg-secondary rounded-2xl p-8">
                   <HeartHandshake className="w-10 h-10 text-accent mb-4" />
-                  <div className="font-semibold text-foreground">Service Client Dédié</div>
+                  <div className="font-semibold text-foreground">Persönlicher Kundenservice</div>
                 </div>
                 <div className="bg-primary rounded-2xl p-8 text-primary-foreground">
                   <div className="text-4xl font-bold mb-2">98%</div>
-                  <div className="text-primary-foreground/80">Clients satisfaits</div>
+                  <div className="text-primary-foreground/80">Zufriedene Kunden</div>
                 </div>
               </div>
             </div>

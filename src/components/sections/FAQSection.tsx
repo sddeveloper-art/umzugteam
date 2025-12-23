@@ -7,36 +7,36 @@ import {
 
 const faqs = [
   {
-    question: "Comment obtenir un devis pour mon déménagement ?",
-    answer: "Vous pouvez obtenir un devis gratuit en remplissant notre formulaire en ligne en haut de cette page, ou en nous appelant directement au 01 23 45 67 89. Un conseiller vous rappellera sous 2 heures pour affiner l'estimation selon vos besoins spécifiques.",
+    question: "Wie erhalte ich ein Angebot für meinen Umzug?",
+    answer: "Sie können ein kostenloses Angebot erhalten, indem Sie unser Online-Formular oben auf dieser Seite ausfüllen oder uns direkt unter +49 151 66532563 anrufen. Ein Berater wird Sie innerhalb von 2 Stunden zurückrufen, um die Schätzung nach Ihren spezifischen Bedürfnissen zu verfeinern.",
   },
   {
-    question: "Mes biens sont-ils assurés pendant le déménagement ?",
-    answer: "Oui, tous vos biens sont couverts par notre assurance professionnelle pendant le transport. Pour les objets de valeur exceptionnelle (œuvres d'art, antiquités), nous proposons une assurance complémentaire ad valorem. Le détail des garanties est inclus dans votre devis.",
+    question: "Sind meine Güter während des Umzugs versichert?",
+    answer: "Ja, alle Ihre Güter sind während des Transports durch unsere Berufsversicherung abgedeckt. Für Gegenstände von außergewöhnlichem Wert (Kunstwerke, Antiquitäten) bieten wir eine zusätzliche Wertversicherung an. Die Garantiedetails sind in Ihrem Angebot enthalten.",
   },
   {
-    question: "Proposez-vous un service d'emballage ?",
-    answer: "Absolument ! Nous offrons un service d'emballage complet : fourniture des cartons et matériaux, emballage professionnel de vos affaires, protection spéciale pour objets fragiles, et étiquetage organisé. Ce service peut être partiel ou total selon vos préférences.",
+    question: "Bieten Sie einen Verpackungsservice an?",
+    answer: "Absolut! Wir bieten einen kompletten Verpackungsservice: Lieferung von Kartons und Materialien, professionelles Verpacken Ihrer Sachen, Spezialschutz für zerbrechliche Gegenstände und organisierte Beschriftung. Dieser Service kann je nach Ihren Wünschen teil- oder vollständig sein.",
   },
   {
-    question: "Quels sont vos délais de préavis ?",
-    answer: "Pour un déménagement standard, nous recommandons de réserver 2 à 3 semaines à l'avance. Pour les périodes chargées (fin de mois, été), prévoyez 4 à 6 semaines. En cas d'urgence, nous faisons notre maximum pour vous accommoder.",
+    question: "Wie lange im Voraus sollte ich buchen?",
+    answer: "Für einen Standardumzug empfehlen wir eine Reservierung 2 bis 3 Wochen im Voraus. In Stoßzeiten (Monatsende, Sommer) planen Sie 4 bis 6 Wochen ein. Bei Eilaufträgen tun wir unser Bestes, um Ihnen entgegenzukommen.",
   },
   {
-    question: "Proposez-vous des déménagements le week-end ?",
-    answer: "Oui, nous proposons des créneaux le samedi et, sur demande, le dimanche. Cette flexibilité est particulièrement appréciée par les entreprises souhaitant minimiser l'impact sur leur activité. Des frais supplémentaires peuvent s'appliquer.",
+    question: "Bieten Sie Wochenendumzüge an?",
+    answer: "Ja, wir bieten Termine am Samstag und auf Anfrage auch am Sonntag an. Diese Flexibilität wird besonders von Unternehmen geschätzt, die die Auswirkungen auf ihren Betrieb minimieren möchten. Es können zusätzliche Gebühren anfallen.",
   },
   {
-    question: "Que se passe-t-il en cas de retard ou de problème ?",
-    answer: "Nous nous engageons sur la ponctualité. En cas de retard exceptionnel (trafic, météo), vous êtes immédiatement prévenu. Si un dommage survient, notre procédure de réclamation est simple et rapide : déclaration sous 48h, expertise et indemnisation selon les garanties.",
+    question: "Was passiert bei Verspätung oder Problemen?",
+    answer: "Wir verpflichten uns zur Pünktlichkeit. Bei ausnahmsweisen Verspätungen (Verkehr, Wetter) werden Sie sofort informiert. Bei Schäden ist unser Reklamationsverfahren einfach und schnell: Meldung innerhalb von 48 Stunden, Begutachtung und Entschädigung gemäß den Garantien.",
   },
   {
-    question: "Effectuez-vous des déménagements internationaux ?",
-    answer: "Oui, nous réalisons des déménagements dans toute l'Europe et à l'international. Nous gérons les formalités douanières, le transport maritime ou aérien selon la destination, et vous accompagnons dans toutes les démarches administratives.",
+    question: "Führen Sie internationale Umzüge durch?",
+    answer: "Ja, wir führen Umzüge in ganz Europa und international durch. Wir kümmern uns um Zollformalitäten, See- oder Lufttransport je nach Zielort und begleiten Sie bei allen administrativen Schritten.",
   },
   {
-    question: "Comment fonctionne le stockage de meubles ?",
-    answer: "Nos garde-meubles sont sécurisés 24/7, climatisés et accessibles sur rendez-vous. Vous pouvez stocker vos biens pour une durée minimale d'un mois, renouvelable. Un inventaire détaillé est établi à l'entrée pour garantir la traçabilité.",
+    question: "Wie funktioniert die Möbellagerung?",
+    answer: "Unsere Lagerräume sind 24/7 gesichert, klimatisiert und nach Terminvereinbarung zugänglich. Sie können Ihre Güter für eine Mindestdauer von einem Monat lagern, verlängerbar. Bei der Einlagerung wird ein detailliertes Inventar erstellt, um die Rückverfolgbarkeit zu gewährleisten.",
   },
 ];
 
@@ -49,11 +49,11 @@ const FAQSection = () => {
             FAQ
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Questions Fréquentes
+            Häufig Gestellte Fragen
           </h2>
           <p className="text-lg text-muted-foreground">
-            Trouvez rapidement les réponses à vos questions. 
-            Notre équipe reste disponible pour toute précision.
+            Finden Sie schnell Antworten auf Ihre Fragen. 
+            Unser Team steht für weitere Auskünfte zur Verfügung.
           </p>
         </div>
 
