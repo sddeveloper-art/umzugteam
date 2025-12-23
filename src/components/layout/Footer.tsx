@@ -11,15 +11,15 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-accent-foreground font-bold text-xl">D</span>
+                <span className="text-accent-foreground font-bold text-xl">U</span>
               </div>
               <span className="text-xl font-bold">
-                Déménagement<span className="text-accent">Pro</span>
+                Umzug<span className="text-accent">Team365</span>
               </span>
             </div>
             <p className="text-background/70 mb-6">
-              Votre partenaire de confiance pour tous vos déménagements depuis plus de 25 ans. 
-              Qualité, fiabilité et satisfaction garanties.
+              Ihr vertrauenswürdiger Partner für alle Umzüge seit über 25 Jahren. 
+              Qualität, Zuverlässigkeit und garantierte Zufriedenheit.
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center hover:bg-accent transition-colors">
@@ -36,18 +36,18 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Nos Services</h4>
+            <h4 className="text-lg font-semibold mb-6">Unsere Leistungen</h4>
             <ul className="space-y-3">
               {[
-                "Déménagement résidentiel",
-                "Déménagement entreprise",
-                "Service d'emballage",
-                "Stockage & garde-meubles",
-                "Nettoyage",
-                "Objets spéciaux",
+                "Privatumzug",
+                "Firmenumzug",
+                "Verpackungsservice",
+                "Lagerung & Einlagerung",
+                "Reinigung",
+                "Spezialtransporte",
               ].map((service) => (
                 <li key={service}>
-                  <a href="#services" className="text-background/70 hover:text-accent transition-colors">
+                  <a href="#leistungen" className="text-background/70 hover:text-accent transition-colors">
                     {service}
                   </a>
                 </li>
@@ -57,15 +57,15 @@ const Footer = () => {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Liens Utiles</h4>
+            <h4 className="text-lg font-semibold mb-6">Nützliche Links</h4>
             <ul className="space-y-3">
               {[
-                { label: "À propos", href: "#avantages" },
-                { label: "Nos garanties", href: "#avantages" },
-                { label: "Témoignages", href: "#temoignages" },
+                { label: "Über uns", href: "#vorteile" },
+                { label: "Unsere Garantien", href: "#vorteile" },
+                { label: "Bewertungen", href: "#bewertungen" },
                 { label: "FAQ", href: "#faq" },
-                { label: "Contact", href: "#contact" },
-                { label: "Devis gratuit", href: "#accueil" },
+                { label: "Kontakt", href: "#kontakt" },
+                { label: "Kostenloses Angebot", href: "#startseite" },
               ].map((link) => (
                 <li key={link.label}>
                   <a href={link.href} className="text-background/70 hover:text-accent transition-colors">
@@ -78,24 +78,24 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-semibold mb-6">Contact</h4>
+            <h4 className="text-lg font-semibold mb-6">Kontakt</h4>
             <ul className="space-y-4">
               <li>
-                <a href="tel:+33123456789" className="flex items-center gap-3 text-background/70 hover:text-accent transition-colors">
+                <a href="tel:+4915166532563" className="flex items-center gap-3 text-background/70 hover:text-accent transition-colors">
                   <Phone className="w-5 h-5 text-accent" />
-                  01 23 45 67 89
+                  +49 151 66532563
                 </a>
               </li>
               <li>
-                <a href="mailto:contact@demenagement-pro.fr" className="flex items-center gap-3 text-background/70 hover:text-accent transition-colors">
+                <a href="mailto:office@umzugteam365.de" className="flex items-center gap-3 text-background/70 hover:text-accent transition-colors">
                   <Mail className="w-5 h-5 text-accent" />
-                  contact@demenagement-pro.fr
+                  office@umzugteam365.de
                 </a>
               </li>
               <li className="flex items-start gap-3 text-background/70">
                 <MapPin className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                123 Avenue du Déménagement<br />
-                75001 Paris, France
+                Musterstraße 123<br />
+                10115 Berlin, Deutschland
               </li>
             </ul>
           </div>
@@ -105,12 +105,12 @@ const Footer = () => {
         <div className="border-t border-background/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-background/60">
             <div>
-              © {currentYear} DéménagementPro. Tous droits réservés.
+              © {currentYear} UmzugTeam365. Alle Rechte vorbehalten.
             </div>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-accent transition-colors">Mentions légales</a>
-              <a href="#" className="hover:text-accent transition-colors">Politique de confidentialité</a>
-              <a href="#" className="hover:text-accent transition-colors">CGV</a>
+              <a href="#" className="hover:text-accent transition-colors">Impressum</a>
+              <a href="#" className="hover:text-accent transition-colors">Datenschutz</a>
+              <a href="#" className="hover:text-accent transition-colors">AGB</a>
             </div>
           </div>
         </div>
