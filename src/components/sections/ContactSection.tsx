@@ -5,6 +5,30 @@ const ContactSection = () => {
   return (
     <section id="kontakt" className="py-24 bg-primary">
       <div className="container mx-auto px-4">
+        {/* Map Section */}
+        <div className="mb-16">
+          <div className="text-center text-primary-foreground mb-8">
+            <span className="inline-block text-accent font-semibold mb-4">
+              Unser Servicegebiet
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Wir Sind In Ganz Berlin & Brandenburg Für Sie Da
+            </h2>
+          </div>
+          <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d310844.2239338461!2d13.144550649999999!3d52.50651305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sBerlin%2C%20Germany!5e0!3m2!1sen!2s!4v1703865600000!5m2!1sen!2s"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Servicegebiet Berlin & Brandenburg"
+            />
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left - Contact info */}
           <div className="text-primary-foreground">
