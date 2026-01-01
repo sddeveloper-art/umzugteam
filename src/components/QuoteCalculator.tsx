@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Calculator, MapPin, Home, Truck, Package, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 interface FormData {
   fromCity: string;
   toCity: string;
@@ -62,6 +62,7 @@ const calculateDistance = (from: string, to: string): number => {
 };
 
 const QuoteCalculator = () => {
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     fromCity: "Berlin",
@@ -144,16 +145,27 @@ const QuoteCalculator = () => {
 
       if (error) {
         console.error("Error sending quote:", error);
-        toast.error("Fehler beim Senden der Anfrage. Bitte versuchen Sie es erneut.");
+        toast({
+          title: "Fehler",
+          description: "Fehler beim Senden der Anfrage. Bitte versuchen Sie es erneut.",
+          variant: "destructive",
+        });
         return;
       }
 
       console.log("Quote sent successfully:", data);
-      toast.success("Ihre Anfrage wurde erfolgreich gesendet!");
+      toast({
+        title: "Erfolg!",
+        description: "Ihre Anfrage wurde erfolgreich gesendet!",
+      });
       setSubmitted(true);
     } catch (err) {
       console.error("Error:", err);
-      toast.error("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+      toast({
+        title: "Fehler",
+        description: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
