@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Calculator, MapPin, Home, Truck, Package, ArrowRight, CheckCircle } from "lucide-react";
-
+import { Calculator, MapPin, Home, Truck, Package, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 interface FormData {
   fromCity: string;
   toCity: string;
@@ -77,7 +78,7 @@ const QuoteCalculator = () => {
     notes: "",
   });
   const [submitted, setSubmitted] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const updateFormData = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -113,9 +114,49 @@ const QuoteCalculator = () => {
     };
   }, [formData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    
+    if (!calculation) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('send-quote-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          fromCity: formData.fromCity,
+          toCity: formData.toCity,
+          apartmentSize: apartmentSizes.find(s => s.value === formData.apartmentSize)?.label || formData.apartmentSize,
+          floor: parseInt(formData.floor) || 0,
+          hasElevator: formData.hasElevator,
+          needsPacking: formData.packingService,
+          needsAssembly: formData.furnitureAssembly,
+          preferredDate: formData.preferredDate,
+          estimatedPrice: Math.round(calculation.total),
+          distance: calculation.distance,
+          volume: calculation.volume,
+          message: formData.notes,
+        },
+      });
+
+      if (error) {
+        console.error("Error sending quote:", error);
+        toast.error("Fehler beim Senden der Anfrage. Bitte versuchen Sie es erneut.");
+        return;
+      }
+
+      console.log("Quote sent successfully:", data);
+      toast.success("Ihre Anfrage wurde erfolgreich gesendet!");
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error:", err);
+      toast.error("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -504,8 +545,15 @@ const QuoteCalculator = () => {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
-            <Button type="submit" variant="accent" size="lg">
-              Unverbindliches Angebot anfordern
+            <Button type="submit" variant="accent" size="lg" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Wird gesendet...
+                </>
+              ) : (
+                "Unverbindliches Angebot anfordern"
+              )}
             </Button>
           )}
         </div>
