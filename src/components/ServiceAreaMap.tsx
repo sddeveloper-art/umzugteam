@@ -1,140 +1,53 @@
-import { useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
-import * as L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-const createCustomIcon = (color: string): L.DivIcon => {
-  return L.divIcon({
-    className: "custom-marker",
-    html: `
-      <div style="
-        background-color: ${color};
-        width: 32px;
-        height: 32px;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
-        border: 3px solid white;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      ">
-        <div style="
-          width: 10px;
-          height: 10px;
-          background: white;
-          border-radius: 50%;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        "></div>
-      </div>
-    `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
-};
+import { MapPin } from "lucide-react";
 
 interface ServiceArea {
   name: string;
-  position: [number, number];
   description: string;
   isMain?: boolean;
 }
 
 const serviceAreas: ServiceArea[] = [
-  {
-    name: "Berlin Mitte",
-    position: [52.52, 13.405],
-    description: "Hauptstandort - Zentrale Berlin",
-    isMain: true,
-  },
-  {
-    name: "Charlottenburg",
-    position: [52.5167, 13.3],
-    description: "Westliches Berlin",
-  },
-  {
-    name: "Prenzlauer Berg",
-    position: [52.5388, 13.4244],
-    description: "Beliebtes Wohngebiet",
-  },
-  {
-    name: "Kreuzberg",
-    position: [52.497, 13.403],
-    description: "Vielfältiger Bezirk",
-  },
-  {
-    name: "Potsdam",
-    position: [52.3906, 13.0645],
-    description: "Brandenburg - Erweiterte Zone",
-  },
-  {
-    name: "Spandau",
-    position: [52.5352, 13.1995],
-    description: "Westlicher Bezirk",
-  },
-  {
-    name: "Köpenick",
-    position: [52.4433, 13.5756],
-    description: "Südöstliches Berlin",
-  },
-  {
-    name: "Reinickendorf",
-    position: [52.5922, 13.3376],
-    description: "Nördliches Berlin",
-  },
+  { name: "Berlin Mitte", description: "Hauptstandort - Zentrale Berlin", isMain: true },
+  { name: "Charlottenburg", description: "Westliches Berlin" },
+  { name: "Prenzlauer Berg", description: "Beliebtes Wohngebiet" },
+  { name: "Kreuzberg", description: "Vielfältiger Bezirk" },
+  { name: "Potsdam", description: "Brandenburg - Erweiterte Zone" },
+  { name: "Spandau", description: "Westlicher Bezirk" },
+  { name: "Köpenick", description: "Südöstliches Berlin" },
+  { name: "Reinickendorf", description: "Nördliches Berlin" },
 ];
 
 const ServiceAreaMap = () => {
-  const centerPosition: [number, number] = [52.52, 13.405];
-
-  const { mainIcon, secondaryIcon } = useMemo(() => {
-    return {
-      mainIcon: createCustomIcon("#F97316"),
-      secondaryIcon: createCustomIcon("#1E3A5F"),
-    };
-  }, []);
-
   return (
-    <MapContainer
-      center={centerPosition}
-      zoom={10}
-      scrollWheelZoom={false}
-      className="w-full h-full rounded-2xl"
-      style={{ minHeight: "400px" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <div className="w-full h-full relative">
+      {/* OpenStreetMap iframe embed */}
+      <iframe
+        title="UmzugTeam365 Servicegebiet Berlin"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=12.8%2C52.3%2C13.8%2C52.7&amp;layer=mapnik&amp;marker=52.52%2C13.405"
+        className="w-full h-full border-0 rounded-2xl"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
       />
-
-      <Circle
-        center={centerPosition}
-        radius={25000}
-        pathOptions={{
-          color: "#F97316",
-          fillColor: "#F97316",
-          fillOpacity: 0.1,
-          weight: 2,
-        }}
-      />
-
-      {serviceAreas.map((area) => (
-        <Marker key={area.name} position={area.position} icon={area.isMain ? mainIcon : secondaryIcon}>
-          <Popup>
-            <div className="text-center p-1">
-              <h3 className="font-bold text-primary text-lg">{area.name}</h3>
-              <p className="text-muted-foreground text-sm">{area.description}</p>
-              {area.isMain && (
-                <span className="inline-block mt-2 px-2 py-1 bg-accent text-white text-xs rounded-full">
-                  Hauptstandort
-                </span>
-              )}
+      
+      {/* Overlay with service areas */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+        <div className="flex flex-wrap gap-3 justify-center">
+          {serviceAreas.map((area) => (
+            <div
+              key={area.name}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm ${
+                area.isMain
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-white/20 text-white backdrop-blur-sm"
+              }`}
+            >
+              <MapPin className="w-3 h-3" />
+              <span>{area.name}</span>
             </div>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
