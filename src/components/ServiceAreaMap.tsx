@@ -1,11 +1,11 @@
-import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import * as L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-// Fix for default marker icons in Leaflet with Vite
-const createCustomIcon = (color: string) => {
+const createCustomIcon = (color: string): L.DivIcon => {
   return L.divIcon({
-    className: 'custom-marker',
+    className: "custom-marker",
     html: `
       <div style="
         background-color: ${color};
@@ -34,9 +34,6 @@ const createCustomIcon = (color: string) => {
   });
 };
 
-const mainIcon = createCustomIcon('#F97316'); // accent orange
-const secondaryIcon = createCustomIcon('#1E3A5F'); // primary blue
-
 interface ServiceArea {
   name: string;
   position: [number, number];
@@ -47,13 +44,13 @@ interface ServiceArea {
 const serviceAreas: ServiceArea[] = [
   {
     name: "Berlin Mitte",
-    position: [52.5200, 13.4050],
+    position: [52.52, 13.405],
     description: "Hauptstandort - Zentrale Berlin",
     isMain: true,
   },
   {
     name: "Charlottenburg",
-    position: [52.5167, 13.3000],
+    position: [52.5167, 13.3],
     description: "Westliches Berlin",
   },
   {
@@ -63,7 +60,7 @@ const serviceAreas: ServiceArea[] = [
   },
   {
     name: "Kreuzberg",
-    position: [52.4970, 13.4030],
+    position: [52.497, 13.403],
     description: "Vielfältiger Bezirk",
   },
   {
@@ -89,7 +86,14 @@ const serviceAreas: ServiceArea[] = [
 ];
 
 const ServiceAreaMap = () => {
-  const centerPosition: [number, number] = [52.5200, 13.4050];
+  const centerPosition: [number, number] = [52.52, 13.405];
+
+  const { mainIcon, secondaryIcon } = useMemo(() => {
+    return {
+      mainIcon: createCustomIcon("#F97316"),
+      secondaryIcon: createCustomIcon("#1E3A5F"),
+    };
+  }, []);
 
   return (
     <MapContainer
@@ -97,32 +101,26 @@ const ServiceAreaMap = () => {
       zoom={10}
       scrollWheelZoom={false}
       className="w-full h-full rounded-2xl"
-      style={{ minHeight: '400px' }}
+      style={{ minHeight: "400px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      
-      {/* Service area circle */}
+
       <Circle
         center={centerPosition}
         radius={25000}
         pathOptions={{
-          color: '#F97316',
-          fillColor: '#F97316',
+          color: "#F97316",
+          fillColor: "#F97316",
           fillOpacity: 0.1,
           weight: 2,
         }}
       />
 
-      {/* Markers for each service area */}
       {serviceAreas.map((area) => (
-        <Marker
-          key={area.name}
-          position={area.position}
-          icon={area.isMain ? mainIcon : secondaryIcon}
-        >
+        <Marker key={area.name} position={area.position} icon={area.isMain ? mainIcon : secondaryIcon}>
           <Popup>
             <div className="text-center p-1">
               <h3 className="font-bold text-primary text-lg">{area.name}</h3>
