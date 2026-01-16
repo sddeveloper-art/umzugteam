@@ -30,7 +30,7 @@ const ContactSection = () => {
               <ServiceAreaMap />
             </Suspense>
           </div>
-          
+
           {/* Legend */}
           <div className="flex flex-wrap justify-center gap-6 mt-6">
             <div className="flex items-center gap-2 text-primary-foreground">
