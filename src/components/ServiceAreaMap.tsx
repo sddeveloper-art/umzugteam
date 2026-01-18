@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, useMap } from "react-leaflet";
 import { MapPin } from "lucide-react";
-import * as L from "leaflet";
+import * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useMemo, useEffect } from "react";
 
@@ -33,24 +33,31 @@ const serviceAreas: ServiceArea[] = [
 
 const BERLIN_CENTER: [number, number] = [52.52, 13.405];
 
+// Leaflet is published as CJS/UMD; Vite may expose it as either a module namespace or default export.
+const L: any = (Leaflet as any).default ?? Leaflet;
+
 // Component to fit bounds when user location changes
 const FitBoundsOnRoute = ({ userLocation }: { userLocation: UserLocation }) => {
   const map = useMap();
-  
+
   useEffect(() => {
+    if (!L?.latLngBounds || typeof map?.fitBounds !== "function") return;
+
     const bounds = L.latLngBounds([
       [userLocation.lat, userLocation.lng],
-      BERLIN_CENTER
+      BERLIN_CENTER,
     ]);
+
     map.fitBounds(bounds, { padding: [50, 50] });
   }, [map, userLocation.lat, userLocation.lng]);
-  
+
   return null;
 };
 
 const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
-  // Create custom icon for markers
+  // Create custom icon for markers (guarded to avoid runtime crashes if Leaflet import shape differs)
   const customIcon = useMemo(() => {
+    if (!L?.divIcon) return undefined;
     return L.divIcon({
       className: "custom-marker",
       html: `<div style="background-color: hsl(34, 100%, 50%); width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>`,
@@ -60,6 +67,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
   }, []);
 
   const mainIcon = useMemo(() => {
+    if (!L?.divIcon) return undefined;
     return L.divIcon({
       className: "custom-marker-main",
       html: `<div style="background-color: hsl(34, 100%, 50%); width: 32px; height: 32px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.4);"></div>`,
@@ -69,6 +77,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
   }, []);
 
   const userIcon = useMemo(() => {
+    if (!L?.divIcon) return undefined;
     return L.divIcon({
       className: "custom-marker-user",
       html: `<div style="background-color: #3b82f6; width: 28px; height: 28px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;">
