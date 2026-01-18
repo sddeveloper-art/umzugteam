@@ -141,7 +141,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
         {userLocation && (
           <Marker
             position={[userLocation.lat, userLocation.lng]}
-            icon={userIcon}
+            {...(userIcon ? { icon: userIcon } : {})}
           >
             <Popup>
               <div className="text-center">
@@ -154,20 +154,24 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
           </Marker>
         )}
         
-        {serviceAreas.map((area) => (
-          <Marker
-            key={area.name}
-            position={area.position}
-            icon={area.isMain ? mainIcon : customIcon}
-          >
-            <Popup>
-              <div className="text-center">
-                <strong className="text-primary">{area.name}</strong>
-                <p className="text-sm text-muted-foreground">{area.description}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {serviceAreas.map((area) => {
+          const icon = area.isMain ? mainIcon : customIcon;
+
+          return (
+            <Marker
+              key={area.name}
+              position={area.position}
+              {...(icon ? { icon } : {})}
+            >
+              <Popup>
+                <div className="text-center">
+                  <strong className="text-primary">{area.name}</strong>
+                  <p className="text-sm text-muted-foreground">{area.description}</p>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
       
       {/* Overlay with service areas */}
