@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { Suspense, lazy } from "react";
+import RouteCalculator from "@/components/RouteCalculator";
 
 const ServiceAreaMap = lazy(() => import("@/components/ServiceAreaMap"));
 
@@ -31,20 +32,23 @@ const ContactSection = () => {
             </Suspense>
           </div>
 
-          {/* Legend */}
-          <div className="flex flex-wrap justify-center gap-6 mt-6">
-            <div className="flex items-center gap-2 text-primary-foreground">
-              <div className="w-4 h-4 rounded-full bg-accent" />
-              <span className="text-sm">Hauptstandort</span>
+          {/* Legend and Route Calculator */}
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <div className="flex flex-wrap justify-center md:justify-start gap-6">
+              <div className="flex items-center gap-2 text-primary-foreground">
+                <div className="w-4 h-4 rounded-full bg-accent" />
+                <span className="text-sm">Hauptstandort</span>
+              </div>
+              <div className="flex items-center gap-2 text-primary-foreground">
+                <div className="w-4 h-4 rounded-full bg-primary-foreground" />
+                <span className="text-sm">Servicebereiche</span>
+              </div>
+              <div className="flex items-center gap-2 text-primary-foreground">
+                <div className="w-4 h-4 rounded-full border-2 border-accent bg-accent/20" />
+                <span className="text-sm">Erweitertes Gebiet (25km)</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 text-primary-foreground">
-              <div className="w-4 h-4 rounded-full bg-primary-foreground" />
-              <span className="text-sm">Servicebereiche</span>
-            </div>
-            <div className="flex items-center gap-2 text-primary-foreground">
-              <div className="w-4 h-4 rounded-full border-2 border-accent bg-accent/20" />
-              <span className="text-sm">Erweitertes Gebiet (25km)</span>
-            </div>
+            <RouteCalculator />
           </div>
         </div>
 
