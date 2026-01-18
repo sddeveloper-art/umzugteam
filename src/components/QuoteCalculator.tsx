@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Calculator, MapPin, Home, Truck, Package, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useCompetitors, calculateCompetitorPrices } from "@/hooks/useCompetitors";
+import PriceComparisonBadge from "@/components/PriceComparisonBadge";
 interface FormData {
   fromCity: string;
   toCity: string;
@@ -63,6 +65,7 @@ const calculateDistance = (from: string, to: string): number => {
 
 const QuoteCalculator = () => {
   const { toast } = useToast();
+  const { data: competitors = [] } = useCompetitors();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     fromCity: "Berlin",
@@ -114,6 +117,18 @@ const QuoteCalculator = () => {
       volume: size.volume,
     };
   }, [formData]);
+
+  // Calculate competitor price comparisons
+  const priceComparisons = useMemo(() => {
+    if (!calculation || competitors.length === 0) return [];
+    return calculateCompetitorPrices(
+      competitors,
+      calculation.total,
+      calculation.basePrice,
+      calculation.distanceCost,
+      calculation.floorCost
+    );
+  }, [calculation, competitors]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -443,6 +458,12 @@ const QuoteCalculator = () => {
                     </div>
                   </div>
                 </div>
+                
+                {/* Price comparison badge */}
+                <PriceComparisonBadge 
+                  comparisons={priceComparisons} 
+                  ourPrice={calculation.total} 
+                />
               </div>
             )}
           </div>
@@ -522,16 +543,24 @@ const QuoteCalculator = () => {
 
             {/* Final price summary */}
             {calculation && (
-              <div className="bg-accent/10 rounded-xl p-6 flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Geschätzter Gesamtpreis</p>
-                  <p className="text-3xl font-bold text-accent">{calculation.total.toFixed(2)} €</p>
+              <>
+                <div className="bg-accent/10 rounded-xl p-6 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Geschätzter Gesamtpreis</p>
+                    <p className="text-3xl font-bold text-accent">{calculation.total.toFixed(2)} €</p>
+                  </div>
+                  <div className="text-right text-sm text-muted-foreground">
+                    <p>{formData.fromCity} → {formData.toCity}</p>
+                    <p>{calculation.distance} km • {calculation.volume} m³</p>
+                  </div>
                 </div>
-                <div className="text-right text-sm text-muted-foreground">
-                  <p>{formData.fromCity} → {formData.toCity}</p>
-                  <p>{calculation.distance} km • {calculation.volume} m³</p>
-                </div>
-              </div>
+                
+                {/* Price comparison badge */}
+                <PriceComparisonBadge 
+                  comparisons={priceComparisons} 
+                  ourPrice={calculation.total} 
+                />
+              </>
             )}
           </div>
         )}
