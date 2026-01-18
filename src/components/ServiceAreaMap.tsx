@@ -1,14 +1,23 @@
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, useMap } from "react-leaflet";
 import { MapPin } from "lucide-react";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 interface ServiceArea {
   name: string;
   description: string;
   isMain?: boolean;
   position: [number, number];
+}
+
+interface UserLocation {
+  lat: number;
+  lng: number;
+}
+
+interface ServiceAreaMapProps {
+  userLocation?: UserLocation | null;
 }
 
 const serviceAreas: ServiceArea[] = [
@@ -22,7 +31,24 @@ const serviceAreas: ServiceArea[] = [
   { name: "Reinickendorf", description: "Nördliches Berlin", position: [52.596, 13.334] },
 ];
 
-const ServiceAreaMap = () => {
+const BERLIN_CENTER: [number, number] = [52.52, 13.405];
+
+// Component to fit bounds when user location changes
+const FitBoundsOnRoute = ({ userLocation }: { userLocation: UserLocation }) => {
+  const map = useMap();
+  
+  useEffect(() => {
+    const bounds = L.latLngBounds([
+      [userLocation.lat, userLocation.lng],
+      BERLIN_CENTER
+    ]);
+    map.fitBounds(bounds, { padding: [50, 50] });
+  }, [map, userLocation.lat, userLocation.lng]);
+  
+  return null;
+};
+
+const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
   // Create custom icon for markers
   const customIcon = useMemo(() => {
     return L.divIcon({
@@ -42,10 +68,29 @@ const ServiceAreaMap = () => {
     });
   }, []);
 
+  const userIcon = useMemo(() => {
+    return L.divIcon({
+      className: "custom-marker-user",
+      html: `<div style="background-color: #3b82f6; width: 28px; height: 28px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;">
+        <div style="width: 10px; height: 10px; background: white; border-radius: 50%;"></div>
+      </div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+    });
+  }, []);
+
+  const routeLine: [number, number][] = useMemo(() => {
+    if (!userLocation) return [];
+    return [
+      [userLocation.lat, userLocation.lng],
+      BERLIN_CENTER
+    ];
+  }, [userLocation]);
+
   return (
     <div className="w-full h-full relative">
       <MapContainer
-        center={[52.52, 13.405]}
+        center={BERLIN_CENTER}
         zoom={10}
         className="w-full h-full rounded-2xl z-0"
         scrollWheelZoom={false}
@@ -57,7 +102,7 @@ const ServiceAreaMap = () => {
         
         {/* Service area circle */}
         <Circle
-          center={[52.52, 13.405]}
+          center={BERLIN_CENTER}
           radius={25000}
           pathOptions={{
             color: "hsl(34, 100%, 50%)",
@@ -66,6 +111,39 @@ const ServiceAreaMap = () => {
             weight: 2,
           }}
         />
+        
+        {/* Route line from user to Berlin */}
+        {userLocation && routeLine.length > 0 && (
+          <>
+            <Polyline
+              positions={routeLine}
+              pathOptions={{
+                color: "#3b82f6",
+                weight: 4,
+                opacity: 0.8,
+                dashArray: "10, 10",
+              }}
+            />
+            <FitBoundsOnRoute userLocation={userLocation} />
+          </>
+        )}
+        
+        {/* User location marker */}
+        {userLocation && (
+          <Marker
+            position={[userLocation.lat, userLocation.lng]}
+            icon={userIcon}
+          >
+            <Popup>
+              <div className="text-center">
+                <strong className="text-blue-600">Ihr Standort</strong>
+                <p className="text-sm text-muted-foreground">
+                  {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
+                </p>
+              </div>
+            </Popup>
+          </Marker>
+        )}
         
         {serviceAreas.map((area) => (
           <Marker
@@ -86,6 +164,12 @@ const ServiceAreaMap = () => {
       {/* Overlay with service areas */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-2xl z-10">
         <div className="flex flex-wrap gap-3 justify-center">
+          {userLocation && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm bg-blue-500 text-white">
+              <MapPin className="w-3 h-3" />
+              <span>Ihr Standort</span>
+            </div>
+          )}
           {serviceAreas.map((area) => (
             <div
               key={area.name}
