@@ -1,11 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState, useCallback } from "react";
 import RouteCalculator from "@/components/RouteCalculator";
 
 const ServiceAreaMap = lazy(() => import("@/components/ServiceAreaMap"));
 
+interface UserLocation {
+  lat: number;
+  lng: number;
+}
+
 const ContactSection = () => {
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+
+  const handleRouteCalculated = useCallback((route: { userLocation: UserLocation }) => {
+    setUserLocation(route.userLocation);
+  }, []);
+
   return (
     <section id="kontakt" className="py-24 bg-primary">
       <div className="container mx-auto px-4">
@@ -28,7 +39,7 @@ const ContactSection = () => {
                 <div className="animate-pulse text-muted-foreground">Karte wird geladen...</div>
               </div>
             }>
-              <ServiceAreaMap />
+              <ServiceAreaMap userLocation={userLocation} />
             </Suspense>
           </div>
 
@@ -47,8 +58,14 @@ const ContactSection = () => {
                 <div className="w-4 h-4 rounded-full border-2 border-accent bg-accent/20" />
                 <span className="text-sm">Erweitertes Gebiet (25km)</span>
               </div>
+              {userLocation && (
+                <div className="flex items-center gap-2 text-primary-foreground">
+                  <div className="w-4 h-4 rounded-full bg-blue-500" />
+                  <span className="text-sm">Ihr Standort</span>
+                </div>
+              )}
             </div>
-            <RouteCalculator />
+            <RouteCalculator onRouteCalculated={handleRouteCalculated} />
           </div>
         </div>
 
