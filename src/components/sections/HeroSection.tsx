@@ -1,8 +1,110 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, Star } from "lucide-react";
+import { ArrowRight, Check, Star, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-moving.jpg";
 
+interface QuickQuoteForm {
+  fromCity: string;
+  toCity: string;
+  apartmentType: string;
+  preferredDate: string;
+  name: string;
+  phone: string;
+  email: string;
+}
+
 const HeroSection = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<QuickQuoteForm>({
+    fromCity: "",
+    toCity: "",
+    apartmentType: "",
+    preferredDate: "",
+    name: "",
+    phone: "",
+    email: "",
+  });
+
+  const updateField = (field: keyof QuickQuoteForm, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!formData.fromCity || !formData.toCity || !formData.name || !formData.phone || !formData.email) {
+      toast({
+        title: "Bitte füllen Sie alle Pflichtfelder aus",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.functions.invoke("send-quote-email", {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          fromCity: formData.fromCity,
+          toCity: formData.toCity,
+          apartmentSize: formData.apartmentType || "Nicht angegeben",
+          floor: 0,
+          hasElevator: false,
+          needsPacking: false,
+          needsAssembly: false,
+          preferredDate: formData.preferredDate,
+          estimatedPrice: 0,
+          distance: 0,
+          volume: 0,
+          message: "Schnellanfrage vom Hero-Formular",
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Anfrage erfolgreich gesendet!",
+        description: "Wir werden uns innerhalb von 24 Stunden bei Ihnen melden.",
+      });
+
+      // Reset form
+      setFormData({
+        fromCity: "",
+        toCity: "",
+        apartmentType: "",
+        preferredDate: "",
+        name: "",
+        phone: "",
+        email: "",
+      });
+    } catch (err) {
+      console.error("Error submitting quick quote:", err);
+      toast({
+        title: "Fehler",
+        description: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="startseite" className="relative min-h-screen flex items-center pt-32 pb-16 overflow-hidden">
       {/* Background image with overlay */}
@@ -34,11 +136,20 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Button variant="hero" size="xl" className="group">
+              <Button 
+                variant="hero" 
+                size="xl" 
+                className="group"
+                onClick={() => scrollToSection("kostenrechner")}
+              >
                 Kostenloses Angebot anfordern
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="heroOutline" size="xl">
+              <Button 
+                variant="heroOutline" 
+                size="xl"
+                onClick={() => scrollToSection("leistungen")}
+              >
                 Unsere Leistungen
               </Button>
             </div>
@@ -67,7 +178,7 @@ const HeroSection = () => {
                 Erhalten Sie Ihre Schätzung in weniger als 2 Minuten
               </p>
 
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
@@ -76,7 +187,10 @@ const HeroSection = () => {
                     <input
                       type="text"
                       placeholder="z.B. Berlin"
+                      value={formData.fromCity}
+                      onChange={(e) => updateField("fromCity", e.target.value)}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                      required
                     />
                   </div>
                   <div>
@@ -86,7 +200,10 @@ const HeroSection = () => {
                     <input
                       type="text"
                       placeholder="z.B. München"
+                      value={formData.toCity}
+                      onChange={(e) => updateField("toCity", e.target.value)}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                      required
                     />
                   </div>
                 </div>
@@ -95,7 +212,11 @@ const HeroSection = () => {
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Wohnungstyp *
                   </label>
-                  <select className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent">
+                  <select 
+                    value={formData.apartmentType}
+                    onChange={(e) => updateField("apartmentType", e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
                     <option value="">Bitte wählen...</option>
                     <option value="studio">1-Zimmer-Wohnung</option>
                     <option value="t2">2-Zimmer-Wohnung</option>
@@ -112,6 +233,8 @@ const HeroSection = () => {
                   </label>
                   <input
                     type="date"
+                    value={formData.preferredDate}
+                    onChange={(e) => updateField("preferredDate", e.target.value)}
                     className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
@@ -124,7 +247,10 @@ const HeroSection = () => {
                     <input
                       type="text"
                       placeholder="Vollständiger Name"
+                      value={formData.name}
+                      onChange={(e) => updateField("name", e.target.value)}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                      required
                     />
                   </div>
                   <div>
@@ -134,7 +260,10 @@ const HeroSection = () => {
                     <input
                       type="tel"
                       placeholder="01XX XXX XXXX"
+                      value={formData.phone}
+                      onChange={(e) => updateField("phone", e.target.value)}
                       className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                      required
                     />
                   </div>
                 </div>
@@ -146,12 +275,28 @@ const HeroSection = () => {
                   <input
                     type="email"
                     placeholder="ihre@email.de"
+                    value={formData.email}
+                    onChange={(e) => updateField("email", e.target.value)}
                     className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                    required
                   />
                 </div>
 
-                <Button variant="accent" size="xl" className="w-full">
-                  Kostenloses Angebot erhalten
+                <Button 
+                  type="submit" 
+                  variant="accent" 
+                  size="xl" 
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Wird gesendet...
+                    </>
+                  ) : (
+                    "Kostenloses Angebot erhalten"
+                  )}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">

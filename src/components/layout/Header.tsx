@@ -81,9 +81,11 @@ const Header = () => {
           </div>
 
           <div className="hidden lg:block">
-            <Button variant="accent" size="lg">
-              Kostenloses Angebot
-            </Button>
+            <a href={location.pathname === "/" ? "#kostenrechner" : "/#kostenrechner"}>
+              <Button variant="accent" size="lg">
+                Kostenloses Angebot
+              </Button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -124,9 +126,11 @@ const Header = () => {
                   </a>
                 )
               )}
-              <Button variant="accent" className="mt-2">
-                Kostenloses Angebot
-              </Button>
+              <a href={location.pathname === "/" ? "#kostenrechner" : "/#kostenrechner"}>
+                <Button variant="accent" className="mt-2 w-full">
+                  Kostenloses Angebot
+                </Button>
+              </a>
             </div>
           </div>
         )}
