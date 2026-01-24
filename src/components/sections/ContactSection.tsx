@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { Suspense, lazy, useState, useCallback } from "react";
 import RouteCalculator from "@/components/RouteCalculator";
+import ContactForm from "@/components/ContactForm";
 
 const ServiceAreaMap = lazy(() => import("@/components/ServiceAreaMap"));
 
@@ -60,7 +61,7 @@ const ContactSection = () => {
               </div>
               {userLocation && (
                 <div className="flex items-center gap-2 text-primary-foreground">
-                  <div className="w-4 h-4 rounded-full bg-blue-500" />
+                  <div className="w-4 h-4 rounded-full bg-accent" />
                   <span className="text-sm">Ihr Standort</span>
                 </div>
               )}
@@ -141,88 +142,7 @@ const ContactSection = () => {
           </div>
 
           {/* Right - Contact form */}
-          <div className="bg-card rounded-2xl p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-foreground mb-6">
-              Senden Sie Uns Eine Nachricht
-            </h3>
-
-            <form className="space-y-5">
-              <div className="grid sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Vorname *
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Max"
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Nachname *
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Mustermann"
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  E-Mail *
-                </label>
-                <input
-                  type="email"
-                  placeholder="max.mustermann@email.de"
-                  className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Telefon
-                </label>
-                <input
-                  type="tel"
-                  placeholder="01XX XXX XXXX"
-                  className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Betreff *
-                </label>
-                <select className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent">
-                  <option value="">Bitte wählen</option>
-                  <option value="devis">Angebotsanfrage</option>
-                  <option value="info">Allgemeine Information</option>
-                  <option value="reclamation">Beschwerde</option>
-                  <option value="partenariat">Partnerschaft</option>
-                  <option value="autre">Sonstiges</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Nachricht *
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Beschreiben Sie Ihr Projekt oder stellen Sie Ihre Fragen..."
-                  className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent resize-none"
-                />
-              </div>
-
-              <Button variant="accent" size="xl" className="w-full">
-                <Send className="w-5 h-5" />
-                Nachricht Senden
-              </Button>
-            </form>
-          </div>
+          <ContactForm />
         </div>
       </div>
     </section>
