@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Send, Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContactFormData {
   firstName: string;
@@ -44,8 +45,20 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate sending - in production, this would call an edge function
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const { error } = await supabase.functions.invoke("send-contact-email", {
+        body: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
 
       toast({
         title: "Nachricht erfolgreich gesendet!",
