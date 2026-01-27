@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      company_bids: {
+        Row: {
+          announcement_id: string
+          company_email: string
+          company_name: string
+          company_phone: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          announcement_id: string
+          company_email: string
+          company_name: string
+          company_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          announcement_id?: string
+          company_email?: string
+          company_name?: string
+          company_phone?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_bids_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "moving_announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       competitors: {
         Row: {
           base_price_multiplier: number
@@ -47,6 +91,78 @@ export type Database = {
           logo_url?: string | null
           name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      moving_announcements: {
+        Row: {
+          apartment_size: string
+          client_email: string
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          description: string | null
+          end_date: string
+          floor: number
+          from_city: string
+          has_elevator: boolean
+          id: string
+          needs_assembly: boolean
+          needs_packing: boolean
+          notification_sent: boolean
+          preferred_date: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["announcement_status"]
+          to_city: string
+          updated_at: string
+          volume: number
+          winner_bid_id: string | null
+        }
+        Insert: {
+          apartment_size: string
+          client_email: string
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          description?: string | null
+          end_date: string
+          floor?: number
+          from_city: string
+          has_elevator?: boolean
+          id?: string
+          needs_assembly?: boolean
+          needs_packing?: boolean
+          notification_sent?: boolean
+          preferred_date?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["announcement_status"]
+          to_city: string
+          updated_at?: string
+          volume?: number
+          winner_bid_id?: string | null
+        }
+        Update: {
+          apartment_size?: string
+          client_email?: string
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          floor?: number
+          from_city?: string
+          has_elevator?: boolean
+          id?: string
+          needs_assembly?: boolean
+          needs_packing?: boolean
+          notification_sent?: boolean
+          preferred_date?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["announcement_status"]
+          to_city?: string
+          updated_at?: string
+          volume?: number
+          winner_bid_id?: string | null
         }
         Relationships: []
       }
@@ -85,6 +201,7 @@ export type Database = {
       }
     }
     Enums: {
+      announcement_status: "active" | "expired" | "completed"
       app_role: "admin" | "user"
     }
     CompositeTypes: {
@@ -213,6 +330,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      announcement_status: ["active", "expired", "completed"],
       app_role: ["admin", "user"],
     },
   },
