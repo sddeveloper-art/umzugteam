@@ -1,8 +1,8 @@
+import { forwardRef, useMemo, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, useMap } from "react-leaflet";
 import { MapPin } from "lucide-react";
 import * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useMemo, useEffect } from "react";
 
 interface ServiceArea {
   name: string;
@@ -54,7 +54,7 @@ const FitBoundsOnRoute = ({ userLocation }: { userLocation: UserLocation }) => {
   return null;
 };
 
-const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
+const ServiceAreaMap = forwardRef<HTMLDivElement, ServiceAreaMapProps>(({ userLocation }, ref) => {
   // Create custom icon for markers (guarded to avoid runtime crashes if Leaflet import shape differs)
   const customIcon = useMemo(() => {
     if (!L?.divIcon) return undefined;
@@ -97,7 +97,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
   }, [userLocation]);
 
   return (
-    <div className="w-full h-full relative">
+    <div ref={ref} className="w-full h-full relative">
       <MapContainer
         center={BERLIN_CENTER}
         zoom={10}
@@ -145,7 +145,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
           >
             <Popup>
               <div className="text-center">
-                <strong className="text-blue-600">Ihr Standort</strong>
+                <strong className="text-accent">Ihr Standort</strong>
                 <p className="text-sm text-muted-foreground">
                   {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
                 </p>
@@ -178,7 +178,7 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-2xl z-10">
         <div className="flex flex-wrap gap-3 justify-center">
           {userLocation && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm bg-blue-500 text-white">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm bg-primary text-primary-foreground">
               <MapPin className="w-3 h-3" />
               <span>Ihr Standort</span>
             </div>
@@ -200,6 +200,8 @@ const ServiceAreaMap = ({ userLocation }: ServiceAreaMapProps) => {
       </div>
     </div>
   );
-};
+});
+
+ServiceAreaMap.displayName = "ServiceAreaMap";
 
 export default ServiceAreaMap;
