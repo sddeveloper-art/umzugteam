@@ -21,14 +21,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useCreateBid, MovingAnnouncement } from "@/hooks/useAnnouncements";
+import { useCreateBid } from "@/hooks/useAnnouncements";
 
 const formSchema = z.object({
   company_name: z.string().min(2, "Firmenname muss mindestens 2 Zeichen haben").max(100),
   company_email: z.string().email("Ungültige E-Mail-Adresse").max(255),
-  company_phone: z.string().optional(),
+  company_phone: z.string().max(30).optional(),
   price: z.coerce.number().min(1, "Preis muss mindestens 1€ sein").max(1000000),
-  notes: z.string().max(500).optional(),
+  notes: z.string().max(1000).optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -36,13 +36,15 @@ type FormData = z.infer<typeof formSchema>;
 interface SubmitBidDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  announcement: MovingAnnouncement | null;
+  announcementId: string | null;
+  announcementTitle: string;
 }
 
 const SubmitBidDialog = ({
   open,
   onOpenChange,
-  announcement,
+  announcementId,
+  announcementTitle,
 }: SubmitBidDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createBid = useCreateBid();
@@ -59,12 +61,12 @@ const SubmitBidDialog = ({
   });
 
   const onSubmit = async (data: FormData) => {
-    if (!announcement) return;
+    if (!announcementId) return;
 
     setIsSubmitting(true);
     try {
       await createBid.mutateAsync({
-        announcement_id: announcement.id,
+        announcement_id: announcementId,
         company_name: data.company_name,
         company_email: data.company_email,
         company_phone: data.company_phone || undefined,
@@ -79,7 +81,7 @@ const SubmitBidDialog = ({
     }
   };
 
-  if (!announcement) return null;
+  if (!announcementId) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -90,8 +92,7 @@ const SubmitBidDialog = ({
             Angebot abgeben
           </DialogTitle>
           <DialogDescription>
-            Umzug von <strong>{announcement.from_city}</strong> nach{" "}
-            <strong>{announcement.to_city}</strong>
+            Umzug: <strong>{announcementTitle}</strong>
           </DialogDescription>
         </DialogHeader>
 

@@ -8,11 +8,11 @@ import Footer from "@/components/layout/Footer";
 import CreateAnnouncementForm from "@/components/announcements/CreateAnnouncementForm";
 import AnnouncementCard from "@/components/announcements/AnnouncementCard";
 import SubmitBidDialog from "@/components/announcements/SubmitBidDialog";
-import BidsList from "@/components/announcements/BidsList";
+import BidSummaryCard from "@/components/announcements/BidSummaryCard";
 import {
-  useActiveAnnouncements,
-  useAnnouncementBids,
-  MovingAnnouncement,
+  usePublicAnnouncements,
+  useBidSummary,
+  PublicAnnouncement,
 } from "@/hooks/useAnnouncements";
 import {
   Dialog,
@@ -21,22 +21,51 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+const AnnouncementWithBids = ({
+  announcement,
+  onSubmitBid,
+  onViewBids,
+}: {
+  announcement: PublicAnnouncement;
+  onSubmitBid: (a: PublicAnnouncement) => void;
+  onViewBids: (a: PublicAnnouncement) => void;
+}) => {
+  const { data: bidSummary } = useBidSummary(announcement.id);
+
+  return (
+    <div className="space-y-2">
+      <AnnouncementCard
+        announcement={announcement}
+        bidsCount={bidSummary?.bid_count || 0}
+        lowestPrice={bidSummary?.lowest_price}
+        onSubmitBid={() => onSubmitBid(announcement)}
+      />
+      <button
+        onClick={() => onViewBids(announcement)}
+        className="w-full text-sm text-primary hover:underline"
+      >
+        Angebote-Übersicht anzeigen →
+      </button>
+    </div>
+  );
+};
+
 const Announcements = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] =
-    useState<MovingAnnouncement | null>(null);
+    useState<PublicAnnouncement | null>(null);
   const [showBidDialog, setShowBidDialog] = useState(false);
   const [showBidsDialog, setShowBidsDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("browse");
 
-  const { data: announcements, isLoading } = useActiveAnnouncements();
-  const { data: bids } = useAnnouncementBids(selectedAnnouncement?.id || "");
+  const { data: announcements, isLoading } = usePublicAnnouncements();
+  const { data: selectedBidSummary } = useBidSummary(selectedAnnouncement?.id || "");
 
-  const handleSubmitBid = (announcement: MovingAnnouncement) => {
+  const handleSubmitBid = (announcement: PublicAnnouncement) => {
     setSelectedAnnouncement(announcement);
     setShowBidDialog(true);
   };
 
-  const handleViewBids = (announcement: MovingAnnouncement) => {
+  const handleViewBids = (announcement: PublicAnnouncement) => {
     setSelectedAnnouncement(announcement);
     setShowBidsDialog(true);
   };
@@ -87,18 +116,12 @@ const Announcements = () => {
               ) : announcements && announcements.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {announcements.map((announcement) => (
-                    <div key={announcement.id} className="space-y-2">
-                      <AnnouncementCard
-                        announcement={announcement}
-                        onSubmitBid={() => handleSubmitBid(announcement)}
-                      />
-                      <button
-                        onClick={() => handleViewBids(announcement)}
-                        className="w-full text-sm text-primary hover:underline"
-                      >
-                        Alle Angebote anzeigen →
-                      </button>
-                    </div>
+                    <AnnouncementWithBids
+                      key={announcement.id}
+                      announcement={announcement}
+                      onSubmitBid={handleSubmitBid}
+                      onViewBids={handleViewBids}
+                    />
                   ))}
                 </div>
               ) : (
@@ -143,21 +166,23 @@ const Announcements = () => {
       <SubmitBidDialog
         open={showBidDialog}
         onOpenChange={setShowBidDialog}
-        announcement={selectedAnnouncement}
+        announcementId={selectedAnnouncement?.id || null}
+        announcementTitle={
+          selectedAnnouncement
+            ? `${selectedAnnouncement.from_city} → ${selectedAnnouncement.to_city}`
+            : ""
+        }
       />
 
       <Dialog open={showBidsDialog} onOpenChange={setShowBidsDialog}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              Angebote für Umzug:{" "}
+              Angebote-Übersicht:{" "}
               {selectedAnnouncement?.from_city} → {selectedAnnouncement?.to_city}
             </DialogTitle>
           </DialogHeader>
-          <BidsList
-            bids={bids || []}
-            winnerBidId={selectedAnnouncement?.winner_bid_id}
-          />
+          <BidSummaryCard summary={selectedBidSummary || null} />
         </DialogContent>
       </Dialog>
 

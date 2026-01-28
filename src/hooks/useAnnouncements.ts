@@ -2,11 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export interface MovingAnnouncement {
+// Public announcement data (no PII)
+export interface PublicAnnouncement {
   id: string;
-  client_name: string;
-  client_email: string;
-  client_phone: string | null;
   from_city: string;
   to_city: string;
   apartment_size: string;
@@ -16,16 +14,32 @@ export interface MovingAnnouncement {
   needs_packing: boolean;
   needs_assembly: boolean;
   preferred_date: string | null;
-  description: string | null;
   start_date: string;
   end_date: string;
   status: "active" | "expired" | "completed";
+  created_at: string;
+}
+
+// Full announcement data (admin only)
+export interface MovingAnnouncement extends PublicAnnouncement {
+  client_name: string;
+  client_email: string;
+  client_phone: string | null;
+  description: string | null;
   winner_bid_id: string | null;
   notification_sent: boolean;
-  created_at: string;
   updated_at: string;
 }
 
+// Public bid summary (no company PII)
+export interface BidSummary {
+  announcement_id: string;
+  bid_count: number;
+  lowest_price: number;
+  highest_price: number;
+}
+
+// Full bid data (admin only)
 export interface CompanyBid {
   id: string;
   announcement_id: string;
@@ -64,6 +78,26 @@ export interface CreateBidData {
   notes?: string;
 }
 
+// Hook for public announcements (no PII exposed)
+export const usePublicAnnouncements = () => {
+  return useQuery({
+    queryKey: ["announcements", "public"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("announcements_public")
+        .select("*")
+        .eq("status", "active")
+        .gt("end_date", new Date().toISOString())
+        .order("end_date", { ascending: true });
+
+      if (error) throw error;
+      return data as PublicAnnouncement[];
+    },
+    refetchInterval: 30000,
+  });
+};
+
+// Hook for admin: full announcements with PII (requires admin role)
 export const useAnnouncements = () => {
   return useQuery({
     queryKey: ["announcements"],
@@ -79,24 +113,30 @@ export const useAnnouncements = () => {
   });
 };
 
+// Legacy hook - now uses public view
 export const useActiveAnnouncements = () => {
+  return usePublicAnnouncements();
+};
+
+// Hook for public bid summaries (no company PII)
+export const useBidSummary = (announcementId: string) => {
   return useQuery({
-    queryKey: ["announcements", "active"],
+    queryKey: ["bids", "summary", announcementId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("moving_announcements")
+        .from("bids_summary")
         .select("*")
-        .eq("status", "active")
-        .gt("end_date", new Date().toISOString())
-        .order("end_date", { ascending: true });
+        .eq("announcement_id", announcementId)
+        .single();
 
-      if (error) throw error;
-      return data as MovingAnnouncement[];
+      if (error && error.code !== "PGRST116") throw error;
+      return data as BidSummary | null;
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    enabled: !!announcementId,
   });
 };
 
+// Hook for admin: full bids with company PII (requires admin role)
 export const useAnnouncementBids = (announcementId: string) => {
   return useQuery({
     queryKey: ["bids", announcementId],
@@ -164,6 +204,7 @@ export const useCreateBid = () => {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["bids", variables.announcement_id] });
+      queryClient.invalidateQueries({ queryKey: ["bids", "summary", variables.announcement_id] });
       toast({
         title: "Angebot abgegeben!",
         description: "Ihr Preisangebot wurde erfolgreich eingereicht.",

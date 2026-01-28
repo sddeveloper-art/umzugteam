@@ -14,11 +14,12 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MovingAnnouncement, formatTimeRemaining } from "@/hooks/useAnnouncements";
+import { PublicAnnouncement, formatTimeRemaining } from "@/hooks/useAnnouncements";
 
 interface AnnouncementCardProps {
-  announcement: MovingAnnouncement;
+  announcement: PublicAnnouncement;
   bidsCount?: number;
+  lowestPrice?: number | null;
   onSubmitBid?: () => void;
   showBidButton?: boolean;
 }
@@ -26,6 +27,7 @@ interface AnnouncementCardProps {
 const AnnouncementCard = ({
   announcement,
   bidsCount = 0,
+  lowestPrice,
   onSubmitBid,
   showBidButton = true,
 }: AnnouncementCardProps) => {
@@ -91,12 +93,6 @@ const AnnouncementCard = ({
           </div>
         )}
 
-        {announcement.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {announcement.description}
-          </p>
-        )}
-
         <div className="flex items-center justify-between pt-2 border-t">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm">
@@ -114,6 +110,12 @@ const AnnouncementCard = ({
               <Users className="h-4 w-4" />
               <span>{bidsCount} Angebote</span>
             </div>
+
+            {lowestPrice && lowestPrice > 0 && (
+              <div className="text-sm font-semibold text-green-600">
+                ab {lowestPrice.toFixed(2)}€
+              </div>
+            )}
           </div>
 
           {showBidButton && !isExpired && onSubmitBid && (
