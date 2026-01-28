@@ -43,11 +43,26 @@ interface Bid {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  console.log("Processing expired announcements...");
-
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Security: Validate authorization - only allow calls with service role key
+  const authHeader = req.headers.get("authorization");
+  const expectedAuth = `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`;
+  
+  if (!authHeader || authHeader !== expectedAuth) {
+    console.error("Unauthorized access attempt to process-expired-announcements");
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+
+  console.log("Processing expired announcements...");
 
   try {
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {

@@ -53,6 +53,13 @@ export type Database = {
             foreignKeyName: "company_bids_announcement_id_fkey"
             columns: ["announcement_id"]
             isOneToOne: false
+            referencedRelation: "announcements_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_bids_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
             referencedRelation: "moving_announcements"
             referencedColumns: ["id"]
           },
@@ -189,7 +196,81 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      announcements_public: {
+        Row: {
+          apartment_size: string | null
+          created_at: string | null
+          end_date: string | null
+          floor: number | null
+          from_city: string | null
+          has_elevator: boolean | null
+          id: string | null
+          needs_assembly: boolean | null
+          needs_packing: boolean | null
+          preferred_date: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["announcement_status"] | null
+          to_city: string | null
+          volume: number | null
+        }
+        Insert: {
+          apartment_size?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          floor?: number | null
+          from_city?: string | null
+          has_elevator?: boolean | null
+          id?: string | null
+          needs_assembly?: boolean | null
+          needs_packing?: boolean | null
+          preferred_date?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["announcement_status"] | null
+          to_city?: string | null
+          volume?: number | null
+        }
+        Update: {
+          apartment_size?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          floor?: number | null
+          from_city?: string | null
+          has_elevator?: boolean | null
+          id?: string | null
+          needs_assembly?: boolean | null
+          needs_packing?: boolean | null
+          preferred_date?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["announcement_status"] | null
+          to_city?: string | null
+          volume?: number | null
+        }
+        Relationships: []
+      }
+      bids_summary: {
+        Row: {
+          announcement_id: string | null
+          bid_count: number | null
+          highest_price: number | null
+          lowest_price: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_bids_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_bids_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "moving_announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {
