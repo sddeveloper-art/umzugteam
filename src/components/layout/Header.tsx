@@ -8,13 +8,14 @@ const Header = () => {
   const location = useLocation();
 
   const navLinks = [
-    { label: "Startseite", href: "#startseite", isRoute: false },
-    { label: "Leistungen", href: "#leistungen", isRoute: false },
-    { label: "Vorteile", href: "#vorteile", isRoute: false },
-    { label: "Preisvergleich", href: "/preisvergleich", isRoute: true },
-    { label: "Bewertungen", href: "#bewertungen", isRoute: false },
-    { label: "FAQ", href: "#faq", isRoute: false },
-    { label: "Kontakt", href: "#kontakt", isRoute: false },
+    { label: "Startseite", href: "#startseite", isRoute: false, isExternal: false },
+    { label: "Leistungen", href: "#leistungen", isRoute: false, isExternal: false },
+    { label: "Vorteile", href: "#vorteile", isRoute: false, isExternal: false },
+    { label: "Preisvergleich", href: "/preisvergleich", isRoute: true, isExternal: false },
+    { label: "Bewertungen", href: "#bewertungen", isRoute: false, isExternal: false },
+    { label: "FAQ", href: "#faq", isRoute: false, isExternal: false },
+    { label: "Kontakt", href: "#kontakt", isRoute: false, isExternal: false },
+    { label: "Admin", href: "https://presence.ionos.de/de-DE/c9ced923-2bb5-44e6-9f89-72570c570a4c/dashboard", isRoute: false, isExternal: true },
   ];
 
   const handleNavClick = (href: string, isRoute: boolean) => {
@@ -59,7 +60,17 @@ const Header = () => {
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => 
-              link.isRoute ? (
+              link.isExternal ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/80 hover:text-accent font-medium transition-colors"
+                >
+                  {link.label}
+                </a>
+              ) : link.isRoute ? (
                 <Link
                   key={link.href}
                   to={link.href}
@@ -103,7 +114,18 @@ const Header = () => {
           <div className="lg:hidden mt-4 pb-4 border-t border-border pt-4 animate-fade-in">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => 
-                link.isRoute ? (
+                link.isExternal ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-foreground/80 hover:text-accent font-medium transition-colors py-2"
+                  >
+                    {link.label}
+                  </a>
+                ) : link.isRoute ? (
                   <Link
                     key={link.href}
                     to={link.href}
