@@ -61,15 +61,20 @@ const Footer = forwardRef<HTMLElement>((_, ref) => {
             <h4 className="text-lg font-semibold mb-6">Nützliche Links</h4>
             <ul className="space-y-3">
               {[
-                { label: "Über uns", href: "#vorteile" },
-                { label: "Unsere Garantien", href: "#vorteile" },
-                { label: "Bewertungen", href: "#bewertungen" },
-                { label: "FAQ", href: "#faq" },
-                { label: "Kontakt", href: "#kontakt" },
-                { label: "Kostenloses Angebot", href: "#startseite" },
+                { label: "Über uns", href: "#vorteile", isExternal: false },
+                { label: "Unsere Garantien", href: "#vorteile", isExternal: false },
+                { label: "Bewertungen", href: "#bewertungen", isExternal: false },
+                { label: "FAQ", href: "#faq", isExternal: false },
+                { label: "Kontakt", href: "#kontakt", isExternal: false },
+                { label: "Kostenloses Angebot", href: "#startseite", isExternal: false },
+                { label: "Admin Panel", href: "https://presence.ionos.de/de-DE/c9ced923-2bb5-44e6-9f89-72570c570a4c/dashboard", isExternal: true },
               ].map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="text-background/70 hover:text-accent transition-colors">
+                  <a 
+                    href={link.href} 
+                    className="text-background/70 hover:text-accent transition-colors"
+                    {...(link.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
                     {link.label}
                   </a>
                 </li>
