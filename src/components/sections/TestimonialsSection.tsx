@@ -6,28 +6,28 @@ const testimonials = [
     location: "Berlin → München",
     rating: 5,
     text: "Außergewöhnliches Team! Sie haben unseren Familienumzug mit bemerkenswerter Professionalität abgewickelt. Alles war perfekt verpackt und nichts wurde beschädigt. Ich empfehle sie wärmstens!",
-    date: "November 2024",
+    date: "November 2025",
   },
   {
     name: "Hans-Peter Müller",
     location: "Hamburg → Frankfurt",
     rating: 5,
     text: "Firmenumzug an einem Wochenende durchgeführt. Pünktliches, effizientes und sehr organisiertes Team. Das Büro war am Montagmorgen betriebsbereit. Tadelloser Service!",
-    date: "Oktober 2024",
+    date: "Oktober 2025",
   },
   {
     name: "Sophie Weber",
     location: "Köln → Stuttgart",
     rating: 5,
     text: "Erster Umzug und wirklich eine ausgezeichnete Erfahrung. Das Team hat mich bei jedem Schritt begleitet, das Angebot war präzise und ohne Überraschungen. Danke für diesen Qualitätsservice!",
-    date: "September 2024",
+    date: "Dezember 2025",
   },
   {
     name: "Thomas Fischer",
     location: "Düsseldorf → Dresden",
     rating: 5,
     text: "Transport meines Flügels mit seltener Fachkenntnis durchgeführt. Spezialverpackung, engagiertes Team und Klavier in perfektem Zustand angekommen. Profis bis ins Detail!",
-    date: "Dezember 2024",
+    date: "Januar 2026",
   },
 ];
 
