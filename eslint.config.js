@@ -1,3 +1,4 @@
+// UmzugTeam365 ESLint Configuration - Updated: 2026-01-28
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
