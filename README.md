@@ -1,3 +1,9 @@
+# UmzugTeam365 - Umzugsplattform
+
+> Last updated: January 28, 2026
+
+---
+
 # Welcome to your Lovable project
 
 ## Project info

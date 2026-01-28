@@ -1,3 +1,6 @@
+# UmzugTeam365 - Updated: 2026-01-28
+# Robots.txt for umzugteam.lovable.app
+
 User-agent: Googlebot
 Allow: /
 
@@ -12,3 +15,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://umzugteam.lovable.app/sitemap.xml
