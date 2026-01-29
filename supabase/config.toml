@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.process-expired-announcements]
 verify_jwt = false
+
+[functions.notify-new-bid]
+verify_jwt = false
