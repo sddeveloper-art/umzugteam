@@ -61,22 +61,32 @@ const Footer = forwardRef<HTMLElement>((_, ref) => {
             <h4 className="text-lg font-semibold mb-6">Nützliche Links</h4>
             <ul className="space-y-3">
               {[
-                { label: "Über uns", href: "#vorteile", isExternal: false },
-                { label: "Unsere Garantien", href: "#vorteile", isExternal: false },
-                { label: "Bewertungen", href: "#bewertungen", isExternal: false },
-                { label: "FAQ", href: "#faq", isExternal: false },
-                { label: "Kontakt", href: "#kontakt", isExternal: false },
-                { label: "Kostenloses Angebot", href: "#startseite", isExternal: false },
-                { label: "Admin Panel", href: "https://presence.ionos.de/de-DE/c9ced923-2bb5-44e6-9f89-72570c570a4c/dashboard", isExternal: true },
+                { label: "Über uns", href: "#vorteile", isRoute: false },
+                { label: "Unsere Garantien", href: "#vorteile", isRoute: false },
+                { label: "Preisvergleich", href: "/preisvergleich", isRoute: true },
+                { label: "Umzugsanfragen", href: "/anfragen", isRoute: true },
+                { label: "Bewertungen", href: "#bewertungen", isRoute: false },
+                { label: "FAQ", href: "#faq", isRoute: false },
+                { label: "Kontakt", href: "#kontakt", isRoute: false },
+                { label: "Kostenloses Angebot", href: "#kostenrechner", isRoute: false },
+                { label: "Admin", href: "/admin", isRoute: true },
               ].map((link) => (
                 <li key={link.label}>
-                  <a 
-                    href={link.href} 
-                    className="text-background/70 hover:text-accent transition-colors"
-                    {...(link.isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  >
-                    {link.label}
-                  </a>
+                  {link.isRoute ? (
+                    <a 
+                      href={link.href} 
+                      className="text-background/70 hover:text-accent transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <a 
+                      href={link.href} 
+                      className="text-background/70 hover:text-accent transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
