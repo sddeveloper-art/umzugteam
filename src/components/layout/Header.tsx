@@ -11,6 +11,7 @@ const Header = () => {
     { label: "Startseite", href: "#startseite", isRoute: false, isExternal: false },
     { label: "Leistungen", href: "#leistungen", isRoute: false, isExternal: false },
     { label: "Vorteile", href: "#vorteile", isRoute: false, isExternal: false },
+    { label: "Trajet", href: "/trajet", isRoute: true, isExternal: false },
     { label: "Preisvergleich", href: "/preisvergleich", isRoute: true, isExternal: false },
     { label: "Anfragen", href: "/anfragen", isRoute: true, isExternal: false },
     { label: "Bewertungen", href: "#bewertungen", isRoute: false, isExternal: false },

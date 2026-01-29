@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import PriceComparison from "./pages/PriceComparison";
 import Announcements from "./pages/Announcements";
+import RouteMap from "./pages/RouteMap";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
               <Route path="/admin" element={<Admin />} />
               <Route path="/preisvergleich" element={<PriceComparison />} />
               <Route path="/anfragen" element={<Announcements />} />
+              <Route path="/trajet" element={<RouteMap />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
