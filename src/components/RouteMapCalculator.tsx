@@ -1,9 +1,10 @@
 import { useState, useMemo, useCallback, useEffect, forwardRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
-import { MapPin, Navigation, ArrowRight, Truck, Clock, Euro, Loader2 } from "lucide-react";
+import { MapPin, Navigation, ArrowRight, Truck, Clock, Euro, Loader2, LocateFixed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -110,6 +111,73 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
     const [showFromSuggestions, setShowFromSuggestions] = useState(false);
     const [showToSuggestions, setShowToSuggestions] = useState(false);
     const [isCalculating, setIsCalculating] = useState(false);
+    const [isLocating, setIsLocating] = useState(false);
+
+    // Find nearest city to given coordinates
+    const findNearestCity = useCallback((lat: number, lng: number): City => {
+      let nearestCity = germanCities[0];
+      let minDistance = Infinity;
+
+      for (const city of germanCities) {
+        const distance = calculateDistance({ name: "", lat, lng }, city);
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestCity = city;
+        }
+      }
+
+      return nearestCity;
+    }, []);
+
+    // Handle geolocation
+    const handleGeolocation = useCallback(() => {
+      if (!navigator.geolocation) {
+        toast({
+          title: "Géolocalisation non supportée",
+          description: "Votre navigateur ne supporte pas la géolocalisation.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setIsLocating(true);
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const nearestCity = findNearestCity(latitude, longitude);
+          
+          setFromCity(nearestCity);
+          setFromSearch(nearestCity.name);
+          setShowFromSuggestions(false);
+          setIsLocating(false);
+
+          toast({
+            title: "Position détectée",
+            description: `Ville la plus proche : ${nearestCity.name}`,
+          });
+        },
+        (error) => {
+          setIsLocating(false);
+          let errorMessage = "Impossible de récupérer votre position.";
+          
+          if (error.code === error.PERMISSION_DENIED) {
+            errorMessage = "Veuillez autoriser l'accès à votre position.";
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            errorMessage = "Position non disponible.";
+          } else if (error.code === error.TIMEOUT) {
+            errorMessage = "Délai d'attente dépassé.";
+          }
+
+          toast({
+            title: "Erreur de géolocalisation",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    }, [findNearestCity]);
 
     // Filter cities based on search
     const filteredFromCities = useMemo(() => {
@@ -233,17 +301,34 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 Abholort
               </Label>
-              <Input
-                value={fromSearch}
-                onChange={(e) => {
-                  setFromSearch(e.target.value);
-                  setShowFromSuggestions(true);
-                  if (!e.target.value) setFromCity(null);
-                }}
-                onFocus={() => setShowFromSuggestions(true)}
-                placeholder="Stadt eingeben..."
-                className="w-full"
-              />
+              <div className="flex gap-2">
+                <Input
+                  value={fromSearch}
+                  onChange={(e) => {
+                    setFromSearch(e.target.value);
+                    setShowFromSuggestions(true);
+                    if (!e.target.value) setFromCity(null);
+                  }}
+                  onFocus={() => setShowFromSuggestions(true)}
+                  placeholder="Stadt eingeben..."
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleGeolocation}
+                  disabled={isLocating}
+                  title="Meine Position verwenden"
+                  className="shrink-0"
+                >
+                  {isLocating ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <LocateFixed className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
               {showFromSuggestions && filteredFromCities.length > 0 && (
                 <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
                   {filteredFromCities.slice(0, 8).map((city) => (
