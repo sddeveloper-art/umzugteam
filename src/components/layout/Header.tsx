@@ -12,10 +12,11 @@ const Header = () => {
     { label: "Leistungen", href: "#leistungen", isRoute: false, isExternal: false },
     { label: "Vorteile", href: "#vorteile", isRoute: false, isExternal: false },
     { label: "Preisvergleich", href: "/preisvergleich", isRoute: true, isExternal: false },
+    { label: "Anfragen", href: "/anfragen", isRoute: true, isExternal: false },
     { label: "Bewertungen", href: "#bewertungen", isRoute: false, isExternal: false },
     { label: "FAQ", href: "#faq", isRoute: false, isExternal: false },
     { label: "Kontakt", href: "#kontakt", isRoute: false, isExternal: false },
-    { label: "Admin", href: "https://presence.ionos.de/de-DE/c9ced923-2bb5-44e6-9f89-72570c570a4c/dashboard", isRoute: false, isExternal: true },
+    { label: "Admin", href: "/admin", isRoute: true, isExternal: false },
   ];
 
   const handleNavClick = (href: string, isRoute: boolean) => {
