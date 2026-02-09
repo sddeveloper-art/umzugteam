@@ -83,6 +83,26 @@ const AnnouncementCard = ({
           )}
         </div>
 
+        {/* Items inventory display */}
+        {announcement.items && announcement.items.length > 0 && (
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+              <Package className="h-3 w-3" />
+              Inventar ({announcement.items.reduce((sum: number, i: any) => sum + i.quantity, 0)} Gegenstände)
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {announcement.items.map((item: any, idx: number) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center text-xs bg-muted px-2 py-0.5 rounded-full"
+                >
+                  {item.quantity}× {item.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {announcement.preferred_date && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />

@@ -2,6 +2,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// Moving item in inventory
+export interface MovingItemData {
+  name: string;
+  quantity: number;
+  category: string;
+}
+
 // Public announcement data (no PII)
 export interface PublicAnnouncement {
   id: string;
@@ -18,6 +25,7 @@ export interface PublicAnnouncement {
   end_date: string;
   status: "active" | "expired" | "completed";
   created_at: string;
+  items: MovingItemData[] | null;
 }
 
 // Full announcement data (admin only)
@@ -67,6 +75,7 @@ export interface CreateAnnouncementData {
   preferred_date?: string;
   description?: string;
   end_date: string;
+  items?: MovingItemData[];
 }
 
 export interface CreateBidData {
@@ -91,7 +100,7 @@ export const usePublicAnnouncements = () => {
         .order("end_date", { ascending: true });
 
       if (error) throw error;
-      return data as PublicAnnouncement[];
+      return (data as unknown as PublicAnnouncement[]) || [];
     },
     refetchInterval: 30000,
   });
@@ -108,7 +117,7 @@ export const useAnnouncements = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data as MovingAnnouncement[];
+      return (data as unknown as MovingAnnouncement[]) || [];
     },
   });
 };
@@ -160,14 +169,15 @@ export const useCreateAnnouncement = () => {
 
   return useMutation({
     mutationFn: async (data: CreateAnnouncementData) => {
+      const insertData: Record<string, unknown> = { ...data };
       const { data: result, error } = await supabase
         .from("moving_announcements")
-        .insert([data])
+        .insert([insertData as any])
         .select()
         .single();
 
       if (error) throw error;
-      return result as MovingAnnouncement;
+      return result as unknown as MovingAnnouncement;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
