@@ -33,6 +33,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useCreateAnnouncement } from "@/hooks/useAnnouncements";
+import MovingItemsPicker, { MovingItem } from "./MovingItemsPicker";
 
 const formSchema = z.object({
   client_name: z.string().min(2, "Name muss mindestens 2 Zeichen haben").max(100),
@@ -78,6 +79,7 @@ interface CreateAnnouncementFormProps {
 
 const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [movingItems, setMovingItems] = useState<MovingItem[]>([]);
   const createAnnouncement = useCreateAnnouncement();
 
   const form = useForm<FormData>({
@@ -119,9 +121,11 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
         preferred_date: data.preferred_date?.toISOString().split("T")[0],
         description: data.description || undefined,
         end_date: endDate.toISOString(),
+        items: movingItems.length > 0 ? movingItems : undefined,
       });
 
       form.reset();
+      setMovingItems([]);
       onSuccess?.();
     } finally {
       setIsSubmitting(false);
@@ -357,6 +361,8 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
               </FormItem>
             )}
           />
+
+          <MovingItemsPicker items={movingItems} onChange={setMovingItems} />
 
           <FormField
             control={form.control}
