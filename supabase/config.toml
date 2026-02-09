@@ -12,5 +12,3 @@ verify_jwt = false
 [functions.notify-new-bid]
 verify_jwt = false
 
-[functions.admin-api]
-verify_jwt = false
