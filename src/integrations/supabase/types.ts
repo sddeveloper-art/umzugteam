@@ -114,6 +114,7 @@ export type Database = {
           from_city: string
           has_elevator: boolean
           id: string
+          items: Json | null
           needs_assembly: boolean
           needs_packing: boolean
           notification_sent: boolean
@@ -137,6 +138,7 @@ export type Database = {
           from_city: string
           has_elevator?: boolean
           id?: string
+          items?: Json | null
           needs_assembly?: boolean
           needs_packing?: boolean
           notification_sent?: boolean
@@ -160,6 +162,7 @@ export type Database = {
           from_city?: string
           has_elevator?: boolean
           id?: string
+          items?: Json | null
           needs_assembly?: boolean
           needs_packing?: boolean
           notification_sent?: boolean
@@ -205,6 +208,7 @@ export type Database = {
           from_city: string | null
           has_elevator: boolean | null
           id: string | null
+          items: Json | null
           needs_assembly: boolean | null
           needs_packing: boolean | null
           preferred_date: string | null
@@ -221,6 +225,7 @@ export type Database = {
           from_city?: string | null
           has_elevator?: boolean | null
           id?: string | null
+          items?: Json | null
           needs_assembly?: boolean | null
           needs_packing?: boolean | null
           preferred_date?: string | null
@@ -237,6 +242,7 @@ export type Database = {
           from_city?: string | null
           has_elevator?: boolean | null
           id?: string | null
+          items?: Json | null
           needs_assembly?: boolean | null
           needs_packing?: boolean | null
           preferred_date?: string | null
