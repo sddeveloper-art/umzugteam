@@ -9,6 +9,52 @@ export interface MovingItem {
   category: string;
 }
 
+// Volume estimates in cubic meters per item
+const ITEM_VOLUMES: Record<string, number> = {
+  "Sofa": 2.5,
+  "Sessel": 1.0,
+  "Couchtisch": 0.5,
+  "TV-Schrank": 1.2,
+  "Bücherregal": 1.0,
+  "Stehlampe": 0.3,
+  "Fernseher": 0.3,
+  "Bett (Einzelbett)": 2.0,
+  "Bett (Doppelbett)": 3.5,
+  "Kleiderschrank": 2.5,
+  "Kommode": 1.0,
+  "Nachttisch": 0.3,
+  "Matratze": 1.0,
+  "Kühlschrank": 1.2,
+  "Waschmaschine": 0.8,
+  "Trockner": 0.8,
+  "Geschirrspüler": 0.6,
+  "Herd/Ofen": 0.7,
+  "Mikrowelle": 0.2,
+  "Küchenkartons": 0.5,
+  "Esstisch": 1.5,
+  "Stühle (pro Stück)": 0.4,
+  "Vitrine": 1.5,
+  "Sideboard": 1.2,
+  "Schreibtisch": 1.5,
+  "Bürostuhl": 0.5,
+  "Aktenschrank": 1.0,
+  "Drucker": 0.3,
+  "Computer/Monitor": 0.3,
+  "Umzugskarton (Standard)": 0.15,
+  "Umzugskarton (Bücher)": 0.15,
+  "Fahrrad": 1.0,
+  "Pflanze (groß)": 0.5,
+  "Spiegel/Bild": 0.2,
+  "Teppich": 0.5,
+};
+
+export const calculateEstimatedVolume = (items: MovingItem[]): number => {
+  return items.reduce((total, item) => {
+    const vol = ITEM_VOLUMES[item.name] || 0.3;
+    return total + vol * item.quantity;
+  }, 0);
+};
+
 const ITEM_CATEGORIES = [
   {
     category: "Wohnzimmer",
@@ -61,17 +107,23 @@ const MovingItemsPicker = ({ items, onChange }: MovingItemsPickerProps) => {
   };
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
+  const estimatedVolume = calculateEstimatedVolume(items);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
           <Package className="h-5 w-5 text-primary" />
           Inventar der Gegenstände
         </h3>
-        {totalItems > 0 && (
-          <Badge variant="secondary">{totalItems} Gegenstände</Badge>
-        )}
+        <div className="flex items-center gap-2">
+          {totalItems > 0 && (
+            <Badge variant="secondary">{totalItems} Gegenstände</Badge>
+          )}
+          {estimatedVolume > 0 && (
+            <Badge variant="default">~{estimatedVolume.toFixed(1)} m³</Badge>
+          )}
+        </div>
       </div>
 
       <div className="space-y-4">
