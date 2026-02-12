@@ -1,4 +1,4 @@
-import { Badge, TrendingDown, Award } from "lucide-react";
+import { TrendingDown, Award } from "lucide-react";
 import { PriceComparison, getMaxSavings, getAverageSavings } from "@/hooks/useCompetitors";
 
 interface PriceComparisonBadgeProps {

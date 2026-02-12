@@ -10,6 +10,7 @@ import {
   Building,
   Calendar,
   Users,
+  Award,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -132,8 +133,11 @@ const AnnouncementCard = ({
             </div>
 
             {lowestPrice && lowestPrice > 0 && (
-              <div className="text-sm font-semibold text-green-600">
-                ab {lowestPrice.toFixed(2)}€
+              <div className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/30 rounded-full px-3 py-1">
+                <Award className="w-3.5 h-3.5 text-green-600" />
+                <span className="text-sm font-bold text-green-600">
+                  ab {lowestPrice.toFixed(0)}€
+                </span>
               </div>
             )}
           </div>

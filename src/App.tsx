@@ -11,6 +11,7 @@ import PriceComparison from "./pages/PriceComparison";
 import Announcements from "./pages/Announcements";
 import RouteMap from "./pages/RouteMap";
 import DetailedCalculator from "./pages/DetailedCalculator";
+import Preise from "./pages/Preise";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/anfragen" element={<Announcements />} />
               <Route path="/trajet" element={<RouteMap />} />
               <Route path="/preisrechner" element={<DetailedCalculator />} />
+              <Route path="/preise" element={<Preise />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
