@@ -29,6 +29,12 @@ const extras = [
   { label: "Ein- und Auspacken", price: "8 €/m³", icon: Package },
   { label: "Möbelmontage", price: "150 € pauschal", icon: Building2 },
   { label: "Stockwerk-Zuschlag (ohne Aufzug)", price: "30 €/Etage", icon: Home },
+  { label: "Empfindliches Verpacken", price: "120 € pauschal", icon: Package },
+  { label: "Premium-Versicherung", price: "89 € pauschal", icon: Home },
+  { label: "Express-Service", price: "199 € pauschal", icon: Truck },
+  { label: "Wochenend-Service", price: "149 € pauschal", icon: MapPin },
+  { label: "Endreinigung", price: "180 € pauschal", icon: Building2 },
+  { label: "Zwischenlagerung (1 Monat)", price: "99 € pauschal", icon: Home },
 ];
 
 const Preise = () => {
