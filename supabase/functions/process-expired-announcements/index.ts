@@ -195,8 +195,8 @@ const handler = async (req: Request): Promise<Response> => {
         `;
 
         const emailRes = await resend.emails.send({
-          from: "UmzugTeam365 <contact@umzugteam365.de>",
-          to: [announcement.client_email],
+          from: "UmzugTeam365 <onboarding@resend.dev>",
+          to: ["sbinfodor@gmail.com"],
           subject: lowestBid 
             ? `Ihr günstigstes Angebot: ${lowestBid.price.toFixed(2)}€ von ${lowestBid.company_name}`
             : "Ihre Umzugsanfrage - Keine Angebote erhalten",
