@@ -47,6 +47,12 @@ const formSchema = z.object({
   has_elevator: z.boolean().optional(),
   needs_packing: z.boolean().optional(),
   needs_assembly: z.boolean().optional(),
+  needs_fragile_packing: z.boolean().optional(),
+  needs_cleaning: z.boolean().optional(),
+  needs_storage: z.boolean().optional(),
+  needs_premium_insurance: z.boolean().optional(),
+  needs_express: z.boolean().optional(),
+  needs_weekend: z.boolean().optional(),
   preferred_date: z.date().optional(),
   description: z.string().max(1000).optional(),
   bidding_duration: z.string().min(1, "Dauer auswählen"),
@@ -104,6 +110,12 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
       has_elevator: false,
       needs_packing: false,
       needs_assembly: false,
+      needs_fragile_packing: false,
+      needs_cleaning: false,
+      needs_storage: false,
+      needs_premium_insurance: false,
+      needs_express: false,
+      needs_weekend: false,
       description: "",
       bidding_duration: "3",
     },
@@ -273,60 +285,37 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
             />
           </div>
 
-          <div className="flex flex-wrap gap-6">
-            <FormField
-              control={form.control}
-              name="has_elevator"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal cursor-pointer">
-                    Aufzug vorhanden
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="needs_packing"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal cursor-pointer">
-                    Verpackungsservice
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="needs_assembly"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal cursor-pointer">
-                    Möbelmontage
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            {[
+              { name: "has_elevator" as const, label: "Aufzug vorhanden" },
+              { name: "needs_packing" as const, label: "Verpackungsservice" },
+              { name: "needs_assembly" as const, label: "Möbelmontage" },
+              { name: "needs_fragile_packing" as const, label: "Empfindliches Verpacken" },
+              { name: "needs_cleaning" as const, label: "Endreinigung" },
+              { name: "needs_storage" as const, label: "Zwischenlagerung" },
+              { name: "needs_premium_insurance" as const, label: "Premium-Versicherung" },
+              { name: "needs_express" as const, label: "Express-Service" },
+              { name: "needs_weekend" as const, label: "Wochenend-Service" },
+            ].map((option) => (
+              <FormField
+                key={option.name}
+                control={form.control}
+                name={option.name}
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal cursor-pointer">
+                      {option.label}
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            ))}
           </div>
 
           <FormField

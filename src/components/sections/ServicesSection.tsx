@@ -6,7 +6,13 @@ import {
   Shield, 
   Clock,
   Building,
-  Piano
+  Piano,
+  Sofa,
+  ShieldCheck,
+  Zap,
+  CalendarClock,
+  WashingMachine,
+  PackageCheck
 } from "lucide-react";
 
 const services = [
@@ -45,6 +51,24 @@ const services = [
     title: "Spezialtransporte",
     description: "Spezialtransport für Klaviere, Kunstwerke und empfindliche Gegenstände.",
     features: ["Spezialausrüstung", "Fachpersonal", "Erweiterte Versicherung"],
+  },
+  {
+    icon: Sofa,
+    title: "Möbel Ab- & Aufbau",
+    description: "Professionelle Demontage und Montage aller Möbelstücke – Küchen, Schränke, Betten.",
+    features: ["Fachgerechter Aufbau", "Werkzeug inklusive", "Küchenmontage"],
+  },
+  {
+    icon: ShieldCheck,
+    title: "Premium-Versicherung",
+    description: "Erweiterte Transportversicherung für maximalen Schutz Ihrer Wertgegenstände.",
+    features: ["Vollkasko-Schutz", "Bis 50.000 € Deckung", "Schadensabwicklung 24h"],
+  },
+  {
+    icon: PackageCheck,
+    title: "Empfindliches Verpacken",
+    description: "Spezialverpackung für Glas, Porzellan, Elektronik und empfindliche Objekte.",
+    features: ["Maßgeschneiderte Polsterung", "Antistatische Folien", "Spezialkisten"],
   },
 ];
 

@@ -13,6 +13,12 @@ interface FormData {
   hasElevator: boolean;
   packingService: boolean;
   furnitureAssembly: boolean;
+  fragilePackaging: boolean;
+  premiumInsurance: boolean;
+  expressService: boolean;
+  weekendService: boolean;
+  cleaningService: boolean;
+  storageService: boolean;
   name: string;
   email: string;
   phone: string;
@@ -75,6 +81,12 @@ const QuoteCalculator = () => {
     hasElevator: false,
     packingService: false,
     furnitureAssembly: false,
+    fragilePackaging: false,
+    premiumInsurance: false,
+    expressService: false,
+    weekendService: false,
+    cleaningService: false,
+    storageService: false,
     name: "",
     email: "",
     phone: "",
@@ -92,15 +104,21 @@ const QuoteCalculator = () => {
     if (!size) return null;
 
     const distance = calculateDistance(formData.fromCity, formData.toCity);
-    const distanceCost = distance * 1.5; // €1.50 per km
+    const distanceCost = distance * 1.5;
     
     const floorNumber = parseInt(formData.floor) || 0;
-    const floorCost = formData.hasElevator ? 0 : floorNumber * 30; // €30 per floor without elevator
+    const floorCost = formData.hasElevator ? 0 : floorNumber * 30;
     
-    const packingCost = formData.packingService ? size.volume * 8 : 0; // €8 per m³
+    const packingCost = formData.packingService ? size.volume * 8 : 0;
     const assemblyCost = formData.furnitureAssembly ? 150 : 0;
+    const fragileCost = formData.fragilePackaging ? 120 : 0;
+    const insuranceCost = formData.premiumInsurance ? 89 : 0;
+    const expressCost = formData.expressService ? 199 : 0;
+    const weekendCost = formData.weekendService ? 149 : 0;
+    const cleaningCost = formData.cleaningService ? 180 : 0;
+    const storageCost = formData.storageService ? 99 : 0;
     
-    const subtotal = size.basePrice + distanceCost + floorCost + packingCost + assemblyCost;
+    const subtotal = size.basePrice + distanceCost + floorCost + packingCost + assemblyCost + fragileCost + insuranceCost + expressCost + weekendCost + cleaningCost + storageCost;
     const tax = subtotal * 0.19;
     const total = subtotal + tax;
 
@@ -111,6 +129,12 @@ const QuoteCalculator = () => {
       floorCost,
       packingCost,
       assemblyCost,
+      fragileCost,
+      insuranceCost,
+      expressCost,
+      weekendCost,
+      cleaningCost,
+      storageCost,
       subtotal,
       tax,
       total,
@@ -365,46 +389,35 @@ const QuoteCalculator = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <label className={`flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
-                formData.packingService ? 'border-accent bg-accent/5' : 'border-input hover:border-accent/50'
-              }`}>
-                <input
-                  type="checkbox"
-                  checked={formData.packingService}
-                  onChange={(e) => updateFormData('packingService', e.target.checked)}
-                  className="w-5 h-5 mt-1 rounded border-input text-accent focus:ring-accent"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-foreground">Ein- und Auspacken</span>
-                    <span className="text-accent font-bold">+{calculation?.packingCost || 0} €</span>
+            <div className="space-y-3">
+              {[
+                { key: "packingService" as const, label: "Ein- und Auspacken", desc: "Professionelles Ein- und Auspacken inkl. Verpackungsmaterial", cost: calculation?.packingCost || 0 },
+                { key: "furnitureAssembly" as const, label: "Möbelmontage", desc: "Ab- und Aufbau von Möbeln wie Schränke, Betten, Regale", cost: 150 },
+                { key: "fragilePackaging" as const, label: "Empfindliches Verpacken", desc: "Spezialverpackung für Glas, Porzellan, Elektronik", cost: 120 },
+                { key: "premiumInsurance" as const, label: "Premium-Versicherung", desc: "Erweiterte Deckung bis 50.000 € für Wertgegenstände", cost: 89 },
+                { key: "expressService" as const, label: "Express-Service", desc: "Bevorzugte Terminplanung und schnellere Durchführung", cost: 199 },
+                { key: "weekendService" as const, label: "Wochenend-Service", desc: "Umzug am Samstag oder Sonntag", cost: 149 },
+                { key: "cleaningService" as const, label: "Endreinigung", desc: "Grundreinigung der alten Wohnung nach dem Umzug", cost: 180 },
+                { key: "storageService" as const, label: "Zwischenlagerung", desc: "Sichere Lagerung Ihrer Gegenstände (1 Monat)", cost: 99 },
+              ].map((option) => (
+                <label key={option.key} className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                  formData[option.key] ? 'border-accent bg-accent/5' : 'border-input hover:border-accent/50'
+                }`}>
+                  <input
+                    type="checkbox"
+                    checked={formData[option.key] as boolean}
+                    onChange={(e) => updateFormData(option.key, e.target.checked)}
+                    className="w-5 h-5 mt-1 rounded border-input text-accent focus:ring-accent"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground">{option.label}</span>
+                      <span className="text-accent font-bold">+{option.cost} €</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">{option.desc}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Professionelles Ein- und Auspacken aller Gegenstände inkl. Verpackungsmaterial
-                  </p>
-                </div>
-              </label>
-
-              <label className={`flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
-                formData.furnitureAssembly ? 'border-accent bg-accent/5' : 'border-input hover:border-accent/50'
-              }`}>
-                <input
-                  type="checkbox"
-                  checked={formData.furnitureAssembly}
-                  onChange={(e) => updateFormData('furnitureAssembly', e.target.checked)}
-                  className="w-5 h-5 mt-1 rounded border-input text-accent focus:ring-accent"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-foreground">Möbelmontage</span>
-                    <span className="text-accent font-bold">+150 €</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Ab- und Aufbau von Möbeln wie Schränke, Betten, Regale
-                  </p>
-                </div>
-              </label>
+                </label>
+              ))}
             </div>
 
             {/* Price calculation preview */}
@@ -439,6 +452,42 @@ const QuoteCalculator = () => {
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Möbelmontage</span>
                       <span className="text-foreground">{calculation.assemblyCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.fragileCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Empfindliches Verpacken</span>
+                      <span className="text-foreground">{calculation.fragileCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.insuranceCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Premium-Versicherung</span>
+                      <span className="text-foreground">{calculation.insuranceCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.expressCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Express-Service</span>
+                      <span className="text-foreground">{calculation.expressCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.weekendCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Wochenend-Service</span>
+                      <span className="text-foreground">{calculation.weekendCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.cleaningCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Endreinigung</span>
+                      <span className="text-foreground">{calculation.cleaningCost.toFixed(2)} €</span>
+                    </div>
+                  )}
+                  {calculation.storageCost > 0 && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Zwischenlagerung</span>
+                      <span className="text-foreground">{calculation.storageCost.toFixed(2)} €</span>
                     </div>
                   )}
                   <div className="border-t border-input pt-2 mt-2">
