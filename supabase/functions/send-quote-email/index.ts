@@ -164,8 +164,8 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "UmzugTeam365 <contact@umzugteam365.de>",
-        to: ["contact@umzugteam365.de"],
+        from: "UmzugTeam365 <onboarding@resend.dev>",
+        to: ["sbinfodor@gmail.com"],
         subject: `Neue Angebotsanfrage von ${safeName}`,
         html: `
           <h1>Neue Angebotsanfrage</h1>
@@ -213,8 +213,8 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "UmzugTeam365 <contact@umzugteam365.de>",
-        to: [data.email],
+        from: "UmzugTeam365 <onboarding@resend.dev>",
+        to: ["sbinfodor@gmail.com"],
         subject: "Ihre Angebotsanfrage bei UmzugTeam365",
         html: `
           <h1>Vielen Dank für Ihre Anfrage, ${safeName}!</h1>
