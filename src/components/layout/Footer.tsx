@@ -103,6 +103,13 @@ const Footer = forwardRef<HTMLElement>((_, ref) => {
                 10115 Berlin, Deutschland
               </li>
             </ul>
+            <div className="mt-6 p-4 bg-background/5 rounded-xl border border-background/10">
+              <h5 className="text-sm font-semibold mb-2 text-accent">Bankverbindung</h5>
+              <p className="text-xs text-background/70 leading-relaxed">
+                IBAN: BE54 6500 7175 7997<br />
+                Zahlung per Überweisung
+              </p>
+            </div>
           </div>
         </div>
 
