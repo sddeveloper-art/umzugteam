@@ -169,6 +169,21 @@ const Preise = () => {
           </div>
         </section>
 
+        {/* Payment info */}
+        <section className="py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto bg-card rounded-2xl p-8 card-elevated text-center">
+              <h3 className="text-xl font-bold text-foreground mb-2">Zahlungsinformationen</h3>
+              <p className="text-muted-foreground mb-4">Bequem per Banküberweisung bezahlen</p>
+              <div className="bg-muted rounded-xl p-4 inline-block">
+                <p className="text-sm text-muted-foreground mb-1">IBAN</p>
+                <p className="text-lg font-bold text-accent tracking-wider">BE54 6500 7175 7997</p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4">Bitte geben Sie Ihre Angebotsnummer als Verwendungszweck an.</p>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="py-16 bg-muted/50">
           <div className="container mx-auto px-4 text-center">
