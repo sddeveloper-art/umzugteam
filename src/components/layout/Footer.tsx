@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
 
 const Footer = forwardRef<HTMLElement>((_, ref) => {
@@ -61,32 +62,20 @@ const Footer = forwardRef<HTMLElement>((_, ref) => {
             <h4 className="text-lg font-semibold mb-6">Nützliche Links</h4>
             <ul className="space-y-3">
               {[
-                { label: "Über uns", href: "#vorteile", isRoute: false },
-                { label: "Unsere Garantien", href: "#vorteile", isRoute: false },
-                { label: "Preisvergleich", href: "/preisvergleich", isRoute: true },
-                { label: "Umzugsanfragen", href: "/anfragen", isRoute: true },
-                { label: "Bewertungen", href: "#bewertungen", isRoute: false },
-                { label: "FAQ", href: "#faq", isRoute: false },
-                { label: "Kontakt", href: "#kontakt", isRoute: false },
-                { label: "Kostenloses Angebot", href: "#kostenrechner", isRoute: false },
-                { label: "Admin", href: "/admin", isRoute: true },
+                { label: "Über uns", href: "/ueber-uns" },
+                { label: "Galerie", href: "/galerie" },
+                { label: "Blog & Ratgeber", href: "/blog" },
+                { label: "Checkliste", href: "/checkliste" },
+                { label: "Preisvergleich", href: "/preisvergleich" },
+                { label: "Umzugsanfragen", href: "/anfragen" },
+                { label: "FAQ", href: "/#faq" },
+                { label: "Kontakt", href: "/#kontakt" },
+                { label: "Kostenloses Angebot", href: "/#kostenrechner" },
               ].map((link) => (
                 <li key={link.label}>
-                  {link.isRoute ? (
-                    <a 
-                      href={link.href} 
-                      className="text-background/70 hover:text-accent transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <a 
-                      href={link.href} 
-                      className="text-background/70 hover:text-accent transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  )}
+                  <Link to={link.href} className="text-background/70 hover:text-accent transition-colors">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

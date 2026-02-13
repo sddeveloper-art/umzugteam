@@ -12,6 +12,11 @@ import Announcements from "./pages/Announcements";
 import RouteMap from "./pages/RouteMap";
 import DetailedCalculator from "./pages/DetailedCalculator";
 import Preise from "./pages/Preise";
+import About from "./pages/About";
+import Gallery from "./pages/Gallery";
+import Checklist from "./pages/Checklist";
+import Blog from "./pages/Blog";
+import CityLanding from "./pages/CityLanding";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +35,11 @@ const App = () => (
               <Route path="/trajet" element={<RouteMap />} />
               <Route path="/preisrechner" element={<DetailedCalculator />} />
               <Route path="/preise" element={<Preise />} />
+              <Route path="/ueber-uns" element={<About />} />
+              <Route path="/galerie" element={<Gallery />} />
+              <Route path="/checkliste" element={<Checklist />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/umzug/:city" element={<CityLanding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
