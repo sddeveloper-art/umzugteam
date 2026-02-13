@@ -1,6 +1,7 @@
 import { Check, Star, Zap, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 interface PackageItem {
   name: string;
@@ -85,14 +86,19 @@ const PackagesSection = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {packages.map((pkg) => {
+          {packages.map((pkg, index) => {
             const Icon = pkg.icon;
             return (
-              <div
+              <motion.div
                 key={pkg.name}
-                className={`relative bg-card rounded-2xl p-8 flex flex-col transition-all ${
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
+                whileHover={{ y: -8, transition: { duration: 0.25 } }}
+                className={`relative bg-card rounded-2xl p-8 flex flex-col transition-shadow ${
                   pkg.highlighted
-                    ? "ring-2 ring-accent shadow-xl scale-[1.02]"
+                    ? "ring-2 ring-accent shadow-xl"
                     : "card-elevated"
                 }`}
               >
@@ -141,7 +147,7 @@ const PackagesSection = () => {
                 >
                   Angebot anfordern
                 </Button>
-              </div>
+              </motion.div>
             );
           })}
         </div>
