@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          is_blocked: boolean
+          slots_booked: number
+          slots_total: number
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          is_blocked?: boolean
+          slots_booked?: number
+          slots_total?: number
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          is_blocked?: boolean
+          slots_booked?: number
+          slots_total?: number
+        }
+        Relationships: []
+      }
+      client_quotes: {
+        Row: {
+          apartment_size: string
+          created_at: string
+          estimated_price: number
+          extras: Json | null
+          from_city: string
+          id: string
+          status: string
+          to_city: string
+          user_id: string
+        }
+        Insert: {
+          apartment_size: string
+          created_at?: string
+          estimated_price: number
+          extras?: Json | null
+          from_city: string
+          id?: string
+          status?: string
+          to_city: string
+          user_id: string
+        }
+        Update: {
+          apartment_size?: string
+          created_at?: string
+          estimated_price?: number
+          extras?: Json | null
+          from_city?: string
+          id?: string
+          status?: string
+          to_city?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       company_bids: {
         Row: {
           announcement_id: string
@@ -173,6 +236,128 @@ export type Database = {
           updated_at?: string
           volume?: number
           winner_bid_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          discount_percent: number
+          id: string
+          is_active: boolean
+          max_uses: number
+          user_id: string
+          uses_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          max_uses?: number
+          user_id: string
+          uses_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          max_uses?: number
+          user_id?: string
+          uses_count?: number
+        }
+        Relationships: []
+      }
+      referral_uses: {
+        Row: {
+          created_at: string
+          id: string
+          referral_code_id: string
+          used_by_email: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referral_code_id: string
+          used_by_email: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referral_code_id?: string
+          used_by_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_uses_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          city: string | null
+          client_email: string
+          client_name: string
+          comment: string | null
+          created_at: string
+          id: string
+          is_approved: boolean
+          rating: number
+        }
+        Insert: {
+          city?: string | null
+          client_email: string
+          client_name: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          rating: number
+        }
+        Update: {
+          city?: string | null
+          client_email?: string
+          client_name?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          rating?: number
         }
         Relationships: []
       }

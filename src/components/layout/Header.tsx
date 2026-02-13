@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,11 +16,11 @@ const Header = () => {
     { label: "Galerie", href: "/galerie", isRoute: true, isExternal: false },
     { label: "Preise", href: "/preise", isRoute: true, isExternal: false },
     { label: "Preisrechner", href: "/preisrechner", isRoute: true, isExternal: false },
+    { label: "Bewertungen", href: "/bewertungen", isRoute: true, isExternal: false },
     { label: "Blog", href: "/blog", isRoute: true, isExternal: false },
     { label: "Checkliste", href: "/checkliste", isRoute: true, isExternal: false },
     { label: "Anfragen", href: "/anfragen", isRoute: true, isExternal: false },
-    { label: "FAQ", href: "#faq", isRoute: false, isExternal: false },
-    { label: "Kontakt", href: "#kontakt", isRoute: false, isExternal: false },
+    { label: "Mein Bereich", href: "/dashboard", isRoute: true, isExternal: false },
   ];
 
   const handleNavClick = (href: string, isRoute: boolean) => {
@@ -96,6 +97,7 @@ const Header = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-2">
+            <LanguageSwitcher />
             <ThemeToggle />
             <a href={location.pathname === "/" ? "#kostenrechner" : "/#kostenrechner"}>
               <Button variant="accent" size="lg">
