@@ -36,22 +36,22 @@
   <url><loc>https://umzugteam365.de/bundesland/schleswig-holstein</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/bundesland/thueringen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <!-- Top Cities -->
+  <!-- Cities (all 67) -->
   <url><loc>https://umzugteam365.de/umzug/berlin</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://umzugteam365.de/umzug/hamburg</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://umzugteam365.de/umzug/muenchen</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://umzugteam365.de/umzug/koeln</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://umzugteam365.de/umzug/frankfurt</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/stuttgart</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/duesseldorf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/dortmund</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/essen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/leipzig</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/bremen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/dresden</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/hannover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/nuernberg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/duisburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/stuttgart</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/duesseldorf</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/leipzig</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/dortmund</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/essen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/bremen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/dresden</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/hannover</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/nuernberg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/duisburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/bochum</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/wuppertal</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/bielefeld</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -61,80 +61,79 @@
   <url><loc>https://umzugteam365.de/umzug/mannheim</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/augsburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/wiesbaden</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/aachen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/gelsenkirchen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/moenchengladbach</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/braunschweig</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/kiel</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/chemnitz</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/aachen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/halle</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/magdeburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/freiburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/krefeld</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/luebeck</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/oberhausen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/erfurt</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/rostock</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/mainz</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/kassel</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/hagen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/saarbruecken</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/potsdam</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/hamm</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/muelheim</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/ludwigshafen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/oldenburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/darmstadt</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/osnabrueck</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/leverkusen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/heidelberg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/solingen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/potsdam</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/darmstadt</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/regensburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/paderborn</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/ingolstadt</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/wuerzburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/wolfsburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/goettingen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/ulm</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/heilbronn</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/reutlingen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/remscheid</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/pforzheim</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/offenbach</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/bottrop</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/ulm</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/siegen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/jena</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/erlangen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/trier</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/jena</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/salzgitter</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/cottbus</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/schwerin</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/hildesheim</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/schwerin</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/flensburg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://umzugteam365.de/umzug/weimar</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/tuebingen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/konstanz</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/giessen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://umzugteam365.de/umzug/bamberg</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/bayreuth</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/passau</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/landshut</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/stralsund</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/greifswald</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/dessau</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/zwickau</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/bremerhaven</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/gelsenkirchen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/moenchengladbach</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/krefeld</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/oberhausen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/hagen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/hamm</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/ludwigshafen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/leverkusen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/solingen</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://umzugteam365.de/umzug/osnabrueck</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
-  <!-- Routes -->
+  <!-- Routes (all 20) -->
   <url><loc>https://umzugteam365.de/umzugsroute/berlin-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/hamburg-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/berlin-hamburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/koeln-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/frankfurt-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/muenchen-hamburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/stuttgart-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/duesseldorf-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/hamburg-koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/berlin-koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/hamburg-koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/frankfurt-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/muenchen-koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/stuttgart-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/duesseldorf-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/hamburg-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/koeln-frankfurt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/muenchen-hamburg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/frankfurt-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/berlin-frankfurt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/muenchen-koeln</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/hamburg-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/leipzig-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/dresden-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/muenchen-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/hannover-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/stuttgart-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://umzugteam365.de/umzugsroute/koeln-frankfurt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://umzugteam365.de/umzugsroute/nuernberg-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/stuttgart-muenchen</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://umzugteam365.de/umzugsroute/dresden-berlin</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
