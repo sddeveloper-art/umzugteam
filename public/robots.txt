@@ -16,4 +16,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://umzugteam.lovable.app/sitemap.xml
+Sitemap: https://umzugteam365.de/sitemap.xml

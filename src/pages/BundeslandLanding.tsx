@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Check, ArrowRight, ArrowLeft, Building2, Users, Ruler } from "lucide-react";
 import { bundeslaender, bundeslaenderList } from "@/data/bundeslaender";
+import { cities } from "@/data/cities";
 
 const BundeslandLanding = () => {
   const { land } = useParams<{ land: string }>();
@@ -155,16 +156,24 @@ const BundeslandLanding = () => {
               {data.cities.length} Städte und Regionen – und viele mehr
             </p>
             <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-              {data.cities.map((city) => (
-                <Badge
-                  key={city}
-                  variant="secondary"
-                  className="text-sm py-2 px-4 cursor-default"
-                >
-                  <MapPin className="w-3 h-3 mr-1" />
-                  {city}
-                </Badge>
-              ))}
+              {data.cities.map((cityName) => {
+                const citySlug = Object.keys(cities).find(
+                  (k) => cities[k].name === cityName
+                );
+                return citySlug ? (
+                  <Link key={cityName} to={`/umzug/${citySlug}`}>
+                    <Badge variant="secondary" className="text-sm py-2 px-4 hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      {cityName}
+                    </Badge>
+                  </Link>
+                ) : (
+                  <Badge key={cityName} variant="secondary" className="text-sm py-2 px-4 cursor-default">
+                    <MapPin className="w-3 h-3 mr-1" />
+                    {cityName}
+                  </Badge>
+                );
+              })}
             </div>
           </div>
         </section>
