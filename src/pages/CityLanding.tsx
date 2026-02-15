@@ -4,50 +4,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MapPin, Check, ArrowRight } from "lucide-react";
-
-const cityData: Record<string, { name: string; population: string; description: string; features: string[] }> = {
-  berlin: {
-    name: "Berlin",
-    population: "3,7 Mio.",
-    description: "Als Hauptstadt bietet Berlin vielfältige Umzugsmöglichkeiten. Ob Kreuzberg, Mitte oder Charlottenburg – wir kennen jeden Kiez.",
-    features: ["Halteverbot-Beantragung übernehmen wir", "Alle Berliner Bezirke abgedeckt", "Express-Umzüge innerhalb von 24h", "Spezialservice für Altbauwohnungen"],
-  },
-  muenchen: {
-    name: "München",
-    population: "1,5 Mio.",
-    description: "In München sind wir Ihr zuverlässiger Partner – ob Schwabing, Bogenhausen oder das Umland.",
-    features: ["Erfahrung mit Münchner Altbauten", "Umzüge ins Münchner Umland", "Premium-Service für anspruchsvolle Kunden", "Firmenumzüge im Businessviertel"],
-  },
-  hamburg: {
-    name: "Hamburg",
-    population: "1,9 Mio.",
-    description: "Von der Hafencity bis Blankenese – wir kennen Hamburg und sorgen für einen reibungslosen Umzug.",
-    features: ["Umzüge an der Alster und Elbe", "Spezialtransporte für Villen", "Erfahrung mit engen Treppenhäusern", "Hamburger Umland inklusive"],
-  },
-  koeln: {
-    name: "Köln",
-    population: "1,1 Mio.",
-    description: "Ob Ehrenfeld, Nippes oder Lindenthal – in Köln sind wir schnell und zuverlässig vor Ort.",
-    features: ["Alle Kölner Veedel abgedeckt", "Rhein-Überquerung kein Problem", "Studentenumzüge zum Sondertarif", "Flexible Terminwahl"],
-  },
-  frankfurt: {
-    name: "Frankfurt",
-    population: "760.000",
-    description: "Die Finanzmetropole am Main: Wir übernehmen Privat- und Firmenumzüge in und um Frankfurt.",
-    features: ["Büroumzüge im Bankenviertel", "Sachsenhausen bis Nordend", "Umzüge ins Rhein-Main-Gebiet", "Hochhaus-Erfahrung vorhanden"],
-  },
-  stuttgart: {
-    name: "Stuttgart",
-    population: "635.000",
-    description: "Stuttgart und die Halbhöhenlage – unsere Teams meistern jede Steigung für Ihren Umzug.",
-    features: ["Erfahrung mit Hanglage-Häusern", "Umzüge in der Region Stuttgart", "Premium-Verpackung für Automobile", "Firmenumzüge in der Industrie"],
-  },
-};
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Check, ArrowRight, ArrowLeft, Users } from "lucide-react";
+import { cities, cityList } from "@/data/cities";
 
 const CityLanding = () => {
   const { city } = useParams<{ city: string }>();
-  const data = city ? cityData[city] : null;
+  const data = city ? cities[city] : null;
 
   if (!data) {
     return (
@@ -55,7 +19,8 @@ const CityLanding = () => {
         <Header />
         <main className="pt-32 pb-24 container mx-auto px-4 text-center">
           <h1 className="text-3xl font-bold text-foreground mb-4">Stadt nicht gefunden</h1>
-          <Link to="/" className="text-accent hover:underline">Zur Startseite</Link>
+          <p className="text-muted-foreground mb-6">Wählen Sie eine Stadt aus unserer Liste.</p>
+          <Link to="/staedte" className="text-accent hover:underline">Alle Städte anzeigen</Link>
         </main>
         <Footer />
       </>
@@ -66,67 +31,149 @@ const CityLanding = () => {
     <>
       <Helmet>
         <title>Umzugsunternehmen {data.name} – UmzugTeam365 | Professioneller Umzug</title>
-        <meta name="description" content={`Professionelles Umzugsunternehmen in ${data.name}. Privat- und Firmenumzüge, Verpackungsservice und mehr. Jetzt kostenloses Angebot anfordern!`} />
+        <meta name="description" content={`Professionelles Umzugsunternehmen in ${data.name}. Privat- und Firmenumzüge, Verpackungsservice und mehr. Festpreise ab 299€. Jetzt Angebot anfordern!`} />
         <link rel="canonical" href={`https://umzugteam365.de/umzug/${city}`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MovingCompany",
+            name: "UmzugTeam365",
+            description: `Professionelles Umzugsunternehmen in ${data.name}`,
+            areaServed: { "@type": "City", name: data.name },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: data.name,
+              addressCountry: "DE",
+            },
+            priceRange: "ab 299€",
+            telephone: "+4915166532563",
+            url: `https://umzugteam365.de/umzug/${city}`,
+          })}
+        </script>
       </Helmet>
+
       <Header />
-      <main className="pt-32 pb-24">
+
+      <main className="min-h-screen bg-background pt-24">
         {/* Hero */}
-        <section className="hero-section text-primary-foreground py-20">
-          <div className="container mx-auto px-4 text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="flex items-center justify-center gap-2 mb-4">
+        <section className="hero-section text-primary-foreground py-16 md:py-24">
+          <div className="container mx-auto px-4">
+            <Link to="/staedte" className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground mb-6 transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              Alle Städte
+            </Link>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-5 h-5" />
-                <span className="font-medium">{data.name} · {data.population} Einwohner</span>
+                <span className="font-medium">{data.name} · {data.bundesland}</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Umzugsunternehmen in {data.name}
               </h1>
-              <p className="text-lg opacity-90 max-w-2xl mx-auto mb-8">{data.description}</p>
-              <Link to="/#kostenrechner">
-                <Button size="lg" variant="secondary" className="text-lg px-8">
-                  Kostenloses Angebot für {data.name}
+              <p className="text-lg md:text-xl text-primary-foreground/85 max-w-3xl mb-4">{data.description}</p>
+              <div className="flex items-center gap-2 mb-8">
+                <Users className="w-4 h-4 text-primary-foreground/70" />
+                <span className="text-primary-foreground/70">{data.population} Einwohner</span>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" variant="secondary" className="text-lg px-8">
+                  <Link to="/#kostenrechner">
+                    Kostenloses Angebot für {data.name}
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
                 </Button>
-              </Link>
+                <Button asChild size="lg" variant="outline" className="text-lg px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                  <a href="tel:+4915166532563">Jetzt anrufen</a>
+                </Button>
+              </div>
             </motion.div>
           </div>
         </section>
 
         {/* Features */}
-        <section className="container mx-auto px-4 py-20">
-          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-            Warum UmzugTeam365 in {data.name}?
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {data.features.map((f, i) => (
-              <motion.div key={f}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex items-start gap-3 bg-card rounded-xl p-5 card-elevated">
-                <Check className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                <span className="text-foreground">{f}</span>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Other cities */}
-        <section className="bg-secondary py-16">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-2xl font-bold text-foreground mb-8">Weitere Standorte</h2>
-            <div className="flex flex-wrap justify-center gap-3">
-              {Object.entries(cityData).filter(([key]) => key !== city).map(([key, val]) => (
-                <Link key={key} to={`/umzug/${key}`}
-                  className="px-4 py-2 rounded-full bg-card text-foreground hover:bg-accent hover:text-accent-foreground transition-colors card-elevated text-sm font-medium flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {val.name}
-                </Link>
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center text-foreground mb-4">
+              Warum UmzugTeam365 in {data.name}?
+            </h2>
+            <p className="text-center text-muted-foreground mb-12">Unsere Vorteile für Ihren Umzug</p>
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {data.features.map((f, i) => (
+                <motion.div key={f}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                >
+                  <Card className="card-elevated h-full">
+                    <CardContent className="flex items-start gap-3 p-5">
+                      <Check className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-foreground">{f}</span>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
+
+        {/* Districts */}
+        {data.districts.length > 0 && (
+          <section className="py-16 bg-muted/50">
+            <div className="container mx-auto px-4 text-center">
+              <h2 className="text-3xl font-bold text-foreground mb-4">Stadtteile in {data.name}</h2>
+              <p className="text-muted-foreground mb-8">Wir sind in allen Stadtteilen aktiv</p>
+              <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+                {data.districts.map((d) => (
+                  <Badge key={d} variant="secondary" className="text-sm py-2 px-4">
+                    <MapPin className="w-3 h-3 mr-1" />
+                    {d}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* CTA */}
+        <section className="py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Umzug in {data.name} planen</h2>
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+              Erhalten Sie jetzt ein kostenloses, unverbindliches Angebot. Festpreisgarantie – keine versteckten Kosten.
+            </p>
+            <Button asChild variant="accent" size="lg">
+              <Link to="/#kostenrechner">
+                Jetzt Preis berechnen
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        {/* Other cities */}
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-8">Weitere Standorte</h2>
+            <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
+              {cityList
+                .filter((c) => c.slug !== city)
+                .slice(0, 20)
+                .map((c) => (
+                  <Link key={c.slug} to={`/umzug/${c.slug}`}
+                    className="px-4 py-2 rounded-full bg-card text-foreground hover:bg-accent hover:text-accent-foreground transition-colors card-elevated text-sm font-medium flex items-center gap-1">
+                    <MapPin className="w-3 h-3" /> {c.name}
+                  </Link>
+                ))}
+              <Link to="/staedte"
+                className="px-4 py-2 rounded-full bg-accent text-accent-foreground text-sm font-medium flex items-center gap-1">
+                Alle Städte <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
+
       <Footer />
     </>
   );
