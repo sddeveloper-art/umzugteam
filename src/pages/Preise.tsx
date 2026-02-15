@@ -45,6 +45,23 @@ const Preise = () => {
       <Helmet>
         <title>Preise & Tarife - UmzugTeam365 | Transparente Umzugspreise</title>
         <meta name="description" content="Unsere transparenten Umzugspreise: Ab 299€ für ein Studio. Festpreisgarantie, keine versteckten Kosten. Jetzt Tarife vergleichen!" />
+        <link rel="canonical" href="https://umzugteam365.de/preise" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            serviceType: "Umzugsservice",
+            provider: { "@type": "MovingCompany", name: "UmzugTeam365", telephone: "+4915166532563" },
+            areaServed: { "@type": "Country", name: "Deutschland" },
+            offers: apartmentSizes.map(s => ({
+              "@type": "Offer",
+              name: s.label,
+              price: s.basePrice,
+              priceCurrency: "EUR",
+              description: `Umzug ab ${s.basePrice}€ für ${s.label}`,
+            })),
+          })}
+        </script>
       </Helmet>
 
       <Header />
