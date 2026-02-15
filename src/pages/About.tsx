@@ -39,6 +39,22 @@ const About = () => {
       <Helmet>
         <title>Über uns – UmzugTeam365 | Ihr Umzugspartner seit 1998</title>
         <meta name="description" content="Lernen Sie das Team hinter UmzugTeam365 kennen. Über 25 Jahre Erfahrung, 50.000+ zufriedene Kunden und ein engagiertes Team für Ihren perfekten Umzug." />
+        <link rel="canonical" href="https://umzugteam365.de/ueber-uns" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            mainEntity: {
+              "@type": "MovingCompany",
+              name: "UmzugTeam365",
+              foundingDate: "1998",
+              numberOfEmployees: { "@type": "QuantitativeValue", value: "120" },
+              description: "Seit über 25 Jahren Ihr zuverlässiger Umzugspartner in ganz Deutschland.",
+              telephone: "+4915166532563",
+              url: "https://umzugteam365.de",
+            },
+          })}
+        </script>
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">

@@ -50,6 +50,7 @@ const Reviews = () => {
       <Helmet>
         <title>Bewertungen – UmzugTeam365 | Kundenmeinungen</title>
         <meta name="description" content="Lesen Sie echte Kundenbewertungen zu UmzugTeam365. Über 50.000 zufriedene Kunden bewerten unseren Umzugsservice." />
+        <link rel="canonical" href="https://umzugteam365.de/bewertungen" />
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">

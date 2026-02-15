@@ -68,6 +68,23 @@ const Blog = () => {
       <Helmet>
         <title>Blog & Ratgeber – UmzugTeam365 | Umzugstipps & Tricks</title>
         <meta name="description" content="Umzugs-Ratgeber von UmzugTeam365: Tipps zum Planen, Sparen und Organisieren. Alles rund um Ihren perfekten Umzug." />
+        <link rel="canonical" href="https://umzugteam365.de/blog" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            name: "UmzugTeam365 Blog & Ratgeber",
+            url: "https://umzugteam365.de/blog",
+            publisher: { "@type": "Organization", name: "UmzugTeam365" },
+            blogPost: articles.map(a => ({
+              "@type": "BlogPosting",
+              headline: a.title,
+              description: a.excerpt,
+              datePublished: a.date,
+              author: { "@type": "Organization", name: "UmzugTeam365" },
+            })),
+          })}
+        </script>
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">
