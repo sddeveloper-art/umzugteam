@@ -8,6 +8,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Check, ArrowRight, ArrowLeft, Users } from "lucide-react";
 import { cities, cityList } from "@/data/cities";
+import { routeList } from "@/data/routes";
+import { bundeslaender } from "@/data/bundeslaender";
+import { Truck } from "lucide-react";
 
 const CityLanding = () => {
   const { city } = useParams<{ city: string }>();
@@ -134,6 +137,44 @@ const CityLanding = () => {
             </div>
           </section>
         )}
+
+        {/* Bundesland link */}
+        {(() => {
+          const bl = Object.values(bundeslaender).find((b) => b.name === data.bundesland);
+          return bl ? (
+            <section className="py-8">
+              <div className="container mx-auto px-4 text-center">
+                <Link to={`/bundesland/${bl.slug}`} className="inline-flex items-center gap-2 text-accent hover:underline font-medium">
+                  <MapPin className="w-4 h-4" />
+                  Mehr Umzüge in {bl.name}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </section>
+          ) : null;
+        })()}
+
+        {/* Related routes */}
+        {(() => {
+          const related = routeList.filter(
+            (r) => r.fromSlug === city || r.toSlug === city
+          );
+          return related.length > 0 ? (
+            <section className="py-16 bg-muted/50">
+              <div className="container mx-auto px-4 text-center">
+                <h2 className="text-2xl font-bold text-foreground mb-8">Beliebte Routen ab {data.name}</h2>
+                <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
+                  {related.slice(0, 8).map((r) => (
+                    <Link key={r.slug} to={`/umzugsroute/${r.slug}`}
+                      className="px-4 py-2 rounded-full bg-card text-foreground hover:bg-accent hover:text-accent-foreground transition-colors card-elevated text-sm font-medium flex items-center gap-1">
+                      <Truck className="w-3 h-3" /> {r.from} → {r.to}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null;
+        })()}
 
         {/* CTA */}
         <section className="py-16">

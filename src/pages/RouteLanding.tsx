@@ -154,19 +154,33 @@ const RouteLanding = () => {
           </div>
         </section>
 
-        {/* Reverse route */}
-        {hasReverse && (
-          <section className="py-12">
-            <div className="container mx-auto px-4 text-center">
-              <Link to={`/umzugsroute/${reverseSlug}`}>
-                <Button variant="outline" size="lg" className="gap-2">
-                  <ArrowLeftRight className="w-4 h-4" />
-                  Gegenrichtung: {data.to} → {data.from}
+        {/* City links */}
+        <section className="py-12">
+          <div className="container mx-auto px-4 text-center">
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to={`/umzug/${data.fromSlug}`}>
+                <Button variant="outline" className="gap-2">
+                  <MapPin className="w-4 h-4" />
+                  Umzüge in {data.from}
                 </Button>
               </Link>
+              <Link to={`/umzug/${data.toSlug}`}>
+                <Button variant="outline" className="gap-2">
+                  <MapPin className="w-4 h-4" />
+                  Umzüge in {data.to}
+                </Button>
+              </Link>
+              {hasReverse && (
+                <Link to={`/umzugsroute/${reverseSlug}`}>
+                  <Button variant="outline" className="gap-2">
+                    <ArrowLeftRight className="w-4 h-4" />
+                    {data.to} → {data.from}
+                  </Button>
+                </Link>
+              )}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         {/* CTA */}
         <section className="py-16">
