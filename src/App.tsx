@@ -21,6 +21,8 @@ import CityLanding from "./pages/CityLanding";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Reviews from "./pages/Reviews";
+import BundeslandLanding from "./pages/BundeslandLanding";
+import BundeslaenderIndex from "./pages/BundeslaenderIndex";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/bewertungen" element={<Reviews />} />
+              <Route path="/bundeslaender" element={<BundeslaenderIndex />} />
+              <Route path="/bundesland/:land" element={<BundeslandLanding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
