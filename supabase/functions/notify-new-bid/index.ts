@@ -43,6 +43,21 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Security: Validate authorization - only allow calls with service role key
+  const authHeader = req.headers.get("authorization");
+  const expectedAuth = `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`;
+
+  if (!authHeader || authHeader !== expectedAuth) {
+    console.error("Unauthorized access attempt to notify-new-bid");
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+
   console.log("Received new bid notification request");
 
   try {
