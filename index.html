@@ -1,4 +1,4 @@
-<!-- UmzugTeam365 - Last updated: 2026-01-28 -->
+<!-- UmzugTeam365 - Last updated: 2026-02-15 -->
 <!doctype html>
 <html lang="de">
   <head>
@@ -7,6 +7,36 @@
     <title>UmzugTeam365 - Günstige Umzüge in Deutschland</title>
     <meta name="description" content="UmzugTeam365 - Ihr Partner für günstige und zuverlässige Umzüge in ganz Deutschland. Erhalten Sie kostenlose Angebote von verifizierten Umzugsfirmen." />
     <meta name="author" content="UmzugTeam365" />
+
+    <!-- Preconnect to external origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload critical fonts with font-display swap -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" />
+
+    <!-- Inline critical above-fold styles to prevent CLS -->
+    <style>
+      /* Prevent FOUC and CLS from font swap */
+      body {
+        font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+      }
+      /* Reserve space for fixed header to prevent CLS */
+      #root {
+        min-height: 100vh;
+      }
+      /* Skeleton for hero to prevent CLS */
+      .hero-placeholder {
+        min-height: 100vh;
+        background: hsl(222 47% 11%);
+      }
+    </style>
 
     <meta property="og:title" content="UmzugTeam365 - Günstige Umzüge" />
     <meta property="og:description" content="Ihr Partner für günstige und zuverlässige Umzüge in ganz Deutschland" />
