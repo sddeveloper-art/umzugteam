@@ -24,9 +24,9 @@ const Reviews = () => {
   const { data: reviews = [], refetch } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("reviews").select("*").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("reviews_public" as any).select("*").order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+      return (data || []) as unknown as Array<{ id: string; client_name: string; rating: number; comment: string | null; city: string | null; created_at: string; is_approved: boolean }>;
     },
   });
 

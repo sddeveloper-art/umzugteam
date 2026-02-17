@@ -462,6 +462,36 @@ export type Database = {
           },
         ]
       }
+      reviews_public: {
+        Row: {
+          city: string | null
+          client_name: string | null
+          comment: string | null
+          created_at: string | null
+          id: string | null
+          is_approved: boolean | null
+          rating: number | null
+        }
+        Insert: {
+          city?: string | null
+          client_name?: string | null
+          comment?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          rating?: number | null
+        }
+        Update: {
+          city?: string | null
+          client_name?: string | null
+          comment?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_approved?: boolean | null
+          rating?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
