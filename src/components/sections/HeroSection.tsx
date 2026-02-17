@@ -113,6 +113,11 @@ const HeroSection = () => {
           src={heroImage}
           alt="Professionelles Umzugsteam"
           className="w-full h-full object-cover"
+          width={1920}
+          height={1080}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 hero-section opacity-90" />
       </div>
