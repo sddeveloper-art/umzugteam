@@ -5,6 +5,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/hooks/useI18n";
+import { loc, locArray } from "@/lib/localized";
 import type { LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -13,7 +14,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const ServicesSection = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { data: services = [] } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -35,12 +36,12 @@ const ServicesSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             const Icon = iconMap[service.icon_name] || Truck;
-            const features = (service.features as string[] | null) || [];
+            const features = locArray(service, "features", language) as string[];
             return (
               <article key={service.id} className="bg-card rounded-2xl p-8 card-elevated animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6"><Icon className="w-7 h-7 text-accent" /></div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{service.title}</h3>
-                <p className="text-muted-foreground mb-6">{service.description}</p>
+                <h3 className="text-xl font-bold text-foreground mb-3">{loc(service, "title", language)}</h3>
+                <p className="text-muted-foreground mb-6">{loc(service, "description", language)}</p>
                 <ul className="space-y-2">
                   {features.map((feature: string) => (<li key={feature} className="flex items-center gap-2 text-sm text-foreground/80"><Shield className="w-4 h-4 text-accent flex-shrink-0" />{feature}</li>))}
                 </ul>

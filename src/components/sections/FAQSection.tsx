@@ -4,9 +4,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/hooks/useI18n";
+import { loc } from "@/lib/localized";
 
 const FAQSection = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { data: faqs = [] } = useQuery({
     queryKey: ["faq_items"],
     queryFn: async () => {
@@ -28,8 +29,8 @@ const FAQSection = () => {
           <Accordion type="single" collapsible className="space-y-4">
             {faqs.map((faq, index) => (
               <AccordionItem key={faq.id} value={`item-${index}`} className="bg-card rounded-xl border-none shadow-sm px-6 data-[state=open]:shadow-md transition-shadow">
-                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-accent hover:no-underline py-6">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">{faq.answer}</AccordionContent>
+                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-accent hover:no-underline py-6">{loc(faq, "question", language)}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">{loc(faq, "answer", language)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
