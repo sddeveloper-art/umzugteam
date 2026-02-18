@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCompetitors, calculateCompetitorPrices } from "@/hooks/useCompetitors";
 import PriceComparisonBadge from "@/components/PriceComparisonBadge";
+import { useI18n } from "@/hooks/useI18n";
+
 interface FormData {
   fromCity: string;
   toCity: string;
@@ -27,12 +29,12 @@ interface FormData {
 }
 
 const apartmentSizes = [
-  { value: "studio", label: "Studio / 1 Zimmer", volume: 15, basePrice: 299 },
-  { value: "2rooms", label: "2 Zimmer (ca. 50m²)", volume: 25, basePrice: 449 },
-  { value: "3rooms", label: "3 Zimmer (ca. 75m²)", volume: 35, basePrice: 599 },
-  { value: "4rooms", label: "4 Zimmer (ca. 100m²)", volume: 50, basePrice: 799 },
-  { value: "5rooms", label: "5+ Zimmer (ca. 120m²+)", volume: 70, basePrice: 999 },
-  { value: "house", label: "Einfamilienhaus", volume: 100, basePrice: 1499 },
+  { value: "studio", labelKey: "Studio / 1 Zimmer", volume: 15, basePrice: 299 },
+  { value: "2rooms", labelKey: "2 Zimmer (ca. 50m²)", volume: 25, basePrice: 449 },
+  { value: "3rooms", labelKey: "3 Zimmer (ca. 75m²)", volume: 35, basePrice: 599 },
+  { value: "4rooms", labelKey: "4 Zimmer (ca. 100m²)", volume: 50, basePrice: 799 },
+  { value: "5rooms", labelKey: "5+ Zimmer (ca. 120m²+)", volume: 70, basePrice: 999 },
+  { value: "house", labelKey: "Einfamilienhaus", volume: 100, basePrice: 1499 },
 ];
 
 const germanCities = [
@@ -71,6 +73,7 @@ const calculateDistance = (from: string, to: string): number => {
 
 const QuoteCalculator = () => {
   const { toast } = useToast();
+  const { t } = useI18n();
   const { data: competitors = [] } = useCompetitors();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
@@ -169,7 +172,7 @@ const QuoteCalculator = () => {
           phone: formData.phone,
           fromCity: formData.fromCity,
           toCity: formData.toCity,
-          apartmentSize: apartmentSizes.find(s => s.value === formData.apartmentSize)?.label || formData.apartmentSize,
+          apartmentSize: apartmentSizes.find(s => s.value === formData.apartmentSize)?.labelKey || formData.apartmentSize,
           floor: parseInt(formData.floor) || 0,
           hasElevator: formData.hasElevator,
           needsPacking: formData.packingService,
@@ -185,8 +188,8 @@ const QuoteCalculator = () => {
       if (error) {
         console.error("Error sending quote:", error);
         toast({
-          title: "Fehler",
-          description: "Fehler beim Senden der Anfrage. Bitte versuchen Sie es erneut.",
+          title: t("common.error"),
+          description: t("hero.errorDesc"),
           variant: "destructive",
         });
         return;
@@ -194,15 +197,15 @@ const QuoteCalculator = () => {
 
       console.log("Quote sent successfully:", data);
       toast({
-        title: "Erfolg!",
-        description: "Ihre Anfrage wurde erfolgreich gesendet!",
+        title: t("calc.successTitle"),
+        description: t("calc.successDesc"),
       });
       setSubmitted(true);
     } catch (err) {
       console.error("Error:", err);
       toast({
-        title: "Fehler",
-        description: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+        title: t("common.error"),
+        description: t("hero.errorDesc"),
         variant: "destructive",
       });
     } finally {
@@ -217,20 +220,20 @@ const QuoteCalculator = () => {
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         <h3 className="text-2xl font-bold text-foreground mb-4">
-          Vielen Dank für Ihre Anfrage!
+          {t("calc.successTitle")}
         </h3>
         <p className="text-muted-foreground mb-6">
-          Wir haben Ihre Anfrage erhalten und werden uns innerhalb von 24 Stunden bei Ihnen melden.
+          {t("calc.successDesc")}
         </p>
         <div className="bg-muted rounded-xl p-6 text-left mb-6">
-          <h4 className="font-semibold text-foreground mb-3">Ihre Angaben:</h4>
+          <h4 className="font-semibold text-foreground mb-3">{t("calc.yourDetails")}</h4>
           <div className="space-y-2 text-sm">
-            <p><span className="text-muted-foreground">Route:</span> {formData.fromCity} → {formData.toCity}</p>
-            <p><span className="text-muted-foreground">Geschätzter Preis:</span> <span className="font-bold text-accent">{calculation?.total.toFixed(2)} €</span></p>
+            <p><span className="text-muted-foreground">{t("calc.route")}:</span> {formData.fromCity} → {formData.toCity}</p>
+            <p><span className="text-muted-foreground">{t("calc.estimatedPrice")}:</span> <span className="font-bold text-accent">{calculation?.total.toFixed(2)} €</span></p>
           </div>
         </div>
         <Button variant="accent" onClick={() => { setSubmitted(false); setStep(1); }}>
-          Neue Anfrage stellen
+          {t("calc.newRequest")}
         </Button>
       </div>
     );
@@ -257,9 +260,9 @@ const QuoteCalculator = () => {
           ))}
         </div>
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Umzugsdetails</span>
-          <span>Extras</span>
-          <span>Kontakt</span>
+          <span>{t("calc.step1")}</span>
+          <span>{t("calc.step2")}</span>
+          <span>{t("calc.step3")}</span>
         </div>
       </div>
 
@@ -272,15 +275,15 @@ const QuoteCalculator = () => {
                 <MapPin className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">Umzugsdetails</h3>
-                <p className="text-sm text-muted-foreground">Wohin soll es gehen?</p>
+                <h3 className="text-xl font-bold text-foreground">{t("calc.movingDetails")}</h3>
+                <p className="text-sm text-muted-foreground">{t("calc.whereToGo")}</p>
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Von (Abholort) *
+                  {t("calc.from")} *
                 </label>
                 <select
                   value={formData.fromCity}
@@ -295,7 +298,7 @@ const QuoteCalculator = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Nach (Zielort) *
+                  {t("calc.to")} *
                 </label>
                 <select
                   value={formData.toCity}
@@ -303,7 +306,7 @@ const QuoteCalculator = () => {
                   className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
                   required
                 >
-                  <option value="">Bitte wählen</option>
+                  <option value="">{t("calc.selectPlease")}</option>
                   {germanCities.map(city => (
                     <option key={city.name} value={city.name}>{city.name}</option>
                   ))}
@@ -313,7 +316,7 @@ const QuoteCalculator = () => {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                Wohnungsgröße *
+                {t("calc.apartmentSize")} *
               </label>
               <div className="grid sm:grid-cols-2 gap-3">
                 {apartmentSizes.map((size) => (
@@ -335,8 +338,8 @@ const QuoteCalculator = () => {
                     />
                     <Home className={`w-5 h-5 ${formData.apartmentSize === size.value ? 'text-accent' : 'text-muted-foreground'}`} />
                     <div>
-                      <div className="font-medium text-foreground">{size.label}</div>
-                      <div className="text-xs text-muted-foreground">Ab {size.basePrice} €</div>
+                      <div className="font-medium text-foreground">{size.labelKey}</div>
+                      <div className="text-xs text-muted-foreground">{t("calc.fromAb")} {size.basePrice} €</div>
                     </div>
                   </label>
                 ))}
@@ -346,19 +349,19 @@ const QuoteCalculator = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Stockwerk
+                  {t("calc.floor")}
                 </label>
                 <select
                   value={formData.floor}
                   onChange={(e) => updateFormData('floor', e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
                 >
-                  <option value="0">Erdgeschoss</option>
-                  <option value="1">1. Stock</option>
-                  <option value="2">2. Stock</option>
-                  <option value="3">3. Stock</option>
-                  <option value="4">4. Stock</option>
-                  <option value="5">5. Stock oder höher</option>
+                  <option value="0">{t("calc.groundFloor")}</option>
+                  <option value="1">1. {t("calc.floorN")}</option>
+                  <option value="2">2. {t("calc.floorN")}</option>
+                  <option value="3">3. {t("calc.floorN")}</option>
+                  <option value="4">4. {t("calc.floorN")}</option>
+                  <option value="5">{t("calc.floor5plus")}</option>
                 </select>
               </div>
               <div className="flex items-center">
@@ -369,7 +372,7 @@ const QuoteCalculator = () => {
                     onChange={(e) => updateFormData('hasElevator', e.target.checked)}
                     className="w-5 h-5 rounded border-input text-accent focus:ring-accent"
                   />
-                  <span className="text-foreground">Aufzug vorhanden</span>
+                  <span className="text-foreground">{t("calc.hasElevator")}</span>
                 </label>
               </div>
             </div>
@@ -384,21 +387,21 @@ const QuoteCalculator = () => {
                 <Package className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">Zusatzleistungen</h3>
-                <p className="text-sm text-muted-foreground">Welche Services benötigen Sie?</p>
+                <h3 className="text-xl font-bold text-foreground">{t("calc.extras")}</h3>
+                <p className="text-sm text-muted-foreground">{t("calc.extrasSubtitle")}</p>
               </div>
             </div>
 
             <div className="space-y-3">
               {[
-                { key: "packingService" as const, label: "Ein- und Auspacken", desc: "Professionelles Ein- und Auspacken inkl. Verpackungsmaterial", cost: calculation?.packingCost || 0 },
-                { key: "furnitureAssembly" as const, label: "Möbelmontage", desc: "Ab- und Aufbau von Möbeln wie Schränke, Betten, Regale", cost: 150 },
-                { key: "fragilePackaging" as const, label: "Empfindliches Verpacken", desc: "Spezialverpackung für Glas, Porzellan, Elektronik", cost: 120 },
-                { key: "premiumInsurance" as const, label: "Premium-Versicherung", desc: "Erweiterte Deckung bis 50.000 € für Wertgegenstände", cost: 89 },
-                { key: "expressService" as const, label: "Express-Service", desc: "Bevorzugte Terminplanung und schnellere Durchführung", cost: 199 },
-                { key: "weekendService" as const, label: "Wochenend-Service", desc: "Umzug am Samstag oder Sonntag", cost: 149 },
-                { key: "cleaningService" as const, label: "Endreinigung", desc: "Grundreinigung der alten Wohnung nach dem Umzug", cost: 180 },
-                { key: "storageService" as const, label: "Zwischenlagerung", desc: "Sichere Lagerung Ihrer Gegenstände (1 Monat)", cost: 99 },
+                { key: "packingService" as const, label: t("calc.packing"), desc: t("calc.packingDesc"), cost: calculation?.packingCost || 0 },
+                { key: "furnitureAssembly" as const, label: t("calc.assembly"), desc: t("calc.assemblyDesc"), cost: 150 },
+                { key: "fragilePackaging" as const, label: t("calc.fragile"), desc: t("calc.fragileDesc"), cost: 120 },
+                { key: "premiumInsurance" as const, label: t("calc.premiumInsurance"), desc: t("calc.premiumInsuranceDesc"), cost: 89 },
+                { key: "expressService" as const, label: t("calc.express"), desc: t("calc.expressDesc"), cost: 199 },
+                { key: "weekendService" as const, label: t("calc.weekend"), desc: t("calc.weekendDesc"), cost: 149 },
+                { key: "cleaningService" as const, label: t("calc.cleaning"), desc: t("calc.cleaningDesc"), cost: 180 },
+                { key: "storageService" as const, label: t("calc.storage"), desc: t("calc.storageDesc"), cost: 99 },
               ].map((option) => (
                 <label key={option.key} className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   formData[option.key] ? 'border-accent bg-accent/5' : 'border-input hover:border-accent/50'
@@ -425,90 +428,89 @@ const QuoteCalculator = () => {
               <div className="bg-primary/5 rounded-xl p-6 mt-6">
                 <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
                   <Calculator className="w-5 h-5 text-accent" />
-                  Kostenübersicht
+                  {t("calc.costOverview")}
                 </h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Grundpreis ({apartmentSizes.find(s => s.value === formData.apartmentSize)?.label})</span>
+                    <span className="text-muted-foreground">{t("calc.basePrice")} ({apartmentSizes.find(s => s.value === formData.apartmentSize)?.labelKey})</span>
                     <span className="text-foreground">{calculation.basePrice.toFixed(2)} €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Entfernung ({calculation.distance} km)</span>
+                    <span className="text-muted-foreground">{t("calc.distance")} ({calculation.distance} km)</span>
                     <span className="text-foreground">{calculation.distanceCost.toFixed(2)} €</span>
                   </div>
                   {calculation.floorCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Stockwerk-Zuschlag</span>
+                      <span className="text-muted-foreground">{t("calc.floorSurcharge")}</span>
                       <span className="text-foreground">{calculation.floorCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.packingCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Ein-/Auspacken</span>
+                      <span className="text-muted-foreground">{t("calc.packing")}</span>
                       <span className="text-foreground">{calculation.packingCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.assemblyCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Möbelmontage</span>
+                      <span className="text-muted-foreground">{t("calc.assembly")}</span>
                       <span className="text-foreground">{calculation.assemblyCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.fragileCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Empfindliches Verpacken</span>
+                      <span className="text-muted-foreground">{t("calc.fragile")}</span>
                       <span className="text-foreground">{calculation.fragileCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.insuranceCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Premium-Versicherung</span>
+                      <span className="text-muted-foreground">{t("calc.premiumInsurance")}</span>
                       <span className="text-foreground">{calculation.insuranceCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.expressCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Express-Service</span>
+                      <span className="text-muted-foreground">{t("calc.express")}</span>
                       <span className="text-foreground">{calculation.expressCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.weekendCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Wochenend-Service</span>
+                      <span className="text-muted-foreground">{t("calc.weekend")}</span>
                       <span className="text-foreground">{calculation.weekendCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.cleaningCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Endreinigung</span>
+                      <span className="text-muted-foreground">{t("calc.cleaning")}</span>
                       <span className="text-foreground">{calculation.cleaningCost.toFixed(2)} €</span>
                     </div>
                   )}
                   {calculation.storageCost > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Zwischenlagerung</span>
+                      <span className="text-muted-foreground">{t("calc.storage")}</span>
                       <span className="text-foreground">{calculation.storageCost.toFixed(2)} €</span>
                     </div>
                   )}
                   <div className="border-t border-input pt-2 mt-2">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Zwischensumme</span>
+                      <span className="text-muted-foreground">{t("calc.subtotal")}</span>
                       <span className="text-foreground">{calculation.subtotal.toFixed(2)} €</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">MwSt. (19%)</span>
+                      <span className="text-muted-foreground">{t("calc.vat")}</span>
                       <span className="text-foreground">{calculation.tax.toFixed(2)} €</span>
                     </div>
                   </div>
                   <div className="border-t border-input pt-3 mt-3">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-foreground text-lg">Geschätzter Gesamtpreis</span>
+                      <span className="font-bold text-foreground text-lg">{t("calc.estimatedTotal")}</span>
                       <span className="font-bold text-accent text-2xl">{calculation.total.toFixed(2)} €</span>
                     </div>
                   </div>
                 </div>
                 
-                {/* Price comparison badge */}
                 <PriceComparisonBadge 
                   comparisons={priceComparisons} 
                   ourPrice={calculation.total} 
@@ -526,14 +528,14 @@ const QuoteCalculator = () => {
                 <Truck className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-foreground">Kontaktdaten</h3>
-                <p className="text-sm text-muted-foreground">Wie können wir Sie erreichen?</p>
+                <h3 className="text-xl font-bold text-foreground">{t("calc.contactInfo")}</h3>
+                <p className="text-sm text-muted-foreground">{t("calc.contactSubtitle")}</p>
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Name *</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t("calc.name")} *</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -544,7 +546,7 @@ const QuoteCalculator = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">E-Mail *</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t("calc.email")} *</label>
                 <input
                   type="email"
                   value={formData.email}
@@ -558,7 +560,7 @@ const QuoteCalculator = () => {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Telefon *</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t("calc.phone")} *</label>
                 <input
                   type="tel"
                   value={formData.phone}
@@ -569,7 +571,7 @@ const QuoteCalculator = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Wunschtermin</label>
+                <label className="block text-sm font-medium text-foreground mb-2">{t("calc.preferredDate")}</label>
                 <input
                   type="date"
                   value={formData.preferredDate}
@@ -580,12 +582,12 @@ const QuoteCalculator = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Zusätzliche Hinweise</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("calc.additionalNotes")}</label>
               <textarea
                 value={formData.notes}
                 onChange={(e) => updateFormData('notes', e.target.value)}
                 rows={3}
-                placeholder="Besondere Gegenstände, Zugangshinweise, etc."
+                placeholder={t("calc.notesPlaceholder")}
                 className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent resize-none"
               />
             </div>
@@ -595,7 +597,7 @@ const QuoteCalculator = () => {
               <>
                 <div className="bg-accent/10 rounded-xl p-6 flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Geschätzter Gesamtpreis</p>
+                    <p className="text-sm text-muted-foreground">{t("calc.estimatedTotal")}</p>
                     <p className="text-3xl font-bold text-accent">{calculation.total.toFixed(2)} €</p>
                   </div>
                   <div className="text-right text-sm text-muted-foreground">
@@ -604,7 +606,6 @@ const QuoteCalculator = () => {
                   </div>
                 </div>
                 
-                {/* Price comparison badge */}
                 <PriceComparisonBadge 
                   comparisons={priceComparisons} 
                   ourPrice={calculation.total} 
@@ -618,7 +619,7 @@ const QuoteCalculator = () => {
         <div className="flex justify-between mt-8 pt-6 border-t border-input">
           {step > 1 ? (
             <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
-              Zurück
+              {t("calc.back")}
             </Button>
           ) : (
             <div />
@@ -631,7 +632,7 @@ const QuoteCalculator = () => {
               onClick={() => setStep(step + 1)}
               disabled={step === 1 && (!formData.toCity || !formData.apartmentSize)}
             >
-              Weiter
+              {t("calc.next")}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
@@ -639,10 +640,10 @@ const QuoteCalculator = () => {
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Wird gesendet...
+                  {t("calc.sending")}
                 </>
               ) : (
-                "Unverbindliches Angebot anfordern"
+                t("calc.submit")
               )}
             </Button>
           )}
