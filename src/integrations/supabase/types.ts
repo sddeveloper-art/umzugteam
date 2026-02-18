@@ -45,43 +45,58 @@ export type Database = {
         Row: {
           author_id: string | null
           category: string
+          category_fr: string | null
           content: string | null
+          content_fr: string | null
           created_at: string
           excerpt: string
+          excerpt_fr: string | null
           id: string
           is_published: boolean
           read_time: string | null
+          read_time_fr: string | null
           slug: string
           sort_order: number
           title: string
+          title_fr: string | null
           updated_at: string
         }
         Insert: {
           author_id?: string | null
           category?: string
+          category_fr?: string | null
           content?: string | null
+          content_fr?: string | null
           created_at?: string
           excerpt: string
+          excerpt_fr?: string | null
           id?: string
           is_published?: boolean
           read_time?: string | null
+          read_time_fr?: string | null
           slug: string
           sort_order?: number
           title: string
+          title_fr?: string | null
           updated_at?: string
         }
         Update: {
           author_id?: string | null
           category?: string
+          category_fr?: string | null
           content?: string | null
+          content_fr?: string | null
           created_at?: string
           excerpt?: string
+          excerpt_fr?: string | null
           id?: string
           is_published?: boolean
           read_time?: string | null
+          read_time_fr?: string | null
           slug?: string
           sort_order?: number
           title?: string
+          title_fr?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -212,30 +227,36 @@ export type Database = {
       faq_items: {
         Row: {
           answer: string
+          answer_fr: string | null
           created_at: string
           id: string
           is_active: boolean
           question: string
+          question_fr: string | null
           sort_order: number
           submitted_by_email: string | null
           updated_at: string
         }
         Insert: {
           answer: string
+          answer_fr?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
           question: string
+          question_fr?: string | null
           sort_order?: number
           submitted_by_email?: string | null
           updated_at?: string
         }
         Update: {
           answer?: string
+          answer_fr?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
           question?: string
+          question_fr?: string | null
           sort_order?: number
           submitted_by_email?: string | null
           updated_at?: string
@@ -245,38 +266,47 @@ export type Database = {
       gallery_items: {
         Row: {
           category: string
+          category_fr: string | null
           created_at: string
           description: string | null
+          description_fr: string | null
           id: string
           image_url: string | null
           is_approved: boolean
           sort_order: number
           submitted_by_email: string | null
           title: string
+          title_fr: string | null
           updated_at: string
         }
         Insert: {
           category?: string
+          category_fr?: string | null
           created_at?: string
           description?: string | null
+          description_fr?: string | null
           id?: string
           image_url?: string | null
           is_approved?: boolean
           sort_order?: number
           submitted_by_email?: string | null
           title: string
+          title_fr?: string | null
           updated_at?: string
         }
         Update: {
           category?: string
+          category_fr?: string | null
           created_at?: string
           description?: string | null
+          description_fr?: string | null
           id?: string
           image_url?: string | null
           is_approved?: boolean
           sort_order?: number
           submitted_by_email?: string | null
           title?: string
+          title_fr?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -359,46 +389,61 @@ export type Database = {
       packages: {
         Row: {
           badge: string | null
+          badge_fr: string | null
           created_at: string
           excluded_features: Json
+          excluded_features_fr: Json | null
           features: Json
+          features_fr: Json | null
           icon_name: string
           id: string
           is_active: boolean
           is_highlighted: boolean
           name: string
+          name_fr: string | null
           price: string
           price_note: string | null
+          price_note_fr: string | null
           sort_order: number
           updated_at: string
         }
         Insert: {
           badge?: string | null
+          badge_fr?: string | null
           created_at?: string
           excluded_features?: Json
+          excluded_features_fr?: Json | null
           features?: Json
+          features_fr?: Json | null
           icon_name?: string
           id?: string
           is_active?: boolean
           is_highlighted?: boolean
           name: string
+          name_fr?: string | null
           price: string
           price_note?: string | null
+          price_note_fr?: string | null
           sort_order?: number
           updated_at?: string
         }
         Update: {
           badge?: string | null
+          badge_fr?: string | null
           created_at?: string
           excluded_features?: Json
+          excluded_features_fr?: Json | null
           features?: Json
+          features_fr?: Json | null
           icon_name?: string
           id?: string
           is_active?: boolean
           is_highlighted?: boolean
           name?: string
+          name_fr?: string | null
           price?: string
           price_note?: string | null
+          price_note_fr?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -530,34 +575,43 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          description_fr: string | null
           features: Json
+          features_fr: Json | null
           icon_name: string
           id: string
           is_active: boolean
           sort_order: number
           title: string
+          title_fr: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           description: string
+          description_fr?: string | null
           features?: Json
+          features_fr?: Json | null
           icon_name?: string
           id?: string
           is_active?: boolean
           sort_order?: number
           title: string
+          title_fr?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string
+          description_fr?: string | null
           features?: Json
+          features_fr?: Json | null
           icon_name?: string
           id?: string
           is_active?: boolean
           sort_order?: number
           title?: string
+          title_fr?: string | null
           updated_at?: string
         }
         Relationships: []
