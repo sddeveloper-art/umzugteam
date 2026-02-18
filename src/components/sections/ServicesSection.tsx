@@ -1,78 +1,30 @@
 import { 
-  Truck, 
-  Package, 
-  Warehouse, 
-  Sparkles, 
-  Shield, 
-  Clock,
-  Building,
-  Piano,
-  Sofa,
-  ShieldCheck,
-  Zap,
-  CalendarClock,
-  WashingMachine,
-  PackageCheck
+  Truck, Package, Warehouse, Sparkles, Shield,
+  Building, Piano, Sofa, ShieldCheck, PackageCheck,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { LucideIcon } from "lucide-react";
 
-const services = [
-  {
-    icon: Truck,
-    title: "Privatumzug",
-    description: "Komplettservice für Ihren privaten Umzug, vom Studio bis zum großen Haus.",
-    features: ["Be- & Entladen", "Sicherer Transport", "Qualifiziertes Team"],
-  },
-  {
-    icon: Building,
-    title: "Firmenumzug",
-    description: "Maßgeschneiderte Lösungen für Büros, Geschäfte und Unternehmen.",
-    features: ["Strategische Planung", "Minimale Unterbrechung", "Wochenende möglich"],
-  },
-  {
-    icon: Package,
-    title: "Verpackungsservice",
-    description: "Professionelles Verpacken Ihrer Güter mit hochwertigen Materialien.",
-    features: ["Verstärkte Kartons", "Luftpolsterschutz", "Organisierte Beschriftung"],
-  },
-  {
-    icon: Warehouse,
-    title: "Lagerung & Einlagerung",
-    description: "Sichere Lagerräume für Ihre Möbel und persönlichen Gegenstände.",
-    features: ["24/7 Sicherheit", "Klimakontrolle", "Flexibler Zugang"],
-  },
-  {
-    icon: Sparkles,
-    title: "Reinigung & Renovierung",
-    description: "Komplette Reinigung Ihrer alten oder neuen Wohnung.",
-    features: ["Grundreinigung", "Umweltfreundliche Produkte", "Übergabeprotokoll"],
-  },
-  {
-    icon: Piano,
-    title: "Spezialtransporte",
-    description: "Spezialtransport für Klaviere, Kunstwerke und empfindliche Gegenstände.",
-    features: ["Spezialausrüstung", "Fachpersonal", "Erweiterte Versicherung"],
-  },
-  {
-    icon: Sofa,
-    title: "Möbel Ab- & Aufbau",
-    description: "Professionelle Demontage und Montage aller Möbelstücke – Küchen, Schränke, Betten.",
-    features: ["Fachgerechter Aufbau", "Werkzeug inklusive", "Küchenmontage"],
-  },
-  {
-    icon: ShieldCheck,
-    title: "Premium-Versicherung",
-    description: "Erweiterte Transportversicherung für maximalen Schutz Ihrer Wertgegenstände.",
-    features: ["Vollkasko-Schutz", "Bis 50.000 € Deckung", "Schadensabwicklung 24h"],
-  },
-  {
-    icon: PackageCheck,
-    title: "Empfindliches Verpacken",
-    description: "Spezialverpackung für Glas, Porzellan, Elektronik und empfindliche Objekte.",
-    features: ["Maßgeschneiderte Polsterung", "Antistatische Folien", "Spezialkisten"],
-  },
-];
+const iconMap: Record<string, LucideIcon> = {
+  Truck, Package, Warehouse, Sparkles, Shield,
+  Building, Piano, Sofa, ShieldCheck, PackageCheck,
+};
 
 const ServicesSection = () => {
+  const { data: services = [] } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <section id="leistungen" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
@@ -89,37 +41,37 @@ const ServicesSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <article
-              key={service.title}
-              className="bg-card rounded-2xl p-8 card-elevated animate-scale-in"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
-                <service.icon className="w-7 h-7 text-accent" />
-              </div>
-              
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                {service.title}
-              </h3>
-              
-              <p className="text-muted-foreground mb-6">
-                {service.description}
-              </p>
-              
-              <ul className="space-y-2">
-                {service.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2 text-sm text-foreground/80">
-                    <Shield className="w-4 h-4 text-accent flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
+          {services.map((service, index) => {
+            const Icon = iconMap[service.icon_name] || Truck;
+            const features = (service.features as string[] | null) || [];
+            return (
+              <article
+                key={service.id}
+                className="bg-card rounded-2xl p-8 card-elevated animate-scale-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+                  <Icon className="w-7 h-7 text-accent" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground mb-6">
+                  {service.description}
+                </p>
+                <ul className="space-y-2">
+                  {features.map((feature: string) => (
+                    <li key={feature} className="flex items-center gap-2 text-sm text-foreground/80">
+                      <Shield className="w-4 h-4 text-accent flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
         </div>
 
-        {/* Stats bar */}
         <div className="mt-20 bg-primary rounded-2xl p-8 md:p-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[

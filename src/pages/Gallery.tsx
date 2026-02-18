@@ -4,20 +4,8 @@ import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { X } from "lucide-react";
-
-const galleryItems = [
-  { title: "Privatumzug Berlin", category: "Privatumzug", desc: "Kompletter 3-Zimmer-Umzug in Berlin-Mitte" },
-  { title: "Büroumzug München", category: "Firmenumzug", desc: "Büroumzug mit 50 Arbeitsplätzen über das Wochenende" },
-  { title: "Seniorenumzug Hamburg", category: "Privatumzug", desc: "Sensibler Umzug mit besonderer Betreuung" },
-  { title: "Lagerung & Einlagerung", category: "Lagerung", desc: "Sichere Zwischenlagerung für 3 Monate" },
-  { title: "Klaviertransport", category: "Spezialtransport", desc: "Professioneller Transport eines Flügels" },
-  { title: "Firmenumzug Frankfurt", category: "Firmenumzug", desc: "IT-Umzug mit empfindlicher Hardware" },
-  { title: "Studentenumzug Köln", category: "Privatumzug", desc: "Schneller und günstiger Studentenumzug" },
-  { title: "Verpackungsservice", category: "Service", desc: "Professionelles Ein- und Auspacken" },
-  { title: "Möbelmontage", category: "Service", desc: "Auf- und Abbau komplexer Schranksysteme" },
-];
-
-const categories = ["Alle", ...Array.from(new Set(galleryItems.map(i => i.category)))];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const colors = [
   "from-accent/20 to-primary/20",
@@ -30,6 +18,20 @@ const Gallery = () => {
   const [filter, setFilter] = useState("Alle");
   const [selected, setSelected] = useState<number | null>(null);
 
+  const { data: galleryItems = [], isLoading } = useQuery({
+    queryKey: ["gallery_items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("gallery_items")
+        .select("*")
+        .eq("is_approved", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const categories = ["Alle", ...Array.from(new Set(galleryItems.map(i => i.category)))];
   const filtered = filter === "Alle" ? galleryItems : galleryItems.filter(i => i.category === filter);
 
   return (
@@ -49,7 +51,6 @@ const Gallery = () => {
             </p>
           </motion.div>
 
-          {/* Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map(cat => (
               <button key={cat} onClick={() => setFilter(cat)}
@@ -61,32 +62,48 @@ const Gallery = () => {
             ))}
           </div>
 
-          {/* Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {filtered.map((item, i) => (
-              <motion.div key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                whileHover={{ y: -6 }}
-                onClick={() => setSelected(i)}
-                className="cursor-pointer bg-card rounded-2xl overflow-hidden card-elevated group">
-                <div className={`aspect-video bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center`}>
-                  <span className="text-5xl opacity-50 group-hover:scale-110 transition-transform">📦</span>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-card rounded-2xl overflow-hidden animate-pulse">
+                  <div className="aspect-video bg-muted" />
+                  <div className="p-5 space-y-2">
+                    <div className="h-3 bg-muted rounded w-1/4" />
+                    <div className="h-5 bg-muted rounded w-2/3" />
+                  </div>
                 </div>
-                <div className="p-5">
-                  <span className="text-xs font-medium text-accent">{item.category}</span>
-                  <h3 className="text-lg font-bold text-foreground mt-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {filtered.map((item, i) => (
+                <motion.div key={item.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  onClick={() => setSelected(i)}
+                  className="cursor-pointer bg-card rounded-2xl overflow-hidden card-elevated group">
+                  {item.image_url ? (
+                    <img src={item.image_url} alt={item.title} className="aspect-video object-cover w-full" />
+                  ) : (
+                    <div className={`aspect-video bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center`}>
+                      <span className="text-5xl opacity-50 group-hover:scale-110 transition-transform">📦</span>
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <span className="text-xs font-medium text-accent">{item.category}</span>
+                    <h3 className="text-lg font-bold text-foreground mt-1">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Lightbox */}
-        {selected !== null && (
+        {selected !== null && filtered[selected] && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-foreground/80 flex items-center justify-center p-4"
             onClick={() => setSelected(null)}>
@@ -96,10 +113,14 @@ const Gallery = () => {
               </button>
               <span className="text-xs font-medium text-accent">{filtered[selected].category}</span>
               <h3 className="text-2xl font-bold text-foreground mt-2 mb-3">{filtered[selected].title}</h3>
-              <p className="text-muted-foreground">{filtered[selected].desc}</p>
-              <div className={`aspect-video rounded-xl mt-4 bg-gradient-to-br ${colors[selected % colors.length]} flex items-center justify-center`}>
-                <span className="text-6xl">📦</span>
-              </div>
+              <p className="text-muted-foreground">{filtered[selected].description}</p>
+              {filtered[selected].image_url ? (
+                <img src={filtered[selected].image_url} alt={filtered[selected].title} className="aspect-video rounded-xl mt-4 object-cover w-full" />
+              ) : (
+                <div className={`aspect-video rounded-xl mt-4 bg-gradient-to-br ${colors[selected % colors.length]} flex items-center justify-center`}>
+                  <span className="text-6xl">📦</span>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

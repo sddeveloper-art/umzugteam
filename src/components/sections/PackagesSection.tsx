@@ -2,74 +2,26 @@ import { Check, Star, Zap, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import type { LucideIcon } from "lucide-react";
 
-interface PackageItem {
-  name: string;
-  icon: React.ElementType;
-  price: string;
-  priceNote: string;
-  badge?: string;
-  highlighted?: boolean;
-  features: string[];
-  excluded?: string[];
-}
-
-const packages: PackageItem[] = [
-  {
-    name: "Basique",
-    icon: Zap,
-    price: "Ab 299 €",
-    priceNote: "Für Studio / 1-Zimmer",
-    features: [
-      "Be- und Entladen",
-      "Sicherer Transport",
-      "Grundversicherung",
-      "Qualifiziertes 2-Mann-Team",
-    ],
-    excluded: [
-      "Verpackungsservice",
-      "Möbelmontage",
-      "Reinigung",
-      "Premium-Versicherung",
-    ],
-  },
-  {
-    name: "Komfort",
-    icon: Star,
-    price: "Ab 549 €",
-    priceNote: "Für Studio / 1-Zimmer",
-    badge: "Beliebt",
-    highlighted: true,
-    features: [
-      "Alles aus Basique",
-      "Ein- und Auspacken",
-      "Möbel Ab- & Aufbau",
-      "Verpackungsmaterial inklusive",
-      "3-Mann-Team",
-    ],
-    excluded: [
-      "Reinigung",
-      "Premium-Versicherung",
-    ],
-  },
-  {
-    name: "Premium",
-    icon: Crown,
-    price: "Ab 899 €",
-    priceNote: "Für Studio / 1-Zimmer",
-    features: [
-      "Alles aus Komfort",
-      "Grundreinigung alte Wohnung",
-      "Empfindliches Verpacken",
-      "Premium-Versicherung (50.000 €)",
-      "Express-Service (Priorität)",
-      "4-Mann-Team",
-      "Persönlicher Ansprechpartner",
-    ],
-  },
-];
+const iconMap: Record<string, LucideIcon> = { Zap, Star, Crown };
 
 const PackagesSection = () => {
+  const { data: packages = [] } = useQuery({
+    queryKey: ["packages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("packages")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <section id="pakete" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
@@ -87,17 +39,19 @@ const PackagesSection = () => {
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {packages.map((pkg, index) => {
-            const Icon = pkg.icon;
+            const Icon = iconMap[pkg.icon_name] || Zap;
+            const features = (pkg.features as string[] | null) || [];
+            const excludedFeatures = (pkg.excluded_features as string[] | null) || [];
             return (
               <motion.div
-                key={pkg.name}
+                key={pkg.id}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
                 whileHover={{ y: -8, transition: { duration: 0.25 } }}
                 className={`relative bg-card rounded-2xl p-8 flex flex-col transition-shadow ${
-                  pkg.highlighted
+                  pkg.is_highlighted
                     ? "ring-2 ring-accent shadow-xl"
                     : "card-elevated"
                 }`}
@@ -110,7 +64,7 @@ const PackagesSection = () => {
 
                 <div className="flex items-center gap-3 mb-6">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                    pkg.highlighted ? "bg-accent text-accent-foreground" : "bg-accent/10 text-accent"
+                    pkg.is_highlighted ? "bg-accent text-accent-foreground" : "bg-accent/10 text-accent"
                   }`}>
                     <Icon className="w-6 h-6" />
                   </div>
@@ -119,17 +73,17 @@ const PackagesSection = () => {
 
                 <div className="mb-6">
                   <span className="text-3xl font-bold text-foreground">{pkg.price}</span>
-                  <p className="text-sm text-muted-foreground mt-1">{pkg.priceNote}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{pkg.price_note}</p>
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-1">
-                  {pkg.features.map((f) => (
+                  {features.map((f: string) => (
                     <li key={f} className="flex items-start gap-2 text-sm">
                       <Check className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
                       <span className="text-foreground">{f}</span>
                     </li>
                   ))}
-                  {pkg.excluded?.map((f) => (
+                  {excludedFeatures.map((f: string) => (
                     <li key={f} className="flex items-start gap-2 text-sm opacity-40">
                       <span className="w-4 h-4 flex items-center justify-center text-muted-foreground mt-0.5 flex-shrink-0">—</span>
                       <span className="text-muted-foreground line-through">{f}</span>
@@ -138,7 +92,7 @@ const PackagesSection = () => {
                 </ul>
 
                 <Button
-                  variant={pkg.highlighted ? "accent" : "outline"}
+                  variant={pkg.is_highlighted ? "accent" : "outline"}
                   className="w-full"
                   onClick={() => {
                     const el = document.getElementById("kostenrechner");
