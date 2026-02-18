@@ -2,10 +2,10 @@ import { Helmet } from "react-helmet-async";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/hooks/useI18n";
 
 const colors = [
   "from-accent/20 to-primary/10",
@@ -14,6 +14,8 @@ const colors = [
 ];
 
 const Blog = () => {
+  const { t, language } = useI18n();
+
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ["blog_articles"],
     queryFn: async () => {
@@ -30,35 +32,17 @@ const Blog = () => {
   return (
     <>
       <Helmet>
-        <title>Blog & Ratgeber – UmzugTeam365 | Umzugstipps & Tricks</title>
-        <meta name="description" content="Umzugs-Ratgeber von UmzugTeam365: Tipps zum Planen, Sparen und Organisieren. Alles rund um Ihren perfekten Umzug." />
+        <title>{t("blog.title")} – UmzugTeam365</title>
+        <meta name="description" content={t("blog.subtitle")} />
         <link rel="canonical" href="https://umzugteam365.de/blog" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Blog",
-            name: "UmzugTeam365 Blog & Ratgeber",
-            url: "https://umzugteam365.de/blog",
-            publisher: { "@type": "Organization", name: "UmzugTeam365" },
-            blogPost: articles.map(a => ({
-              "@type": "BlogPosting",
-              headline: a.title,
-              description: a.excerpt,
-              datePublished: a.created_at,
-              author: { "@type": "Organization", name: "UmzugTeam365" },
-            })),
-          })}
-        </script>
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <span className="inline-block text-accent font-semibold mb-4">Blog & Ratgeber</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Umzugstipps & Ratgeber</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Expertenwissen rund ums Umziehen – von der Planung bis zum Einzug.
-            </p>
+            <span className="inline-block text-accent font-semibold mb-4">{t("blog.badge")}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{t("blog.title")}</h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t("blog.subtitle")}</p>
           </motion.div>
 
           {isLoading ? (
@@ -98,10 +82,10 @@ const Blog = () => {
                     <p className="text-sm text-muted-foreground mb-4">{article.excerpt}</p>
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-muted-foreground">
-                        {new Date(article.created_at).toLocaleDateString("de-DE", { day: "numeric", month: "short", year: "numeric" })}
+                        {new Date(article.created_at).toLocaleDateString(language === "fr" ? "fr-FR" : "de-DE", { day: "numeric", month: "short", year: "numeric" })}
                       </span>
                       <span className="text-sm text-accent font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                        Lesen <ArrowRight className="w-4 h-4" />
+                        {t("blog.read")} <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
                   </div>

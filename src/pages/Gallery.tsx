@@ -6,6 +6,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/hooks/useI18n";
 
 const colors = [
   "from-accent/20 to-primary/20",
@@ -15,7 +16,8 @@ const colors = [
 ];
 
 const Gallery = () => {
-  const [filter, setFilter] = useState("Alle");
+  const { t } = useI18n();
+  const [filter, setFilter] = useState(t("gallery.all"));
   const [selected, setSelected] = useState<number | null>(null);
 
   const { data: galleryItems = [], isLoading } = useQuery({
@@ -31,24 +33,23 @@ const Gallery = () => {
     },
   });
 
-  const categories = ["Alle", ...Array.from(new Set(galleryItems.map(i => i.category)))];
-  const filtered = filter === "Alle" ? galleryItems : galleryItems.filter(i => i.category === filter);
+  const allLabel = t("gallery.all");
+  const categories = [allLabel, ...Array.from(new Set(galleryItems.map(i => i.category)))];
+  const filtered = filter === allLabel ? galleryItems : galleryItems.filter(i => i.category === filter);
 
   return (
     <>
       <Helmet>
-        <title>Galerie – UmzugTeam365 | Unsere Umzugsprojekte</title>
-        <meta name="description" content="Entdecken Sie unsere erfolgreich durchgeführten Umzugsprojekte. Privat-, Firmen- und Spezialtransporte in ganz Deutschland." />
+        <title>{t("gallery.title")} – UmzugTeam365</title>
+        <meta name="description" content={t("gallery.subtitle")} />
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <span className="inline-block text-accent font-semibold mb-4">Galerie</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Unsere Projekte</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ein Blick hinter die Kulissen unserer Umzüge – von kleinen Wohnungen bis zu großen Bürokomplexen.
-            </p>
+            <span className="inline-block text-accent font-semibold mb-4">{t("gallery.badge")}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{t("gallery.title")}</h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t("gallery.subtitle")}</p>
           </motion.div>
 
           <div className="flex flex-wrap justify-center gap-3 mb-12">

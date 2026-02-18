@@ -11,8 +11,10 @@ import { Star } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
+import { useI18n } from "@/hooks/useI18n";
 
 const Reviews = () => {
+  const { t } = useI18n();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [rating, setRating] = useState(5);
@@ -34,9 +36,9 @@ const Reviews = () => {
     e.preventDefault();
     setSubmitting(true);
     const { error } = await supabase.from("reviews").insert({ client_name: name, client_email: email, rating, comment, city });
-    if (error) toast({ title: "Fehler", description: error.message, variant: "destructive" });
+    if (error) toast({ title: t("common.error"), description: error.message, variant: "destructive" });
     else {
-      toast({ title: "Vielen Dank!", description: "Ihre Bewertung wird nach Prüfung veröffentlicht." });
+      toast({ title: t("reviews.thankYou"), description: t("reviews.thankYouDesc") });
       setName(""); setEmail(""); setRating(5); setComment(""); setCity("");
       refetch();
     }
@@ -48,16 +50,15 @@ const Reviews = () => {
   return (
     <>
       <Helmet>
-        <title>Bewertungen – UmzugTeam365 | Kundenmeinungen</title>
-        <meta name="description" content="Lesen Sie echte Kundenbewertungen zu UmzugTeam365. Über 50.000 zufriedene Kunden bewerten unseren Umzugsservice." />
+        <title>{t("reviews.title")} – UmzugTeam365</title>
         <link rel="canonical" href="https://umzugteam365.de/bewertungen" />
       </Helmet>
       <Header />
       <main className="pt-32 pb-24">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <span className="inline-block text-accent font-semibold mb-4">Bewertungen</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Was unsere Kunden sagen</h1>
+            <span className="inline-block text-accent font-semibold mb-4">{t("reviews.badge")}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{t("reviews.title")}</h1>
             <div className="flex items-center justify-center gap-2 mt-4">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map(s => (
@@ -65,15 +66,14 @@ const Reviews = () => {
                 ))}
               </div>
               <span className="text-2xl font-bold text-foreground">{avgRating}</span>
-              <span className="text-muted-foreground">({reviews.length} Bewertungen)</span>
+              <span className="text-muted-foreground">({reviews.length} {t("reviews.reviewsCount")})</span>
             </div>
           </motion.div>
 
           <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Reviews list */}
             <div className="lg:col-span-2 space-y-4">
               {reviews.length === 0 ? (
-                <p className="text-center text-muted-foreground py-12">Noch keine Bewertungen. Seien Sie der Erste!</p>
+                <p className="text-center text-muted-foreground py-12">{t("reviews.noReviews")}</p>
               ) : (
                 reviews.map((r, i) => (
                   <motion.div key={r.id}
@@ -100,25 +100,15 @@ const Reviews = () => {
               )}
             </div>
 
-            {/* Submit form */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="bg-card rounded-2xl p-6 card-elevated h-fit sticky top-32">
-              <h2 className="text-lg font-bold text-foreground mb-4">Bewertung abgeben</h2>
+              <h2 className="text-lg font-bold text-foreground mb-4">{t("reviews.submitTitle")}</h2>
               <form onSubmit={submitReview} className="space-y-3">
+                <div><Label>{t("reviews.name")} *</Label><Input value={name} onChange={(e) => setName(e.target.value)} required /></div>
+                <div><Label>{t("reviews.email")} *</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
+                <div><Label>{t("reviews.city")}</Label><Input value={city} onChange={(e) => setCity(e.target.value)} placeholder={t("common.egBerlin")} /></div>
                 <div>
-                  <Label>Name *</Label>
-                  <Input value={name} onChange={(e) => setName(e.target.value)} required />
-                </div>
-                <div>
-                  <Label>E-Mail *</Label>
-                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </div>
-                <div>
-                  <Label>Stadt</Label>
-                  <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="z.B. Berlin" />
-                </div>
-                <div>
-                  <Label>Bewertung *</Label>
+                  <Label>{t("reviews.rating")} *</Label>
                   <div className="flex gap-1 mt-1">
                     {[1, 2, 3, 4, 5].map(s => (
                       <button key={s} type="button" onClick={() => setRating(s)}
@@ -128,12 +118,9 @@ const Reviews = () => {
                     ))}
                   </div>
                 </div>
-                <div>
-                  <Label>Kommentar</Label>
-                  <Textarea value={comment} onChange={(e) => setComment(e.target.value)} rows={3} />
-                </div>
+                <div><Label>{t("reviews.comment")}</Label><Textarea value={comment} onChange={(e) => setComment(e.target.value)} rows={3} /></div>
                 <Button type="submit" variant="accent" className="w-full" disabled={submitting}>
-                  {submitting ? "Senden..." : "Bewertung absenden"}
+                  {submitting ? t("reviews.submitting") : t("reviews.submit")}
                 </Button>
               </form>
             </motion.div>
