@@ -20,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useI18n } from "@/hooks/useI18n";
 
 const AnnouncementWithBids = ({
   announcement,
@@ -30,6 +31,7 @@ const AnnouncementWithBids = ({
   onSubmitBid: (a: PublicAnnouncement) => void;
   onViewBids: (a: PublicAnnouncement) => void;
 }) => {
+  const { t } = useI18n();
   const { data: bidSummary } = useBidSummary(announcement.id);
 
   return (
@@ -44,15 +46,15 @@ const AnnouncementWithBids = ({
         onClick={() => onViewBids(announcement)}
         className="w-full text-sm text-primary hover:underline"
       >
-        Angebote-Übersicht anzeigen →
+        {t("ann.viewBids")}
       </button>
     </div>
   );
 };
 
 const Announcements = () => {
-  const [selectedAnnouncement, setSelectedAnnouncement] =
-    useState<PublicAnnouncement | null>(null);
+  const { t } = useI18n();
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<PublicAnnouncement | null>(null);
   const [showBidDialog, setShowBidDialog] = useState(false);
   const [showBidsDialog, setShowBidsDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("browse");
@@ -73,11 +75,8 @@ const Announcements = () => {
   return (
     <>
       <Helmet>
-        <title>Umzugsanfragen | UmzugTeam365</title>
-        <meta
-          name="description"
-          content="Erstellen Sie eine Umzugsanfrage und erhalten Sie Angebote von verschiedenen Umzugsunternehmen. Vergleichen Sie Preise und wählen Sie das beste Angebot."
-        />
+        <title>{t("ann.title")} | UmzugTeam365</title>
+        <meta name="description" content={t("ann.subtitle")} />
       </Helmet>
 
       <Header />
@@ -87,31 +86,27 @@ const Announcements = () => {
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               <Megaphone className="inline-block h-8 w-8 text-primary mr-2 mb-1" />
-              Umzugsanfragen & Angebote
+              {t("ann.title")}
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Erstellen Sie eine Anfrage und erhalten Sie Angebote von
-              verschiedenen Umzugsunternehmen. Nach Ablauf der Frist erhalten Sie
-              automatisch eine E-Mail mit dem günstigsten Angebot.
-            </p>
+            <p className="text-muted-foreground max-w-2xl mx-auto">{t("ann.subtitle")}</p>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
               <TabsTrigger value="browse" className="flex items-center gap-2">
                 <Eye className="h-4 w-4" />
-                Anfragen durchsuchen
+                {t("ann.browse")}
               </TabsTrigger>
               <TabsTrigger value="create" className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
-                Neue Anfrage
+                {t("ann.create")}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="browse">
               {isLoading ? (
                 <div className="text-center py-12">
-                  <p className="text-muted-foreground">Lade Anfragen...</p>
+                  <p className="text-muted-foreground">{t("ann.loading")}</p>
                 </div>
               ) : announcements && announcements.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -128,17 +123,10 @@ const Announcements = () => {
                 <Card className="max-w-md mx-auto">
                   <CardContent className="text-center py-12">
                     <Megaphone className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">
-                      Keine aktiven Anfragen
-                    </h3>
-                    <p className="text-muted-foreground mb-4">
-                      Es gibt derzeit keine offenen Umzugsanfragen.
-                    </p>
-                    <button
-                      onClick={() => setActiveTab("create")}
-                      className="text-primary hover:underline"
-                    >
-                      Erstellen Sie die erste Anfrage →
+                    <h3 className="text-lg font-semibold mb-2">{t("ann.noRequests")}</h3>
+                    <p className="text-muted-foreground mb-4">{t("ann.noRequestsDesc")}</p>
+                    <button onClick={() => setActiveTab("create")} className="text-primary hover:underline">
+                      {t("ann.createFirst")}
                     </button>
                   </CardContent>
                 </Card>
@@ -148,14 +136,10 @@ const Announcements = () => {
             <TabsContent value="create">
               <Card className="max-w-2xl mx-auto">
                 <CardHeader>
-                  <CardTitle className="text-center">
-                    Neue Umzugsanfrage erstellen
-                  </CardTitle>
+                  <CardTitle className="text-center">{t("ann.createNew")}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CreateAnnouncementForm
-                    onSuccess={() => setActiveTab("browse")}
-                  />
+                  <CreateAnnouncementForm onSuccess={() => setActiveTab("browse")} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -178,7 +162,7 @@ const Announcements = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              Angebote-Übersicht:{" "}
+              {t("ann.bidsOverview")}{" "}
               {selectedAnnouncement?.from_city} → {selectedAnnouncement?.to_city}
             </DialogTitle>
           </DialogHeader>
