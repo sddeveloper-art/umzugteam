@@ -6,6 +6,7 @@ import { Clock, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/hooks/useI18n";
+import { loc } from "@/lib/localized";
 
 const colors = [
   "from-accent/20 to-primary/10",
@@ -73,13 +74,13 @@ const Blog = () => {
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs font-medium bg-accent/10 text-accent px-2 py-1 rounded-full">{article.category}</span>
+                      <span className="text-xs font-medium bg-accent/10 text-accent px-2 py-1 rounded-full">{loc(article, "category", language)}</span>
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {article.read_time}
+                        <Clock className="w-3 h-3" /> {loc(article, "read_time", language)}
                       </span>
                     </div>
-                    <h2 className="text-lg font-bold text-foreground mb-2 group-hover:text-accent transition-colors">{article.title}</h2>
-                    <p className="text-sm text-muted-foreground mb-4">{article.excerpt}</p>
+                    <h2 className="text-lg font-bold text-foreground mb-2 group-hover:text-accent transition-colors">{loc(article, "title", language)}</h2>
+                    <p className="text-sm text-muted-foreground mb-4">{loc(article, "excerpt", language)}</p>
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-muted-foreground">
                         {new Date(article.created_at).toLocaleDateString(language === "fr" ? "fr-FR" : "de-DE", { day: "numeric", month: "short", year: "numeric" })}

@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/hooks/useI18n";
+import { loc } from "@/lib/localized";
 
 const colors = [
   "from-accent/20 to-primary/20",
@@ -16,8 +17,8 @@ const colors = [
 ];
 
 const Gallery = () => {
-  const { t } = useI18n();
-  const [filter, setFilter] = useState(t("gallery.all"));
+  const { t, language } = useI18n();
+  const [filter, setFilter] = useState("__all__");
   const [selected, setSelected] = useState<number | null>(null);
 
   const { data: galleryItems = [], isLoading } = useQuery({
@@ -34,8 +35,15 @@ const Gallery = () => {
   });
 
   const allLabel = t("gallery.all");
-  const categories = [allLabel, ...Array.from(new Set(galleryItems.map(i => i.category)))];
-  const filtered = filter === allLabel ? galleryItems : galleryItems.filter(i => i.category === filter);
+  const categoryKeys = Array.from(new Set(galleryItems.map(i => i.category)));
+  const categories: { key: string; label: string }[] = [
+    { key: "__all__", label: allLabel },
+    ...categoryKeys.map(cat => {
+      const sample = galleryItems.find(i => i.category === cat);
+      return { key: cat, label: sample ? loc(sample, "category", language) : cat };
+    }),
+  ];
+  const filtered = filter === "__all__" ? galleryItems : galleryItems.filter(i => i.category === filter);
 
   return (
     <>
@@ -54,11 +62,11 @@ const Gallery = () => {
 
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             {categories.map(cat => (
-              <button key={cat} onClick={() => setFilter(cat)}
+              <button key={cat.key} onClick={() => setFilter(cat.key)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  filter === cat ? "bg-accent text-accent-foreground" : "bg-secondary text-foreground hover:bg-accent/10"
+                  filter === cat.key ? "bg-accent text-accent-foreground" : "bg-secondary text-foreground hover:bg-accent/10"
                 }`}>
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -87,16 +95,16 @@ const Gallery = () => {
                   onClick={() => setSelected(i)}
                   className="cursor-pointer bg-card rounded-2xl overflow-hidden card-elevated group">
                   {item.image_url ? (
-                    <img src={item.image_url} alt={item.title} className="aspect-video object-cover w-full" />
+                    <img src={item.image_url} alt={loc(item, "title", language)} className="aspect-video object-cover w-full" />
                   ) : (
                     <div className={`aspect-video bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center`}>
                       <span className="text-5xl opacity-50 group-hover:scale-110 transition-transform">📦</span>
                     </div>
                   )}
                   <div className="p-5">
-                    <span className="text-xs font-medium text-accent">{item.category}</span>
-                    <h3 className="text-lg font-bold text-foreground mt-1">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                    <span className="text-xs font-medium text-accent">{loc(item, "category", language)}</span>
+                    <h3 className="text-lg font-bold text-foreground mt-1">{loc(item, "title", language)}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{loc(item, "description", language)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -112,11 +120,11 @@ const Gallery = () => {
               <button onClick={() => setSelected(null)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
                 <X className="w-5 h-5" />
               </button>
-              <span className="text-xs font-medium text-accent">{filtered[selected].category}</span>
-              <h3 className="text-2xl font-bold text-foreground mt-2 mb-3">{filtered[selected].title}</h3>
-              <p className="text-muted-foreground">{filtered[selected].description}</p>
+              <span className="text-xs font-medium text-accent">{loc(filtered[selected], "category", language)}</span>
+              <h3 className="text-2xl font-bold text-foreground mt-2 mb-3">{loc(filtered[selected], "title", language)}</h3>
+              <p className="text-muted-foreground">{loc(filtered[selected], "description", language)}</p>
               {filtered[selected].image_url ? (
-                <img src={filtered[selected].image_url} alt={filtered[selected].title} className="aspect-video rounded-xl mt-4 object-cover w-full" />
+                <img src={filtered[selected].image_url} alt={loc(filtered[selected], "title", language)} className="aspect-video rounded-xl mt-4 object-cover w-full" />
               ) : (
                 <div className={`aspect-video rounded-xl mt-4 bg-gradient-to-br ${colors[selected % colors.length]} flex items-center justify-center`}>
                   <span className="text-6xl">📦</span>
