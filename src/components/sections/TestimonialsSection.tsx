@@ -1,37 +1,22 @@
 import { Star, Quote } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "Maria Schmidt",
-    location: "Berlin → München",
-    rating: 5,
-    text: "Außergewöhnliches Team! Sie haben unseren Familienumzug mit bemerkenswerter Professionalität abgewickelt. Alles war perfekt verpackt und nichts wurde beschädigt. Ich empfehle sie wärmstens!",
-    date: "November 2025",
-  },
-  {
-    name: "Hans-Peter Müller",
-    location: "Hamburg → Frankfurt",
-    rating: 5,
-    text: "Firmenumzug an einem Wochenende durchgeführt. Pünktliches, effizientes und sehr organisiertes Team. Das Büro war am Montagmorgen betriebsbereit. Tadelloser Service!",
-    date: "Oktober 2025",
-  },
-  {
-    name: "Sophie Weber",
-    location: "Köln → Stuttgart",
-    rating: 5,
-    text: "Erster Umzug und wirklich eine ausgezeichnete Erfahrung. Das Team hat mich bei jedem Schritt begleitet, das Angebot war präzise und ohne Überraschungen. Danke für diesen Qualitätsservice!",
-    date: "Dezember 2025",
-  },
-  {
-    name: "Thomas Fischer",
-    location: "Düsseldorf → Dresden",
-    rating: 5,
-    text: "Transport meines Flügels mit seltener Fachkenntnis durchgeführt. Spezialverpackung, engagiertes Team und Klavier in perfektem Zustand angekommen. Profis bis ins Detail!",
-    date: "Januar 2026",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const TestimonialsSection = () => {
+  const { data: testimonials = [] } = useQuery({
+    queryKey: ["reviews_public_homepage"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reviews_public")
+        .select("*")
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false })
+        .limit(4);
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <section id="bewertungen" className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
@@ -51,33 +36,35 @@ const TestimonialsSection = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {testimonials.map((testimonial, index) => (
             <article
-              key={testimonial.name}
+              key={testimonial.id}
               className="bg-card rounded-2xl p-8 card-elevated relative animate-scale-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <Quote className="absolute top-6 right-6 w-10 h-10 text-accent/20" />
               
               <div className="flex gap-1 mb-4">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
+                {Array.from({ length: testimonial.rating || 5 }).map((_, i) => (
                   <Star key={i} className="w-5 h-5 text-accent fill-accent" />
                 ))}
               </div>
               
               <p className="text-foreground/90 mb-6 leading-relaxed">
-                "{testimonial.text}"
+                "{testimonial.comment}"
               </p>
               
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-semibold text-foreground">
-                    {testimonial.name}
+                    {testimonial.client_name}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {testimonial.location}
-                  </div>
+                  {testimonial.city && (
+                    <div className="text-sm text-muted-foreground">
+                      {testimonial.city}
+                    </div>
+                  )}
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {testimonial.date}
+                  {testimonial.created_at && new Date(testimonial.created_at).toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
                 </div>
               </div>
             </article>

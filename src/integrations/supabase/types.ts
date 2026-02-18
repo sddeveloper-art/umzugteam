@@ -41,6 +41,51 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_articles: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          is_published: boolean
+          read_time: string | null
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string
+          content?: string | null
+          created_at?: string
+          excerpt: string
+          id?: string
+          is_published?: boolean
+          read_time?: string | null
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          is_published?: boolean
+          read_time?: string | null
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       client_quotes: {
         Row: {
           apartment_size: string
@@ -164,6 +209,78 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_items: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          is_active: boolean
+          question: string
+          sort_order: number
+          submitted_by_email: string | null
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question: string
+          sort_order?: number
+          submitted_by_email?: string | null
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question?: string
+          sort_order?: number
+          submitted_by_email?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gallery_items: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_approved: boolean
+          sort_order: number
+          submitted_by_email: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          sort_order?: number
+          submitted_by_email?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          sort_order?: number
+          submitted_by_email?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       moving_announcements: {
         Row: {
           apartment_size: string
@@ -236,6 +353,54 @@ export type Database = {
           updated_at?: string
           volume?: number
           winner_bid_id?: string | null
+        }
+        Relationships: []
+      }
+      packages: {
+        Row: {
+          badge: string | null
+          created_at: string
+          excluded_features: Json
+          features: Json
+          icon_name: string
+          id: string
+          is_active: boolean
+          is_highlighted: boolean
+          name: string
+          price: string
+          price_note: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          badge?: string | null
+          created_at?: string
+          excluded_features?: Json
+          features?: Json
+          icon_name?: string
+          id?: string
+          is_active?: boolean
+          is_highlighted?: boolean
+          name: string
+          price: string
+          price_note?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          badge?: string | null
+          created_at?: string
+          excluded_features?: Json
+          features?: Json
+          icon_name?: string
+          id?: string
+          is_active?: boolean
+          is_highlighted?: boolean
+          name?: string
+          price?: string
+          price_note?: string | null
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -358,6 +523,42 @@ export type Database = {
           id?: string
           is_approved?: boolean
           rating?: number
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          features: Json
+          icon_name: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          features?: Json
+          icon_name?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          features?: Json
+          icon_name?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

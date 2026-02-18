@@ -4,57 +4,8 @@ import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
-
-const articles = [
-  {
-    slug: "umzug-planen-tipps",
-    title: "10 Tipps für einen stressfreien Umzug",
-    excerpt: "Von der Planung bis zum Einzug: So meistern Sie Ihren Umzug ohne Stress. Unsere Experten teilen ihre besten Ratschläge.",
-    category: "Ratgeber",
-    readTime: "5 Min.",
-    date: "12. Feb. 2026",
-  },
-  {
-    slug: "umzugskosten-sparen",
-    title: "Umzugskosten sparen: So geht's",
-    excerpt: "Erfahren Sie, wie Sie bei Ihrem nächsten Umzug bares Geld sparen können – ohne auf Qualität zu verzichten.",
-    category: "Finanzen",
-    readTime: "4 Min.",
-    date: "8. Feb. 2026",
-  },
-  {
-    slug: "adresse-aendern-checkliste",
-    title: "Adressänderung: Wo Sie sich überall ummelden müssen",
-    excerpt: "Bank, Versicherung, Arbeitgeber – diese komplette Liste hilft Ihnen, keine Ummeldung zu vergessen.",
-    category: "Checkliste",
-    readTime: "6 Min.",
-    date: "3. Feb. 2026",
-  },
-  {
-    slug: "umzug-mit-kindern",
-    title: "Umzug mit Kindern: Tipps für Familien",
-    excerpt: "Wie Sie den Umzug für Ihre Kinder stressfrei gestalten und die ganze Familie einbeziehen.",
-    category: "Familie",
-    readTime: "5 Min.",
-    date: "28. Jan. 2026",
-  },
-  {
-    slug: "erste-eigene-wohnung",
-    title: "Erste eigene Wohnung: Was Sie beachten sollten",
-    excerpt: "Von der Budgetplanung bis zur Einrichtung – der ultimative Guide für Ihren ersten Umzug.",
-    category: "Ratgeber",
-    readTime: "7 Min.",
-    date: "22. Jan. 2026",
-  },
-  {
-    slug: "nachhaltig-umziehen",
-    title: "Nachhaltig umziehen: Öko-Tipps für den Umzug",
-    excerpt: "Wie Sie Ihren Umzug umweltfreundlich gestalten: von wiederverwendbaren Kartons bis zur grünen Entsorgung.",
-    category: "Nachhaltigkeit",
-    readTime: "4 Min.",
-    date: "15. Jan. 2026",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const colors = [
   "from-accent/20 to-primary/10",
@@ -63,6 +14,19 @@ const colors = [
 ];
 
 const Blog = () => {
+  const { data: articles = [], isLoading } = useQuery({
+    queryKey: ["blog_articles"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("blog_articles")
+        .select("*")
+        .eq("is_published", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <>
       <Helmet>
@@ -80,7 +44,7 @@ const Blog = () => {
               "@type": "BlogPosting",
               headline: a.title,
               description: a.excerpt,
-              datePublished: a.date,
+              datePublished: a.created_at,
               author: { "@type": "Organization", name: "UmzugTeam365" },
             })),
           })}
@@ -97,37 +61,54 @@ const Blog = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {articles.map((article, i) => (
-              <motion.article key={article.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                whileHover={{ y: -6 }}
-                className="bg-card rounded-2xl overflow-hidden card-elevated group">
-                <div className={`aspect-[2/1] bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center`}>
-                  <span className="text-4xl opacity-60">📝</span>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs font-medium bg-accent/10 text-accent px-2 py-1 rounded-full">{article.category}</span>
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {article.readTime}
-                    </span>
-                  </div>
-                  <h2 className="text-lg font-bold text-foreground mb-2 group-hover:text-accent transition-colors">{article.title}</h2>
-                  <p className="text-sm text-muted-foreground mb-4">{article.excerpt}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">{article.date}</span>
-                    <span className="text-sm text-accent font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Lesen <ArrowRight className="w-4 h-4" />
-                    </span>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="bg-card rounded-2xl overflow-hidden animate-pulse">
+                  <div className="aspect-[2/1] bg-muted" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 bg-muted rounded w-1/3" />
+                    <div className="h-5 bg-muted rounded w-2/3" />
+                    <div className="h-4 bg-muted rounded w-full" />
                   </div>
                 </div>
-              </motion.article>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {articles.map((article, i) => (
+                <motion.article key={article.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  className="bg-card rounded-2xl overflow-hidden card-elevated group">
+                  <div className={`aspect-[2/1] bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center`}>
+                    <span className="text-4xl opacity-60">📝</span>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-xs font-medium bg-accent/10 text-accent px-2 py-1 rounded-full">{article.category}</span>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> {article.read_time}
+                      </span>
+                    </div>
+                    <h2 className="text-lg font-bold text-foreground mb-2 group-hover:text-accent transition-colors">{article.title}</h2>
+                    <p className="text-sm text-muted-foreground mb-4">{article.excerpt}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(article.created_at).toLocaleDateString("de-DE", { day: "numeric", month: "short", year: "numeric" })}
+                      </span>
+                      <span className="text-sm text-accent font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Lesen <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          )}
         </div>
       </main>
       <Footer />
