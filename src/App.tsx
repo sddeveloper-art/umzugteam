@@ -26,6 +26,7 @@ import BundeslaenderIndex from "./pages/BundeslaenderIndex";
 import StaedteIndex from "./pages/StaedteIndex";
 import RoutenIndex from "./pages/RoutenIndex";
 import RouteLanding from "./pages/RouteLanding";
+import CreateQuote from "./pages/CreateQuote";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
               <Route path="/staedte" element={<StaedteIndex />} />
               <Route path="/umzugsrouten" element={<RoutenIndex />} />
               <Route path="/umzugsroute/:route" element={<RouteLanding />} />
+              <Route path="/angebot-erstellen" element={<CreateQuote />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
