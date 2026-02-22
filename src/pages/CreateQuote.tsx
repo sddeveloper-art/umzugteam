@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { addDays } from "date-fns";
 import { format } from "date-fns";
-import { de } from "date-fns/locale";
+import { de, fr } from "date-fns/locale";
 import {
   Home, Building2, Truck, Package, Piano, Archive,
   MapPin, ArrowRight, ArrowLeft, Check, Send, Loader2,
@@ -63,60 +63,63 @@ interface QuoteData {
   bidding_duration: string;
 }
 
-const STEPS = [
-  { id: "category", label: "Kategorie", icon: Package },
-  { id: "route", label: "Itinerar", icon: MapPin },
-  { id: "details", label: "Details", icon: Home },
-  { id: "items", label: "Inventar", icon: BoxesIcon },
-  { id: "contact", label: "Kontakt", icon: User },
-  { id: "summary", label: "Übersicht", icon: Check },
-];
-
-const CATEGORIES = [
-  { value: "privatumzug", label: "Privatumzug", desc: "Wohnung oder Haus umziehen", icon: Home },
-  { value: "firmenumzug", label: "Firmenumzug", desc: "Büro- und Gewerbeumzüge", icon: Building2 },
-  { value: "moebeltransport", label: "Möbeltransport", desc: "Einzelne Möbelstücke transportieren", icon: Sofa },
-  { value: "klaviertransport", label: "Klaviertransport", desc: "Klavier & Flügel sicher bewegen", icon: Piano },
-  { value: "fernumzug", label: "Fernumzug", desc: "Umzüge über 500 km", icon: Truck },
-  { value: "lagerung", label: "Einlagerung", desc: "Möbel einlagern & aufbewahren", icon: Archive },
-];
-
-const APARTMENT_SIZES = [
-  { value: "1-Zimmer", label: "1-Zimmer Wohnung" },
-  { value: "2-Zimmer", label: "2-Zimmer Wohnung" },
-  { value: "3-Zimmer", label: "3-Zimmer Wohnung" },
-  { value: "4-Zimmer", label: "4-Zimmer Wohnung" },
-  { value: "5+-Zimmer", label: "5+ Zimmer Wohnung" },
-  { value: "Haus", label: "Einfamilienhaus" },
-  { value: "Büro", label: "Büro/Gewerbe" },
-];
-
-const BIDDING_DURATIONS = [
-  { value: "1", label: "1 Tag" },
-  { value: "2", label: "2 Tage" },
-  { value: "3", label: "3 Tage" },
-  { value: "5", label: "5 Tage" },
-  { value: "7", label: "1 Woche" },
-  { value: "14", label: "2 Wochen" },
-];
-
-const SERVICE_OPTIONS = [
-  { key: "has_elevator", label: "Aufzug vorhanden", desc: "Im Gebäude verfügbar" },
-  { key: "needs_packing", label: "Verpackungsservice", desc: "Wir verpacken alles für Sie" },
-  { key: "needs_assembly", label: "Möbelmontage", desc: "Ab- und Aufbau inklusive" },
-  { key: "needs_fragile_packing", label: "Empfindliches Verpacken", desc: "Spezialschutz für Glas & Porzellan" },
-  { key: "needs_cleaning", label: "Endreinigung", desc: "Reinigung der alten Wohnung" },
-  { key: "needs_storage", label: "Zwischenlagerung", desc: "Temporäre Einlagerung" },
-  { key: "needs_premium_insurance", label: "Premium-Versicherung", desc: "Volle Wertabdeckung" },
-  { key: "needs_express", label: "Express-Service", desc: "Bevorzugte Bearbeitung" },
-  { key: "needs_weekend", label: "Wochenend-Service", desc: "Umzug am Sa/So" },
-];
-
 const CreateQuote = () => {
   const navigate = useNavigate();
   const createAnnouncement = useCreateAnnouncement();
+  const { t, language } = useI18n();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const dateLocale = language === "fr" ? fr : de;
+
+  const STEPS = [
+    { id: "category", label: t("wizard.step.category"), icon: Package },
+    { id: "route", label: t("wizard.step.route"), icon: MapPin },
+    { id: "details", label: t("wizard.step.details"), icon: Home },
+    { id: "items", label: t("wizard.step.items"), icon: BoxesIcon },
+    { id: "contact", label: t("wizard.step.contact"), icon: User },
+    { id: "summary", label: t("wizard.step.summary"), icon: Check },
+  ];
+
+  const CATEGORIES = [
+    { value: "privatumzug", label: t("wizard.cat.private"), desc: t("wizard.cat.privateDesc"), icon: Home },
+    { value: "firmenumzug", label: t("wizard.cat.company"), desc: t("wizard.cat.companyDesc"), icon: Building2 },
+    { value: "moebeltransport", label: t("wizard.cat.furniture"), desc: t("wizard.cat.furnitureDesc"), icon: Sofa },
+    { value: "klaviertransport", label: t("wizard.cat.piano"), desc: t("wizard.cat.pianoDesc"), icon: Piano },
+    { value: "fernumzug", label: t("wizard.cat.longDist"), desc: t("wizard.cat.longDistDesc"), icon: Truck },
+    { value: "lagerung", label: t("wizard.cat.storage"), desc: t("wizard.cat.storageDesc"), icon: Archive },
+  ];
+
+  const APARTMENT_SIZES = [
+    { value: "1-Zimmer", label: t("wizard.size.1room") },
+    { value: "2-Zimmer", label: t("wizard.size.2room") },
+    { value: "3-Zimmer", label: t("wizard.size.3room") },
+    { value: "4-Zimmer", label: t("wizard.size.4room") },
+    { value: "5+-Zimmer", label: t("wizard.size.5room") },
+    { value: "Haus", label: t("wizard.size.house") },
+    { value: "Büro", label: t("wizard.size.office") },
+  ];
+
+  const BIDDING_DURATIONS = [
+    { value: "1", label: t("wizard.dur.1day") },
+    { value: "2", label: t("wizard.dur.2days") },
+    { value: "3", label: t("wizard.dur.3days") },
+    { value: "5", label: t("wizard.dur.5days") },
+    { value: "7", label: t("wizard.dur.1week") },
+    { value: "14", label: t("wizard.dur.2weeks") },
+  ];
+
+  const SERVICE_OPTIONS = [
+    { key: "has_elevator", label: t("wizard.svc.elevator"), desc: t("wizard.svc.elevatorDesc") },
+    { key: "needs_packing", label: t("wizard.svc.packing"), desc: t("wizard.svc.packingDesc") },
+    { key: "needs_assembly", label: t("wizard.svc.assembly"), desc: t("wizard.svc.assemblyDesc") },
+    { key: "needs_fragile_packing", label: t("wizard.svc.fragile"), desc: t("wizard.svc.fragileDesc") },
+    { key: "needs_cleaning", label: t("wizard.svc.cleaning"), desc: t("wizard.svc.cleaningDesc") },
+    { key: "needs_storage", label: t("wizard.svc.storage"), desc: t("wizard.svc.storageDesc") },
+    { key: "needs_premium_insurance", label: t("wizard.svc.insurance"), desc: t("wizard.svc.insuranceDesc") },
+    { key: "needs_express", label: t("wizard.svc.express"), desc: t("wizard.svc.expressDesc") },
+    { key: "needs_weekend", label: t("wizard.svc.weekend"), desc: t("wizard.svc.weekendDesc") },
+  ];
 
   const [data, setData] = useState<QuoteData>({
     category: "",
@@ -149,7 +152,7 @@ const CreateQuote = () => {
       case 0: return !!data.category;
       case 1: return data.from_city.length >= 2 && data.to_city.length >= 2;
       case 2: return !!data.apartment_size;
-      case 3: return true; // items optional
+      case 3: return true;
       case 4: return data.client_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email) && !!data.bidding_duration;
       case 5: return true;
       default: return false;
@@ -195,8 +198,8 @@ const CreateQuote = () => {
   return (
     <>
       <Helmet>
-        <title>Kostenloses Angebot erstellen | UmzugTeam365</title>
-        <meta name="description" content="Erstellen Sie kostenlos Ihre Umzugsanfrage und erhalten Sie Angebote von geprüften Umzugsunternehmen." />
+        <title>{t("wizard.pageTitle")} | UmzugTeam365</title>
+        <meta name="description" content={t("wizard.metaDesc")} />
       </Helmet>
 
       <Header />
@@ -207,10 +210,10 @@ const CreateQuote = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                Kostenloses Angebot erstellen
+                {t("wizard.pageTitle")}
               </h1>
               <span className="text-sm text-muted-foreground">
-                Schritt {currentStep + 1} von {STEPS.length}
+                {t("wizard.stepOf")} {currentStep + 1} {t("wizard.of")} {STEPS.length}
               </span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -263,8 +266,8 @@ const CreateQuote = () => {
                 {/* Step 0: Category */}
                 {currentStep === 0 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Was möchten Sie transportieren?</h2>
-                    <p className="text-muted-foreground mb-6">Wählen Sie die Kategorie, die am besten zu Ihrem Umzug passt.</p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.cat.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.cat.subtitle")}</p>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {CATEGORIES.map((cat) => {
                         const CatIcon = cat.icon;
@@ -300,8 +303,8 @@ const CreateQuote = () => {
                 {/* Step 1: Route */}
                 {currentStep === 1 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Wählen Sie Ihre Route</h2>
-                    <p className="text-muted-foreground mb-6">Von wo nach wo soll Ihr Umzug gehen?</p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.route.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.route.subtitle")}</p>
                     <div className="max-w-lg mx-auto space-y-6">
                       <div className="relative">
                         <div className="absolute left-5 top-[3.5rem] bottom-[3.5rem] w-0.5 bg-primary/30" />
@@ -311,11 +314,11 @@ const CreateQuote = () => {
                               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
                                 <MapPin className="w-5 h-5 text-primary-foreground" />
                               </div>
-                              <label className="font-semibold text-foreground">Von (Abholung) *</label>
+                              <label className="font-semibold text-foreground">{t("wizard.route.from")}</label>
                             </div>
                             <div className="ml-[3.25rem]">
                               <Input
-                                placeholder="z.B. Berlin, Alexanderplatz 1"
+                                placeholder={t("wizard.route.fromPlaceholder")}
                                 value={data.from_city}
                                 onChange={(e) => update({ from_city: e.target.value })}
                                 className="text-base py-6"
@@ -327,11 +330,11 @@ const CreateQuote = () => {
                               <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center z-10">
                                 <MapPin className="w-5 h-5 text-accent-foreground" />
                               </div>
-                              <label className="font-semibold text-foreground">Nach (Lieferung) *</label>
+                              <label className="font-semibold text-foreground">{t("wizard.route.to")}</label>
                             </div>
                             <div className="ml-[3.25rem]">
                               <Input
-                                placeholder="z.B. München, Marienplatz 5"
+                                placeholder={t("wizard.route.toPlaceholder")}
                                 value={data.to_city}
                                 onChange={(e) => update({ to_city: e.target.value })}
                                 className="text-base py-6"
@@ -347,15 +350,15 @@ const CreateQuote = () => {
                 {/* Step 2: Details */}
                 {currentStep === 2 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Umzugsdetails</h2>
-                    <p className="text-muted-foreground mb-6">Geben Sie uns mehr Informationen zu Ihrem Umzug.</p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.details.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.details.subtitle")}</p>
                     <div className="space-y-6 max-w-2xl">
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">Wohnungsgröße *</label>
+                          <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.sizeLabel")}</label>
                           <Select value={data.apartment_size} onValueChange={(v) => update({ apartment_size: v })}>
                             <SelectTrigger className="py-6 text-base">
-                              <SelectValue placeholder="Auswählen..." />
+                              <SelectValue placeholder={t("wizard.details.sizePlaceholder")} />
                             </SelectTrigger>
                             <SelectContent>
                               {APARTMENT_SIZES.map((s) => (
@@ -365,7 +368,7 @@ const CreateQuote = () => {
                           </Select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">Etage</label>
+                          <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.floorLabel")}</label>
                           <Input
                             type="number"
                             min={0}
@@ -378,7 +381,7 @@ const CreateQuote = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Wunschtermin</label>
+                        <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.dateLabel")}</label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
@@ -390,8 +393,8 @@ const CreateQuote = () => {
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
                               {data.preferred_date
-                                ? format(data.preferred_date, "PPP", { locale: de })
-                                : "Datum auswählen"}
+                                ? format(data.preferred_date, "PPP", { locale: dateLocale })
+                                : t("wizard.details.datePlaceholder")}
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
@@ -408,7 +411,7 @@ const CreateQuote = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-3">Zusätzliche Services</label>
+                        <label className="block text-sm font-medium text-foreground mb-3">{t("wizard.details.servicesLabel")}</label>
                         <div className="grid sm:grid-cols-2 gap-3">
                           {SERVICE_OPTIONS.map((opt) => {
                             const checked = data[opt.key as keyof QuoteData] as boolean;
@@ -441,10 +444,8 @@ const CreateQuote = () => {
                 {/* Step 3: Items */}
                 {currentStep === 3 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Inventar (optional)</h2>
-                    <p className="text-muted-foreground mb-6">
-                      Listen Sie Ihre Gegenstände auf, um ein genaueres Angebot zu erhalten.
-                    </p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.items.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.items.subtitle")}</p>
                     <MovingItemsPicker
                       items={data.items}
                       onChange={(items) => update({ items })}
@@ -455,17 +456,15 @@ const CreateQuote = () => {
                 {/* Step 4: Contact */}
                 {currentStep === 4 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Ihre Kontaktdaten</h2>
-                    <p className="text-muted-foreground mb-6">
-                      Damit die Umzugsunternehmen Sie kontaktieren können.
-                    </p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.contact.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.contact.subtitle")}</p>
                     <div className="max-w-lg mx-auto space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          <User className="inline w-4 h-4 mr-1" />Name *
+                          <User className="inline w-4 h-4 mr-1" />{t("wizard.contact.nameLabel")}
                         </label>
                         <Input
-                          placeholder="Max Mustermann"
+                          placeholder={t("wizard.contact.namePlaceholder")}
                           value={data.client_name}
                           onChange={(e) => update({ client_name: e.target.value })}
                           className="py-6 text-base"
@@ -473,11 +472,11 @@ const CreateQuote = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          <Mail className="inline w-4 h-4 mr-1" />E-Mail *
+                          <Mail className="inline w-4 h-4 mr-1" />{t("wizard.contact.emailLabel")}
                         </label>
                         <Input
                           type="email"
-                          placeholder="max@beispiel.de"
+                          placeholder={t("wizard.contact.emailPlaceholder")}
                           value={data.client_email}
                           onChange={(e) => update({ client_email: e.target.value })}
                           className="py-6 text-base"
@@ -485,11 +484,11 @@ const CreateQuote = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          <Phone className="inline w-4 h-4 mr-1" />Telefon (optional)
+                          <Phone className="inline w-4 h-4 mr-1" />{t("wizard.contact.phoneLabel")}
                         </label>
                         <Input
                           type="tel"
-                          placeholder="+49 123 456789"
+                          placeholder={t("wizard.contact.phonePlaceholder")}
                           value={data.client_phone}
                           onChange={(e) => update({ client_phone: e.target.value })}
                           className="py-6 text-base"
@@ -497,10 +496,10 @@ const CreateQuote = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          Zusätzliche Informationen (optional)
+                          {t("wizard.contact.extraLabel")}
                         </label>
                         <Textarea
-                          placeholder="Besondere Gegenstände, Zugangshinweise, etc."
+                          placeholder={t("wizard.contact.extraPlaceholder")}
                           value={data.description}
                           onChange={(e) => update({ description: e.target.value })}
                           rows={3}
@@ -509,11 +508,11 @@ const CreateQuote = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          <Clock className="inline w-4 h-4 mr-1" />Angebotszeitraum *
+                          <Clock className="inline w-4 h-4 mr-1" />{t("wizard.contact.durationLabel")}
                         </label>
                         <Select value={data.bidding_duration} onValueChange={(v) => update({ bidding_duration: v })}>
                           <SelectTrigger className="py-6 text-base">
-                            <SelectValue placeholder="Dauer auswählen..." />
+                            <SelectValue placeholder={t("wizard.contact.durationPlaceholder")} />
                           </SelectTrigger>
                           <SelectContent>
                             {BIDDING_DURATIONS.map((d) => (
@@ -521,9 +520,7 @@ const CreateQuote = () => {
                             ))}
                           </SelectContent>
                         </Select>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Nach Ablauf erhalten Sie eine E-Mail mit dem günstigsten Angebot.
-                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("wizard.contact.durationHint")}</p>
                       </div>
                     </div>
                   </div>
@@ -532,32 +529,32 @@ const CreateQuote = () => {
                 {/* Step 5: Summary */}
                 {currentStep === 5 && (
                   <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">Zusammenfassung</h2>
-                    <p className="text-muted-foreground mb-6">
-                      Überprüfen Sie Ihre Angaben und senden Sie Ihre Anfrage ab.
-                    </p>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.summary.title")}</h2>
+                    <p className="text-muted-foreground mb-6">{t("wizard.summary.subtitle")}</p>
                     <div className="space-y-4">
-                      <SummaryRow label="Kategorie" value={CATEGORIES.find((c) => c.value === data.category)?.label || data.category} onEdit={() => setCurrentStep(0)} />
-                      <SummaryRow label="Route" value={`${data.from_city} → ${data.to_city}`} onEdit={() => setCurrentStep(1)} />
-                      <SummaryRow label="Wohnungsgröße" value={data.apartment_size} onEdit={() => setCurrentStep(2)} />
-                      <SummaryRow label="Etage" value={`${data.floor}. OG${data.has_elevator ? " (Aufzug)" : ""}`} onEdit={() => setCurrentStep(2)} />
+                      <SummaryRow label={t("wizard.summary.category")} value={CATEGORIES.find((c) => c.value === data.category)?.label || data.category} onEdit={() => setCurrentStep(0)} editLabel={t("wizard.summary.edit")} />
+                      <SummaryRow label={t("wizard.summary.route")} value={`${data.from_city} → ${data.to_city}`} onEdit={() => setCurrentStep(1)} editLabel={t("wizard.summary.edit")} />
+                      <SummaryRow label={t("wizard.summary.size")} value={APARTMENT_SIZES.find((s) => s.value === data.apartment_size)?.label || data.apartment_size} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
+                      <SummaryRow label={t("wizard.summary.floor")} value={`${data.floor}. ${t("wizard.summary.og")}${data.has_elevator ? ` (${t("wizard.svc.elevator")})` : ""}`} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
                       {data.preferred_date && (
-                        <SummaryRow label="Wunschtermin" value={format(data.preferred_date, "PPP", { locale: de })} onEdit={() => setCurrentStep(2)} />
+                        <SummaryRow label={t("wizard.summary.date")} value={format(data.preferred_date, "PPP", { locale: dateLocale })} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
                       )}
                       {data.items.length > 0 && (
                         <SummaryRow
-                          label="Inventar"
-                          value={`${data.items.reduce((s, i) => s + i.quantity, 0)} Gegenstände (~${estimatedVolume.toFixed(1)} m³)`}
+                          label={t("wizard.summary.inventory")}
+                          value={`${data.items.reduce((s, i) => s + i.quantity, 0)} ${t("wizard.summary.items")} (~${estimatedVolume.toFixed(1)} m³)`}
                           onEdit={() => setCurrentStep(3)}
+                          editLabel={t("wizard.summary.edit")}
                         />
                       )}
-                      <SummaryRow label="Name" value={data.client_name} onEdit={() => setCurrentStep(4)} />
-                      <SummaryRow label="E-Mail" value={data.client_email} onEdit={() => setCurrentStep(4)} />
-                      {data.client_phone && <SummaryRow label="Telefon" value={data.client_phone} onEdit={() => setCurrentStep(4)} />}
+                      <SummaryRow label={t("wizard.summary.name")} value={data.client_name} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
+                      <SummaryRow label={t("wizard.summary.email")} value={data.client_email} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
+                      {data.client_phone && <SummaryRow label={t("wizard.summary.phone")} value={data.client_phone} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />}
                       <SummaryRow
-                        label="Angebotszeitraum"
+                        label={t("wizard.summary.duration")}
                         value={BIDDING_DURATIONS.find((d) => d.value === data.bidding_duration)?.label || data.bidding_duration}
                         onEdit={() => setCurrentStep(4)}
+                        editLabel={t("wizard.summary.edit")}
                       />
 
                       {/* Active services */}
@@ -573,10 +570,8 @@ const CreateQuote = () => {
                         <div className="flex items-start gap-3">
                           <Check className="w-5 h-5 text-primary mt-0.5" />
                           <div>
-                            <p className="text-sm font-medium text-foreground">Kostenlos & unverbindlich</p>
-                            <p className="text-xs text-muted-foreground">
-                              Ihre Anfrage wird veröffentlicht und geprüfte Umzugsunternehmen können Ihnen Angebote machen. Sie entscheiden dann, welches Angebot am besten passt.
-                            </p>
+                            <p className="text-sm font-medium text-foreground">{t("wizard.summary.freeNote")}</p>
+                            <p className="text-xs text-muted-foreground">{t("wizard.summary.freeDesc")}</p>
                           </div>
                         </div>
                       </div>
@@ -595,7 +590,7 @@ const CreateQuote = () => {
               disabled={currentStep === 0}
               className="gap-2"
             >
-              <ArrowLeft className="w-4 h-4" /> Zurück
+              <ArrowLeft className="w-4 h-4" /> {t("wizard.nav.back")}
             </Button>
 
             {currentStep < STEPS.length - 1 ? (
@@ -605,7 +600,7 @@ const CreateQuote = () => {
                 className="gap-2"
                 size="lg"
               >
-                Weiter <ArrowRight className="w-4 h-4" />
+                {t("wizard.nav.next")} <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
               <Button
@@ -615,9 +610,9 @@ const CreateQuote = () => {
                 size="lg"
               >
                 {isSubmitting ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Wird gesendet...</>
+                  <><Loader2 className="w-4 h-4 animate-spin" /> {t("wizard.nav.sending")}</>
                 ) : (
-                  <><Send className="w-4 h-4" /> Anfrage absenden</>
+                  <><Send className="w-4 h-4" /> {t("wizard.nav.submit")}</>
                 )}
               </Button>
             )}
@@ -630,13 +625,13 @@ const CreateQuote = () => {
   );
 };
 
-const SummaryRow = ({ label, value, onEdit }: { label: string; value: string; onEdit: () => void }) => (
+const SummaryRow = ({ label, value, onEdit, editLabel }: { label: string; value: string; onEdit: () => void; editLabel: string }) => (
   <div className="flex items-center justify-between py-3 border-b border-border last:border-0">
     <div>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="text-sm font-medium text-foreground">{value}</p>
     </div>
-    <button onClick={onEdit} className="text-xs text-primary hover:underline">Ändern</button>
+    <button onClick={onEdit} className="text-xs text-primary hover:underline">{editLabel}</button>
   </div>
 );
 
