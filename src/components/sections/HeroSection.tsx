@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Star, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +15,7 @@ interface QuickQuoteForm {
 const HeroSection = () => {
   const { toast } = useToast();
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<QuickQuoteForm>({
     fromCity: "", toCity: "", apartmentType: "", preferredDate: "", name: "", phone: "", email: "",
@@ -76,7 +78,7 @@ const HeroSection = () => {
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-lg">{t("hero.subtitle")}</p>
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Button variant="hero" size="xl" className="group" onClick={() => scrollToSection("kostenrechner")}>
+              <Button variant="hero" size="xl" className="group" onClick={() => navigate("/angebot-erstellen")}>
                 {t("hero.ctaPrimary")}<ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button variant="heroOutline" size="xl" onClick={() => scrollToSection("leistungen")}>{t("hero.ctaSecondary")}</Button>
