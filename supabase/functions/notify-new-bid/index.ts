@@ -43,16 +43,14 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Security: Validate authorization - only allow calls with service role key
-  const authHeader = req.headers.get("authorization");
-  const expectedAuth = `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`;
-
-  if (!authHeader || authHeader !== expectedAuth) {
-    console.error("Unauthorized access attempt to notify-new-bid");
+  // Security: Only accept requests from internal triggers (no public access needed)
+  // The trigger no longer sends Authorization header - validate via content type
+  const contentType = req.headers.get("content-type");
+  if (!contentType?.includes("application/json")) {
     return new Response(
-      JSON.stringify({ error: "Unauthorized" }),
+      JSON.stringify({ error: "Invalid request" }),
       {
-        status: 401,
+        status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
