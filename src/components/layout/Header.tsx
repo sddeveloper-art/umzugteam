@@ -111,9 +111,9 @@ const Header = () => {
               <LanguageSwitcher />
               <ThemeToggle />
               <Link to="/dashboard" className="text-sm text-foreground/70 hover:text-foreground font-medium transition-colors px-3">{t("nav.myArea")}</Link>
-              <a href={location.pathname === "/" ? "#kostenrechner" : "/#kostenrechner"}>
+              <Link to="/angebot-erstellen">
                 <Button variant="accent" size="default" className="shadow-md">{t("nav.freeQuote")}</Button>
-              </a>
+              </Link>
             </div>
 
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden p-2 text-foreground" aria-label={t("nav.toggleMenu")}>
@@ -151,9 +151,9 @@ const Header = () => {
                   <LanguageSwitcher />
                   <ThemeToggle />
                 </div>
-                <a href={location.pathname === "/" ? "#kostenrechner" : "/#kostenrechner"}>
+                <Link to="/angebot-erstellen" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="accent" className="mt-3 w-full">{t("nav.freeQuote")}</Button>
-                </a>
+                </Link>
               </div>
             </div>
           )}
