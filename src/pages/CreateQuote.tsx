@@ -9,7 +9,8 @@ import {
   Home, Building2, Truck, Package, Piano, Archive,
   MapPin, ArrowRight, ArrowLeft, Check, Send, Loader2,
   User, Mail, Phone, CalendarIcon, Clock, ChevronRight,
-  Sofa, BedDouble, UtensilsCrossed, Briefcase, BoxesIcon
+  Sofa, BedDouble, UtensilsCrossed, Briefcase, BoxesIcon,
+  Shield, Star, Sparkles
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -37,6 +38,14 @@ import { useCreateAnnouncement } from "@/hooks/useAnnouncements";
 import { MovingItem, calculateEstimatedVolume } from "@/components/announcements/MovingItemsPicker";
 import MovingItemsPicker from "@/components/announcements/MovingItemsPicker";
 import { useI18n } from "@/hooks/useI18n";
+
+// Category images
+import catPrivatumzug from "@/assets/cat-privatumzug.webp";
+import catFirmenumzug from "@/assets/cat-firmenumzug.webp";
+import catMoebeltransport from "@/assets/cat-moebeltransport.webp";
+import catKlaviertransport from "@/assets/cat-klaviertransport.webp";
+import catFernumzug from "@/assets/cat-fernumzug.webp";
+import catLagerung from "@/assets/cat-lagerung.webp";
 
 // --- Types ---
 interface QuoteData {
@@ -82,12 +91,12 @@ const CreateQuote = () => {
   ];
 
   const CATEGORIES = [
-    { value: "privatumzug", label: t("wizard.cat.private"), desc: t("wizard.cat.privateDesc"), icon: Home },
-    { value: "firmenumzug", label: t("wizard.cat.company"), desc: t("wizard.cat.companyDesc"), icon: Building2 },
-    { value: "moebeltransport", label: t("wizard.cat.furniture"), desc: t("wizard.cat.furnitureDesc"), icon: Sofa },
-    { value: "klaviertransport", label: t("wizard.cat.piano"), desc: t("wizard.cat.pianoDesc"), icon: Piano },
-    { value: "fernumzug", label: t("wizard.cat.longDist"), desc: t("wizard.cat.longDistDesc"), icon: Truck },
-    { value: "lagerung", label: t("wizard.cat.storage"), desc: t("wizard.cat.storageDesc"), icon: Archive },
+    { value: "privatumzug", label: t("wizard.cat.private"), desc: t("wizard.cat.privateDesc"), icon: Home, image: catPrivatumzug },
+    { value: "firmenumzug", label: t("wizard.cat.company"), desc: t("wizard.cat.companyDesc"), icon: Building2, image: catFirmenumzug },
+    { value: "moebeltransport", label: t("wizard.cat.furniture"), desc: t("wizard.cat.furnitureDesc"), icon: Sofa, image: catMoebeltransport },
+    { value: "klaviertransport", label: t("wizard.cat.piano"), desc: t("wizard.cat.pianoDesc"), icon: Piano, image: catKlaviertransport },
+    { value: "fernumzug", label: t("wizard.cat.longDist"), desc: t("wizard.cat.longDistDesc"), icon: Truck, image: catFernumzug },
+    { value: "lagerung", label: t("wizard.cat.storage"), desc: t("wizard.cat.storageDesc"), icon: Archive, image: catLagerung },
   ];
 
   const APARTMENT_SIZES = [
@@ -205,17 +214,34 @@ const CreateQuote = () => {
       <Header />
 
       <main className="min-h-screen bg-muted pt-24 pb-16">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-4 max-w-5xl">
           {/* Progress Header */}
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+            <div className="text-center mb-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
                 {t("wizard.pageTitle")}
               </h1>
-              <span className="text-sm text-muted-foreground">
-                {t("wizard.stepOf")} {currentStep + 1} {t("wizard.of")} {STEPS.length}
-              </span>
+              <p className="text-muted-foreground">
+                {t("wizard.metaDesc")}
+              </p>
             </div>
+
+            {/* Trust indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Shield className="w-4 h-4 text-accent" />
+                <span>0 € {language === "fr" ? "pour publier" : "zum Veröffentlichen"}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-accent" />
+                <span>{language === "fr" ? "Transporteurs vérifiés" : "Geprüfte Umzugsfirmen"}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-accent" />
+                <span>{language === "fr" ? "Jusqu'à 60% d'économies" : "Bis zu 60% sparen"}</span>
+              </div>
+            </div>
+
             <Progress value={progress} className="h-2" />
 
             {/* Step indicators */}
@@ -251,6 +277,11 @@ const CreateQuote = () => {
                 );
               })}
             </div>
+
+            {/* Mobile step indicator */}
+            <div className="md:hidden flex items-center justify-center mt-3 text-sm text-muted-foreground">
+              {t("wizard.stepOf")} {currentStep + 1} {t("wizard.of")} {STEPS.length} — {STEPS[currentStep].label}
+            </div>
           </div>
 
           {/* Step Content */}
@@ -262,323 +293,338 @@ const CreateQuote = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25 }}
             >
-              <div className="bg-card rounded-2xl shadow-lg border border-border p-6 md:p-10">
-                {/* Step 0: Category */}
-                {currentStep === 0 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.cat.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.cat.subtitle")}</p>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {CATEGORIES.map((cat) => {
-                        const CatIcon = cat.icon;
-                        const selected = data.category === cat.value;
-                        return (
-                          <button
-                            key={cat.value}
-                            onClick={() => update({ category: cat.value })}
-                            className={cn(
-                              "flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all text-center hover:shadow-md",
-                              selected
-                                ? "border-primary bg-primary/5 shadow-md"
-                                : "border-border hover:border-primary/40"
-                            )}
-                          >
-                            <div className={cn(
-                              "w-14 h-14 rounded-full flex items-center justify-center",
-                              selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                            )}>
-                              <CatIcon className="w-7 h-7" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-foreground">{cat.label}</p>
-                              <p className="text-xs text-muted-foreground mt-1">{cat.desc}</p>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
+              {/* Step 0: Category — clicktrans-style image grid */}
+              {currentStep === 0 && (
+                <div>
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-foreground mb-2">{t("wizard.cat.title")}</h2>
+                    <p className="text-muted-foreground">{t("wizard.cat.subtitle")}</p>
                   </div>
-                )}
-
-                {/* Step 1: Route */}
-                {currentStep === 1 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.route.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.route.subtitle")}</p>
-                    <div className="max-w-lg mx-auto space-y-6">
-                      <div className="relative">
-                        <div className="absolute left-5 top-[3.5rem] bottom-[3.5rem] w-0.5 bg-primary/30" />
-                        <div className="space-y-6">
-                          <div className="relative">
-                            <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
-                                <MapPin className="w-5 h-5 text-primary-foreground" />
-                              </div>
-                              <label className="font-semibold text-foreground">{t("wizard.route.from")}</label>
-                            </div>
-                            <div className="ml-[3.25rem]">
-                              <Input
-                                placeholder={t("wizard.route.fromPlaceholder")}
-                                value={data.from_city}
-                                onChange={(e) => update({ from_city: e.target.value })}
-                                className="text-base py-6"
-                              />
-                            </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                    {CATEGORIES.map((cat, index) => {
+                      const selected = data.category === cat.value;
+                      return (
+                        <motion.button
+                          key={cat.value}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          onClick={() => { update({ category: cat.value }); setTimeout(next, 300); }}
+                          className={cn(
+                            "group flex flex-col items-center text-center rounded-2xl p-4 transition-all duration-200",
+                            selected
+                              ? "ring-2 ring-accent bg-accent/5 shadow-lg"
+                              : "hover:bg-card hover:shadow-md"
+                          )}
+                        >
+                          <div className={cn(
+                            "w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden mb-3 transition-transform duration-200 group-hover:scale-105",
+                            selected && "ring-2 ring-accent"
+                          )}>
+                            <img
+                              src={cat.image}
+                              alt={cat.label}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
                           </div>
-                          <div className="relative">
-                            <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center z-10">
-                                <MapPin className="w-5 h-5 text-accent-foreground" />
+                          <p className={cn(
+                            "font-semibold text-sm transition-colors",
+                            selected ? "text-accent" : "text-foreground"
+                          )}>
+                            {cat.label}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 leading-tight">{cat.desc}</p>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Steps 1-5 wrapped in card */}
+              {currentStep > 0 && (
+                <div className="bg-card rounded-2xl shadow-lg border border-border p-6 md:p-10">
+                  {/* Step 1: Route */}
+                  {currentStep === 1 && (
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.route.title")}</h2>
+                      <p className="text-muted-foreground mb-6">{t("wizard.route.subtitle")}</p>
+                      <div className="max-w-lg mx-auto space-y-6">
+                        <div className="relative">
+                          <div className="absolute left-5 top-[3.5rem] bottom-[3.5rem] w-0.5 bg-primary/30" />
+                          <div className="space-y-6">
+                            <div className="relative">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
+                                  <MapPin className="w-5 h-5 text-primary-foreground" />
+                                </div>
+                                <label className="font-semibold text-foreground">{t("wizard.route.from")}</label>
                               </div>
-                              <label className="font-semibold text-foreground">{t("wizard.route.to")}</label>
+                              <div className="ml-[3.25rem]">
+                                <Input
+                                  placeholder={t("wizard.route.fromPlaceholder")}
+                                  value={data.from_city}
+                                  onChange={(e) => update({ from_city: e.target.value })}
+                                  className="text-base py-6"
+                                />
+                              </div>
                             </div>
-                            <div className="ml-[3.25rem]">
-                              <Input
-                                placeholder={t("wizard.route.toPlaceholder")}
-                                value={data.to_city}
-                                onChange={(e) => update({ to_city: e.target.value })}
-                                className="text-base py-6"
-                              />
+                            <div className="relative">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center z-10">
+                                  <MapPin className="w-5 h-5 text-accent-foreground" />
+                                </div>
+                                <label className="font-semibold text-foreground">{t("wizard.route.to")}</label>
+                              </div>
+                              <div className="ml-[3.25rem]">
+                                <Input
+                                  placeholder={t("wizard.route.toPlaceholder")}
+                                  value={data.to_city}
+                                  onChange={(e) => update({ to_city: e.target.value })}
+                                  className="text-base py-6"
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Step 2: Details */}
-                {currentStep === 2 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.details.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.details.subtitle")}</p>
-                    <div className="space-y-6 max-w-2xl">
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.sizeLabel")}</label>
-                          <Select value={data.apartment_size} onValueChange={(v) => update({ apartment_size: v })}>
-                            <SelectTrigger className="py-6 text-base">
-                              <SelectValue placeholder={t("wizard.details.sizePlaceholder")} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {APARTMENT_SIZES.map((s) => (
-                                <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                  {/* Step 2: Details */}
+                  {currentStep === 2 && (
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.details.title")}</h2>
+                      <p className="text-muted-foreground mb-6">{t("wizard.details.subtitle")}</p>
+                      <div className="space-y-6 max-w-2xl">
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.sizeLabel")}</label>
+                            <Select value={data.apartment_size} onValueChange={(v) => update({ apartment_size: v })}>
+                              <SelectTrigger className="py-6 text-base">
+                                <SelectValue placeholder={t("wizard.details.sizePlaceholder")} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {APARTMENT_SIZES.map((s) => (
+                                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.floorLabel")}</label>
+                            <Input
+                              type="number"
+                              min={0}
+                              max={50}
+                              value={data.floor}
+                              onChange={(e) => update({ floor: parseInt(e.target.value) || 0 })}
+                              className="py-6 text-base"
+                            />
+                          </div>
                         </div>
+
                         <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.floorLabel")}</label>
+                          <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.dateLabel")}</label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "w-full sm:w-[280px] justify-start text-left font-normal py-6 text-base",
+                                  !data.preferred_date && "text-muted-foreground"
+                                )}
+                              >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {data.preferred_date
+                                  ? format(data.preferred_date, "PPP", { locale: dateLocale })
+                                  : t("wizard.details.datePlaceholder")}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={data.preferred_date || undefined}
+                                onSelect={(d) => update({ preferred_date: d || null })}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                                className="pointer-events-auto"
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-3">{t("wizard.details.servicesLabel")}</label>
+                          <div className="grid sm:grid-cols-2 gap-3">
+                            {SERVICE_OPTIONS.map((opt) => {
+                              const checked = data[opt.key as keyof QuoteData] as boolean;
+                              return (
+                                <label
+                                  key={opt.key}
+                                  className={cn(
+                                    "flex items-start gap-3 p-3 rounded-lg border transition-colors cursor-pointer",
+                                    checked ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
+                                  )}
+                                >
+                                  <Checkbox
+                                    checked={checked}
+                                    onCheckedChange={(v) => update({ [opt.key]: !!v } as any)}
+                                    className="mt-0.5"
+                                  />
+                                  <div>
+                                    <p className="text-sm font-medium text-foreground">{opt.label}</p>
+                                    <p className="text-xs text-muted-foreground">{opt.desc}</p>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Items */}
+                  {currentStep === 3 && (
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.items.title")}</h2>
+                      <p className="text-muted-foreground mb-6">{t("wizard.items.subtitle")}</p>
+                      <MovingItemsPicker
+                        items={data.items}
+                        onChange={(items) => update({ items })}
+                      />
+                    </div>
+                  )}
+
+                  {/* Step 4: Contact */}
+                  {currentStep === 4 && (
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.contact.title")}</h2>
+                      <p className="text-muted-foreground mb-6">{t("wizard.contact.subtitle")}</p>
+                      <div className="max-w-lg mx-auto space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            <User className="inline w-4 h-4 mr-1" />{t("wizard.contact.nameLabel")}
+                          </label>
                           <Input
-                            type="number"
-                            min={0}
-                            max={50}
-                            value={data.floor}
-                            onChange={(e) => update({ floor: parseInt(e.target.value) || 0 })}
+                            placeholder={t("wizard.contact.namePlaceholder")}
+                            value={data.client_name}
+                            onChange={(e) => update({ client_name: e.target.value })}
                             className="py-6 text-base"
                           />
                         </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">{t("wizard.details.dateLabel")}</label>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full sm:w-[280px] justify-start text-left font-normal py-6 text-base",
-                                !data.preferred_date && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {data.preferred_date
-                                ? format(data.preferred_date, "PPP", { locale: dateLocale })
-                                : t("wizard.details.datePlaceholder")}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={data.preferred_date || undefined}
-                              onSelect={(d) => update({ preferred_date: d || null })}
-                              disabled={(date) => date < new Date()}
-                              initialFocus
-                              className="pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-3">{t("wizard.details.servicesLabel")}</label>
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          {SERVICE_OPTIONS.map((opt) => {
-                            const checked = data[opt.key as keyof QuoteData] as boolean;
-                            return (
-                              <label
-                                key={opt.key}
-                                className={cn(
-                                  "flex items-start gap-3 p-3 rounded-lg border transition-colors cursor-pointer",
-                                  checked ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
-                                )}
-                              >
-                                <Checkbox
-                                  checked={checked}
-                                  onCheckedChange={(v) => update({ [opt.key]: !!v } as any)}
-                                  className="mt-0.5"
-                                />
-                                <div>
-                                  <p className="text-sm font-medium text-foreground">{opt.label}</p>
-                                  <p className="text-xs text-muted-foreground">{opt.desc}</p>
-                                </div>
-                              </label>
-                            );
-                          })}
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            <Mail className="inline w-4 h-4 mr-1" />{t("wizard.contact.emailLabel")}
+                          </label>
+                          <Input
+                            type="email"
+                            placeholder={t("wizard.contact.emailPlaceholder")}
+                            value={data.client_email}
+                            onChange={(e) => update({ client_email: e.target.value })}
+                            className="py-6 text-base"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            <Phone className="inline w-4 h-4 mr-1" />{t("wizard.contact.phoneLabel")}
+                          </label>
+                          <Input
+                            type="tel"
+                            placeholder={t("wizard.contact.phonePlaceholder")}
+                            value={data.client_phone}
+                            onChange={(e) => update({ client_phone: e.target.value })}
+                            className="py-6 text-base"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            {t("wizard.contact.extraLabel")}
+                          </label>
+                          <Textarea
+                            placeholder={t("wizard.contact.extraPlaceholder")}
+                            value={data.description}
+                            onChange={(e) => update({ description: e.target.value })}
+                            rows={3}
+                            className="resize-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-foreground mb-2">
+                            <Clock className="inline w-4 h-4 mr-1" />{t("wizard.contact.durationLabel")}
+                          </label>
+                          <Select value={data.bidding_duration} onValueChange={(v) => update({ bidding_duration: v })}>
+                            <SelectTrigger className="py-6 text-base">
+                              <SelectValue placeholder={t("wizard.contact.durationPlaceholder")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {BIDDING_DURATIONS.map((d) => (
+                                <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <p className="text-xs text-muted-foreground mt-1">{t("wizard.contact.durationHint")}</p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Step 3: Items */}
-                {currentStep === 3 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.items.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.items.subtitle")}</p>
-                    <MovingItemsPicker
-                      items={data.items}
-                      onChange={(items) => update({ items })}
-                    />
-                  </div>
-                )}
-
-                {/* Step 4: Contact */}
-                {currentStep === 4 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.contact.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.contact.subtitle")}</p>
-                    <div className="max-w-lg mx-auto space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          <User className="inline w-4 h-4 mr-1" />{t("wizard.contact.nameLabel")}
-                        </label>
-                        <Input
-                          placeholder={t("wizard.contact.namePlaceholder")}
-                          value={data.client_name}
-                          onChange={(e) => update({ client_name: e.target.value })}
-                          className="py-6 text-base"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          <Mail className="inline w-4 h-4 mr-1" />{t("wizard.contact.emailLabel")}
-                        </label>
-                        <Input
-                          type="email"
-                          placeholder={t("wizard.contact.emailPlaceholder")}
-                          value={data.client_email}
-                          onChange={(e) => update({ client_email: e.target.value })}
-                          className="py-6 text-base"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          <Phone className="inline w-4 h-4 mr-1" />{t("wizard.contact.phoneLabel")}
-                        </label>
-                        <Input
-                          type="tel"
-                          placeholder={t("wizard.contact.phonePlaceholder")}
-                          value={data.client_phone}
-                          onChange={(e) => update({ client_phone: e.target.value })}
-                          className="py-6 text-base"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          {t("wizard.contact.extraLabel")}
-                        </label>
-                        <Textarea
-                          placeholder={t("wizard.contact.extraPlaceholder")}
-                          value={data.description}
-                          onChange={(e) => update({ description: e.target.value })}
-                          rows={3}
-                          className="resize-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          <Clock className="inline w-4 h-4 mr-1" />{t("wizard.contact.durationLabel")}
-                        </label>
-                        <Select value={data.bidding_duration} onValueChange={(v) => update({ bidding_duration: v })}>
-                          <SelectTrigger className="py-6 text-base">
-                            <SelectValue placeholder={t("wizard.contact.durationPlaceholder")} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {BIDDING_DURATIONS.map((d) => (
-                              <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <p className="text-xs text-muted-foreground mt-1">{t("wizard.contact.durationHint")}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 5: Summary */}
-                {currentStep === 5 && (
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.summary.title")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("wizard.summary.subtitle")}</p>
-                    <div className="space-y-4">
-                      <SummaryRow label={t("wizard.summary.category")} value={CATEGORIES.find((c) => c.value === data.category)?.label || data.category} onEdit={() => setCurrentStep(0)} editLabel={t("wizard.summary.edit")} />
-                      <SummaryRow label={t("wizard.summary.route")} value={`${data.from_city} → ${data.to_city}`} onEdit={() => setCurrentStep(1)} editLabel={t("wizard.summary.edit")} />
-                      <SummaryRow label={t("wizard.summary.size")} value={APARTMENT_SIZES.find((s) => s.value === data.apartment_size)?.label || data.apartment_size} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
-                      <SummaryRow label={t("wizard.summary.floor")} value={`${data.floor}. ${t("wizard.summary.og")}${data.has_elevator ? ` (${t("wizard.svc.elevator")})` : ""}`} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
-                      {data.preferred_date && (
-                        <SummaryRow label={t("wizard.summary.date")} value={format(data.preferred_date, "PPP", { locale: dateLocale })} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
-                      )}
-                      {data.items.length > 0 && (
+                  {/* Step 5: Summary */}
+                  {currentStep === 5 && (
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">{t("wizard.summary.title")}</h2>
+                      <p className="text-muted-foreground mb-6">{t("wizard.summary.subtitle")}</p>
+                      <div className="space-y-4">
+                        <SummaryRow label={t("wizard.summary.category")} value={CATEGORIES.find((c) => c.value === data.category)?.label || data.category} onEdit={() => setCurrentStep(0)} editLabel={t("wizard.summary.edit")} />
+                        <SummaryRow label={t("wizard.summary.route")} value={`${data.from_city} → ${data.to_city}`} onEdit={() => setCurrentStep(1)} editLabel={t("wizard.summary.edit")} />
+                        <SummaryRow label={t("wizard.summary.size")} value={APARTMENT_SIZES.find((s) => s.value === data.apartment_size)?.label || data.apartment_size} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
+                        <SummaryRow label={t("wizard.summary.floor")} value={`${data.floor}. ${t("wizard.summary.og")}${data.has_elevator ? ` (${t("wizard.svc.elevator")})` : ""}`} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
+                        {data.preferred_date && (
+                          <SummaryRow label={t("wizard.summary.date")} value={format(data.preferred_date, "PPP", { locale: dateLocale })} onEdit={() => setCurrentStep(2)} editLabel={t("wizard.summary.edit")} />
+                        )}
+                        {data.items.length > 0 && (
+                          <SummaryRow
+                            label={t("wizard.summary.inventory")}
+                            value={`${data.items.reduce((s, i) => s + i.quantity, 0)} ${t("wizard.summary.items")} (~${estimatedVolume.toFixed(1)} m³)`}
+                            onEdit={() => setCurrentStep(3)}
+                            editLabel={t("wizard.summary.edit")}
+                          />
+                        )}
+                        <SummaryRow label={t("wizard.summary.name")} value={data.client_name} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
+                        <SummaryRow label={t("wizard.summary.email")} value={data.client_email} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
+                        {data.client_phone && <SummaryRow label={t("wizard.summary.phone")} value={data.client_phone} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />}
                         <SummaryRow
-                          label={t("wizard.summary.inventory")}
-                          value={`${data.items.reduce((s, i) => s + i.quantity, 0)} ${t("wizard.summary.items")} (~${estimatedVolume.toFixed(1)} m³)`}
-                          onEdit={() => setCurrentStep(3)}
+                          label={t("wizard.summary.duration")}
+                          value={BIDDING_DURATIONS.find((d) => d.value === data.bidding_duration)?.label || data.bidding_duration}
+                          onEdit={() => setCurrentStep(4)}
                           editLabel={t("wizard.summary.edit")}
                         />
-                      )}
-                      <SummaryRow label={t("wizard.summary.name")} value={data.client_name} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
-                      <SummaryRow label={t("wizard.summary.email")} value={data.client_email} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />
-                      {data.client_phone && <SummaryRow label={t("wizard.summary.phone")} value={data.client_phone} onEdit={() => setCurrentStep(4)} editLabel={t("wizard.summary.edit")} />}
-                      <SummaryRow
-                        label={t("wizard.summary.duration")}
-                        value={BIDDING_DURATIONS.find((d) => d.value === data.bidding_duration)?.label || data.bidding_duration}
-                        onEdit={() => setCurrentStep(4)}
-                        editLabel={t("wizard.summary.edit")}
-                      />
 
-                      {/* Active services */}
-                      {SERVICE_OPTIONS.filter((o) => data[o.key as keyof QuoteData]).length > 0 && (
-                        <div className="flex flex-wrap gap-2 pt-2">
-                          {SERVICE_OPTIONS.filter((o) => data[o.key as keyof QuoteData]).map((o) => (
-                            <Badge key={o.key} variant="secondary">{o.label}</Badge>
-                          ))}
-                        </div>
-                      )}
+                        {/* Active services */}
+                        {SERVICE_OPTIONS.filter((o) => data[o.key as keyof QuoteData]).length > 0 && (
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            {SERVICE_OPTIONS.filter((o) => data[o.key as keyof QuoteData]).map((o) => (
+                              <Badge key={o.key} variant="secondary">{o.label}</Badge>
+                            ))}
+                          </div>
+                        )}
 
-                      <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mt-6">
-                        <div className="flex items-start gap-3">
-                          <Check className="w-5 h-5 text-primary mt-0.5" />
-                          <div>
-                            <p className="text-sm font-medium text-foreground">{t("wizard.summary.freeNote")}</p>
-                            <p className="text-xs text-muted-foreground">{t("wizard.summary.freeDesc")}</p>
+                        <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mt-6">
+                          <div className="flex items-start gap-3">
+                            <Check className="w-5 h-5 text-primary mt-0.5" />
+                            <div>
+                              <p className="text-sm font-medium text-foreground">{t("wizard.summary.freeNote")}</p>
+                              <p className="text-xs text-muted-foreground">{t("wizard.summary.freeDesc")}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           </AnimatePresence>
 
@@ -593,12 +639,23 @@ const CreateQuote = () => {
               <ArrowLeft className="w-4 h-4" /> {t("wizard.nav.back")}
             </Button>
 
-            {currentStep < STEPS.length - 1 ? (
+            {currentStep === 0 ? (
               <Button
                 onClick={next}
                 disabled={!canProceed()}
                 className="gap-2"
                 size="lg"
+                variant="accent"
+              >
+                {t("wizard.nav.next")} <ArrowRight className="w-4 h-4" />
+              </Button>
+            ) : currentStep < STEPS.length - 1 ? (
+              <Button
+                onClick={next}
+                disabled={!canProceed()}
+                className="gap-2"
+                size="lg"
+                variant="accent"
               >
                 {t("wizard.nav.next")} <ArrowRight className="w-4 h-4" />
               </Button>
@@ -608,6 +665,7 @@ const CreateQuote = () => {
                 disabled={isSubmitting || !canProceed()}
                 className="gap-2"
                 size="lg"
+                variant="accent"
               >
                 {isSubmitting ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> {t("wizard.nav.sending")}</>
