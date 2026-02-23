@@ -24,7 +24,7 @@ const Footer = forwardRef<HTMLElement>((_, ref) => {
     { label: t("footer.routesLink"), href: "/umzugsrouten" },
     { label: t("footer.faqLink"), href: "/#faq" },
     { label: t("footer.contactLink"), href: "/#kontakt" },
-    { label: t("footer.quoteLink"), href: "/#kostenrechner" },
+    { label: t("footer.quoteLink"), href: "/angebot-erstellen" },
   ];
 
   return (

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Check, Star, Zap, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,8 +52,8 @@ const PackagesSection = () => {
                   {features.map((f: string) => (<li key={f} className="flex items-start gap-2 text-sm"><Check className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" /><span className="text-foreground">{f}</span></li>))}
                   {excludedFeatures.map((f: string) => (<li key={f} className="flex items-start gap-2 text-sm opacity-40"><span className="w-4 h-4 flex items-center justify-center text-muted-foreground mt-0.5 flex-shrink-0">—</span><span className="text-muted-foreground line-through">{f}</span></li>))}
                 </ul>
-                <Button variant={pkg.is_highlighted ? "accent" : "outline"} className="w-full" onClick={() => { const el = document.getElementById("kostenrechner"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}>
-                  {t("packages.cta")}
+                <Button variant={pkg.is_highlighted ? "accent" : "outline"} className="w-full" asChild>
+                  <Link to="/angebot-erstellen">{t("packages.cta")}</Link>
                 </Button>
               </motion.div>
             );

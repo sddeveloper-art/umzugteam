@@ -80,7 +80,7 @@ const CityLanding = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" variant="secondary" className="text-lg px-8">
-                  <Link to="/#kostenrechner">
+                  <Link to="/angebot-erstellen">
                     Kostenloses Angebot für {data.name}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Link>
@@ -184,7 +184,7 @@ const CityLanding = () => {
               Erhalten Sie jetzt ein kostenloses, unverbindliches Angebot. Festpreisgarantie – keine versteckten Kosten.
             </p>
             <Button asChild variant="accent" size="lg">
-              <Link to="/#kostenrechner">
+              <Link to="/angebot-erstellen">
                 Jetzt Preis berechnen
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>

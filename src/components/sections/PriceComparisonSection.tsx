@@ -92,7 +92,7 @@ const PriceComparisonSection = () => {
           )}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild variant="accent" size="lg">
-              <Link to="/#kostenrechner">
+              <Link to="/angebot-erstellen">
                 Jetzt Preis berechnen
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
