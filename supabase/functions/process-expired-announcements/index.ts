@@ -47,6 +47,19 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Security: Validate shared webhook secret for internal-only access
+  const webhookSecret = req.headers.get("x-webhook-secret");
+  const expectedSecret = Deno.env.get("INTERNAL_WEBHOOK_SECRET");
+  if (!expectedSecret || webhookSecret !== expectedSecret) {
+    return new Response(
+      JSON.stringify({ error: "Unauthorized" }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+
   console.log("Processing expired announcements...");
 
   try {
