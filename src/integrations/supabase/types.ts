@@ -206,6 +206,61 @@ export type Database = {
           },
         ]
       }
+      company_ratings: {
+        Row: {
+          announcement_id: string
+          bid_id: string
+          comment: string | null
+          company_name: string
+          created_at: string
+          id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          bid_id: string
+          comment?: string | null
+          company_name: string
+          created_at?: string
+          id?: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          bid_id?: string
+          comment?: string | null
+          company_name?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_ratings_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ratings_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "moving_announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_ratings_bid_id_fkey"
+            columns: ["bid_id"]
+            isOneToOne: false
+            referencedRelation: "company_bids"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       competitors: {
         Row: {
           base_price_multiplier: number
@@ -746,6 +801,15 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      company_reputation: {
+        Row: {
+          avg_rating: number | null
+          company_name: string | null
+          positive_ratings: number | null
+          total_ratings: number | null
+        }
+        Relationships: []
       }
       reviews_public: {
         Row: {
