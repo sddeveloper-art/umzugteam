@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Megaphone, BarChart3, FileText, Image, HelpCircle, Wrench, Package } from "lucide-react";
+import { Loader2, Megaphone, BarChart3, FileText, Image, HelpCircle, Wrench, Package, PieChart } from "lucide-react";
 import AdminNav from "@/components/admin/AdminNav";
 import CompetitorsManager from "@/components/admin/CompetitorsManager";
 import AnnouncementsManager from "@/components/admin/AnnouncementsManager";
@@ -13,6 +13,7 @@ import GalleryManager from "@/components/admin/GalleryManager";
 import FAQManager from "@/components/admin/FAQManager";
 import ServicesManager from "@/components/admin/ServicesManager";
 import PackagesManager from "@/components/admin/PackagesManager";
+import AnalyticsManager from "@/components/admin/AnalyticsManager";
 
 const Admin = () => {
   const { user, loading, isAdmin, signIn, signOut } = useAuth();
@@ -87,8 +88,12 @@ const Admin = () => {
       <AdminNav userEmail={user.email || ""} onSignOut={signOut} />
 
       <main className="container mx-auto p-6">
-        <Tabs defaultValue="announcements" className="w-full">
+        <Tabs defaultValue="analytics" className="w-full">
           <TabsList className="flex flex-wrap w-full max-w-4xl gap-1 mb-8 h-auto p-1">
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <PieChart className="h-4 w-4" />
+              <span className="hidden sm:inline">Analytics</span>
+            </TabsTrigger>
             <TabsTrigger value="announcements" className="flex items-center gap-2">
               <Megaphone className="h-4 w-4" />
               <span className="hidden sm:inline">Anfragen</span>
@@ -119,6 +124,7 @@ const Admin = () => {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="analytics"><AnalyticsManager /></TabsContent>
           <TabsContent value="announcements"><AnnouncementsManager /></TabsContent>
           <TabsContent value="competitors"><CompetitorsManager /></TabsContent>
           <TabsContent value="blog"><BlogManager /></TabsContent>
