@@ -351,6 +351,7 @@ export type Database = {
           status: Database["public"]["Enums"]["announcement_status"]
           to_city: string
           updated_at: string
+          user_id: string | null
           volume: number
           winner_bid_id: string | null
         }
@@ -375,6 +376,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["announcement_status"]
           to_city: string
           updated_at?: string
+          user_id?: string | null
           volume?: number
           winner_bid_id?: string | null
         }
@@ -399,6 +401,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["announcement_status"]
           to_city?: string
           updated_at?: string
+          user_id?: string | null
           volume?: number
           winner_bid_id?: string | null
         }
@@ -673,6 +676,7 @@ export type Database = {
           start_date: string | null
           status: Database["public"]["Enums"]["announcement_status"] | null
           to_city: string | null
+          user_id: string | null
           volume: number | null
         }
         Insert: {
@@ -690,6 +694,7 @@ export type Database = {
           start_date?: string | null
           status?: Database["public"]["Enums"]["announcement_status"] | null
           to_city?: string | null
+          user_id?: string | null
           volume?: number | null
         }
         Update: {
@@ -707,6 +712,7 @@ export type Database = {
           start_date?: string | null
           status?: Database["public"]["Enums"]["announcement_status"] | null
           to_city?: string | null
+          user_id?: string | null
           volume?: number | null
         }
         Relationships: []
