@@ -675,6 +675,7 @@ export type Database = {
           items: Json | null
           needs_assembly: boolean | null
           needs_packing: boolean | null
+          photos: Json | null
           preferred_date: string | null
           start_date: string | null
           status: Database["public"]["Enums"]["announcement_status"] | null
@@ -693,6 +694,7 @@ export type Database = {
           items?: Json | null
           needs_assembly?: boolean | null
           needs_packing?: boolean | null
+          photos?: Json | null
           preferred_date?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["announcement_status"] | null
@@ -711,6 +713,7 @@ export type Database = {
           items?: Json | null
           needs_assembly?: boolean | null
           needs_packing?: boolean | null
+          photos?: Json | null
           preferred_date?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["announcement_status"] | null
