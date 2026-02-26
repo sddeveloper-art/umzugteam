@@ -11,10 +11,11 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { User, FileText, Gift, LogOut, Megaphone, ChevronDown, ChevronUp, Clock, Euro, Bell } from "lucide-react";
+import { User, FileText, Gift, LogOut, Megaphone, ChevronDown, ChevronUp, Clock, Euro, Bell, Star } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { useI18n } from "@/hooks/useI18n";
 import { formatTimeRemaining } from "@/hooks/useAnnouncements";
+import RateCompanyDialog from "@/components/announcements/RateCompanyDialog";
 
 interface Announcement {
   id: string;
@@ -28,6 +29,15 @@ interface Announcement {
   volume: number;
   floor: number;
   photos: string[] | null;
+  winner_bid_id: string | null;
+}
+
+interface CompanyRating {
+  id: string;
+  announcement_id: string;
+  rating: number;
+  comment: string | null;
+  company_name: string;
 }
 
 interface Bid {
@@ -48,6 +58,7 @@ const Dashboard = () => {
   const [bidsByAnnouncement, setBidsByAnnouncement] = useState<Record<string, Bid[]>>({});
   const [expandedAnnouncement, setExpandedAnnouncement] = useState<string | null>(null);
   const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [ratings, setRatings] = useState<Record<string, CompanyRating>>({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -62,7 +73,7 @@ const Dashboard = () => {
         supabase.from("profiles").select("*").eq("user_id", user.id).single(),
         supabase.from("client_quotes").select("*").order("created_at", { ascending: false }),
         supabase.from("referral_codes").select("*").eq("user_id", user.id).single(),
-        supabase.from("moving_announcements").select("id, from_city, to_city, apartment_size, status, end_date, created_at, preferred_date, volume, floor, photos").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("moving_announcements").select("id, from_city, to_city, apartment_size, status, end_date, created_at, preferred_date, volume, floor, photos, winner_bid_id").eq("user_id", user.id).order("created_at", { ascending: false }),
       ]);
 
       if (profileRes.data) setProfile({ full_name: profileRes.data.full_name || "", phone: profileRes.data.phone || "" });
@@ -87,6 +98,19 @@ const Dashboard = () => {
             });
             setBidsByAnnouncement(grouped);
           }
+        }
+
+        // Fetch existing ratings
+        const { data: ratingsData } = await supabase
+          .from("company_ratings")
+          .select("id, announcement_id, rating, comment, company_name")
+          .eq("user_id", user.id);
+        if (ratingsData) {
+          const ratingsMap: Record<string, CompanyRating> = {};
+          (ratingsData as unknown as CompanyRating[]).forEach(r => {
+            ratingsMap[r.announcement_id] = r;
+          });
+          setRatings(ratingsMap);
         }
       }
       setLoading(false);
@@ -272,24 +296,64 @@ const Dashboard = () => {
                               </div>
                             )}
 
+                            {/* Existing Rating */}
+                            {ratings[a.id] && (
+                              <div className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 ring-1 ring-yellow-500/20">
+                                <div className="flex items-center gap-0.5">
+                                  {[1, 2, 3, 4, 5].map(s => (
+                                    <Star key={s} className={`h-4 w-4 ${s <= ratings[a.id].rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/20"}`} />
+                                  ))}
+                                </div>
+                                <span className="text-sm font-medium text-foreground">{ratings[a.id].company_name}</span>
+                                {ratings[a.id].comment && <span className="text-xs text-muted-foreground">– {ratings[a.id].comment}</span>}
+                              </div>
+                            )}
+
                             {/* Bids */}
                             {bids.length === 0 ? (
                               <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.noBids")}</p>
                             ) : (
                               <div className="space-y-2">
                                 <h3 className="text-sm font-semibold text-foreground mb-3">{t("dashboard.bids")} ({bids.length})</h3>
-                                {bids.map((b, i) => (
-                                  <div key={b.id} className={`flex items-center justify-between p-3 rounded-xl ${i === 0 ? "bg-accent/5 ring-1 ring-accent/20" : "bg-secondary"}`}>
-                                    <div>
-                                      <span className="font-medium text-foreground">{b.company_name}</span>
-                                      {b.notes && <p className="text-xs text-muted-foreground mt-0.5">{b.notes}</p>}
+                                {bids.map((b, i) => {
+                                  const isWinner = a.winner_bid_id === b.id;
+                                  const canRate = a.status === "completed" && isWinner && !ratings[a.id] && user;
+                                  return (
+                                    <div key={b.id} className={`flex items-center justify-between p-3 rounded-xl ${isWinner ? "bg-accent/5 ring-1 ring-accent/20" : i === 0 ? "bg-accent/5 ring-1 ring-accent/20" : "bg-secondary"}`}>
+                                      <div>
+                                        <div className="flex items-center gap-2">
+                                          <span className="font-medium text-foreground">{b.company_name}</span>
+                                          {isWinner && <Badge variant="outline" className="text-xs bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30">Gewinner</Badge>}
+                                        </div>
+                                        {b.notes && <p className="text-xs text-muted-foreground mt-0.5">{b.notes}</p>}
+                                      </div>
+                                      <div className="flex items-center gap-3">
+                                        {canRate && (
+                                          <RateCompanyDialog
+                                            announcementId={a.id}
+                                            bidId={b.id}
+                                            companyName={b.company_name}
+                                            userId={user!.id}
+                                            onRated={() => {
+                                              // Refresh ratings
+                                              supabase.from("company_ratings").select("id, announcement_id, rating, comment, company_name").eq("user_id", user!.id).then(({ data }) => {
+                                                if (data) {
+                                                  const rm: Record<string, CompanyRating> = {};
+                                                  (data as unknown as CompanyRating[]).forEach(r => { rm[r.announcement_id] = r; });
+                                                  setRatings(rm);
+                                                }
+                                              });
+                                            }}
+                                          />
+                                        )}
+                                        <div className="text-right">
+                                          <span className={`font-bold ${i === 0 ? "text-accent" : "text-foreground"}`}>{Number(b.price).toFixed(0)} €</span>
+                                          <p className="text-xs text-muted-foreground">{new Date(b.created_at).toLocaleDateString("de-DE")}</p>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="text-right">
-                                      <span className={`font-bold ${i === 0 ? "text-accent" : "text-foreground"}`}>{Number(b.price).toFixed(0)} €</span>
-                                      <p className="text-xs text-muted-foreground">{new Date(b.created_at).toLocaleDateString("de-DE")}</p>
-                                    </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
