@@ -76,6 +76,7 @@ export interface CreateAnnouncementData {
   description?: string;
   end_date: string;
   items?: MovingItemData[];
+  photos?: string[];
 }
 
 export interface CreateBidData {
