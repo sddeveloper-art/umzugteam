@@ -170,6 +170,11 @@ export const useCreateAnnouncement = () => {
   return useMutation({
     mutationFn: async (data: CreateAnnouncementData) => {
       const insertData: Record<string, unknown> = { ...data };
+      
+      // Attach user_id if authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) insertData.user_id = user.id;
+      
       const { data: result, error } = await supabase
         .from("moving_announcements")
         .insert([insertData as any])
