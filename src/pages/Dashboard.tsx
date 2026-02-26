@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { User, FileText, Gift, LogOut, Megaphone, ChevronDown, ChevronUp, Clock, Euro } from "lucide-react";
+import { User, FileText, Gift, LogOut, Megaphone, ChevronDown, ChevronUp, Clock, Euro, Bell } from "lucide-react";
 import type { User as SupaUser } from "@supabase/supabase-js";
 import { useI18n } from "@/hooks/useI18n";
 import { formatTimeRemaining } from "@/hooks/useAnnouncements";
@@ -92,6 +92,44 @@ const Dashboard = () => {
     };
     checkAuth();
   }, [navigate]);
+
+  // Realtime subscription for new bids on user's announcements
+  const announcementIdsRef = useRef<string[]>([]);
+  useEffect(() => {
+    announcementIdsRef.current = announcements.map(a => a.id);
+  }, [announcements]);
+
+  useEffect(() => {
+    if (!user || announcements.length === 0) return;
+
+    const channel = supabase
+      .channel('dashboard-bids')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'company_bids' },
+        (payload) => {
+          const newBid = payload.new as Bid;
+          // Only process if bid is for one of user's announcements
+          if (!announcementIdsRef.current.includes(newBid.announcement_id)) return;
+
+          setBidsByAnnouncement(prev => {
+            const existing = prev[newBid.announcement_id] || [];
+            const updated = [...existing, newBid].sort((a, b) => a.price - b.price);
+            return { ...prev, [newBid.announcement_id]: updated };
+          });
+
+          // Find the announcement for context
+          const ann = announcements.find(a => a.id === newBid.announcement_id);
+          toast({
+            title: `🔔 ${t("dashboard.newBidReceived")}`,
+            description: `${newBid.company_name} — ${Number(newBid.price).toFixed(0)} € ${ann ? `(${ann.from_city} → ${ann.to_city})` : ""}`,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user, announcements.length]);
 
   const updateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
