@@ -12,3 +12,6 @@ verify_jwt = false
 [functions.notify-new-bid]
 verify_jwt = false
 
+[functions.ai-estimate]
+verify_jwt = false
+

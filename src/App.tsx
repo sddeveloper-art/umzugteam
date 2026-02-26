@@ -28,6 +28,7 @@ import RoutenIndex from "./pages/RoutenIndex";
 import RouteLanding from "./pages/RouteLanding";
 import CreateQuote from "./pages/CreateQuote";
 import Verfuegbarkeit from "./pages/Verfuegbarkeit";
+import AIEstimate from "./pages/AIEstimate";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/umzugsroute/:route" element={<RouteLanding />} />
               <Route path="/angebot-erstellen" element={<CreateQuote />} />
               <Route path="/verfuegbarkeit" element={<Verfuegbarkeit />} />
+              <Route path="/ki-schaetzung" element={<AIEstimate />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
