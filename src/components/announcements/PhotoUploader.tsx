@@ -10,7 +10,7 @@ interface PhotoUploaderProps {
   maxPhotos?: number;
 }
 
-const PhotoUploader = ({ photos, onChange, maxPhotos = 5 }: PhotoUploaderProps) => {
+const PhotoUploader = ({ photos, onChange, maxPhotos = 50 }: PhotoUploaderProps) => {
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
