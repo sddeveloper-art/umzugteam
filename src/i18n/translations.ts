@@ -424,6 +424,7 @@ export const translations = {
   "dashboard.tabQuotes": { de: "Angebote", fr: "Devis" },
   "dashboard.tabReferral": { de: "Empfehlung", fr: "Parrainage" },
   "dashboard.viewBids": { de: "Angebote ansehen", fr: "Voir les offres" },
+  "dashboard.newBidReceived": { de: "Neues Angebot erhalten!", fr: "Nouvelle offre reçue !" },
 
   // ===== ANNOUNCEMENTS PAGE =====
   "ann.title": { de: "Umzugsanfragen & Angebote", fr: "Demandes de déménagement & Offres" },
