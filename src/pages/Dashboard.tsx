@@ -27,6 +27,7 @@ interface Announcement {
   preferred_date: string | null;
   volume: number;
   floor: number;
+  photos: string[] | null;
 }
 
 interface Bid {
@@ -61,7 +62,7 @@ const Dashboard = () => {
         supabase.from("profiles").select("*").eq("user_id", user.id).single(),
         supabase.from("client_quotes").select("*").order("created_at", { ascending: false }),
         supabase.from("referral_codes").select("*").eq("user_id", user.id).single(),
-        supabase.from("moving_announcements").select("id, from_city, to_city, apartment_size, status, end_date, created_at, preferred_date, volume, floor").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("moving_announcements").select("id, from_city, to_city, apartment_size, status, end_date, created_at, preferred_date, volume, floor, photos").eq("user_id", user.id).order("created_at", { ascending: false }),
       ]);
 
       if (profileRes.data) setProfile({ full_name: profileRes.data.full_name || "", phone: profileRes.data.phone || "" });
@@ -256,7 +257,22 @@ const Dashboard = () => {
                         </div>
 
                         {isExpanded && (
-                          <div className="border-t border-border px-5 py-4">
+                          <div className="border-t border-border px-5 py-4 space-y-4">
+                            {/* Photos */}
+                            {a.photos && a.photos.length > 0 && (
+                              <div>
+                                <h3 className="text-sm font-semibold text-foreground mb-2">📷 Fotos ({a.photos.length})</h3>
+                                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                  {(a.photos as string[]).map((url, i) => (
+                                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="aspect-square rounded-lg overflow-hidden border border-border hover:ring-2 ring-accent transition-all">
+                                      <img src={url} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
+                                    </a>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Bids */}
                             {bids.length === 0 ? (
                               <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.noBids")}</p>
                             ) : (

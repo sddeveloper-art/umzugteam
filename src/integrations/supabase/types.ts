@@ -346,6 +346,7 @@ export type Database = {
           needs_assembly: boolean
           needs_packing: boolean
           notification_sent: boolean
+          photos: Json | null
           preferred_date: string | null
           start_date: string
           status: Database["public"]["Enums"]["announcement_status"]
@@ -371,6 +372,7 @@ export type Database = {
           needs_assembly?: boolean
           needs_packing?: boolean
           notification_sent?: boolean
+          photos?: Json | null
           preferred_date?: string | null
           start_date?: string
           status?: Database["public"]["Enums"]["announcement_status"]
@@ -396,6 +398,7 @@ export type Database = {
           needs_assembly?: boolean
           needs_packing?: boolean
           notification_sent?: boolean
+          photos?: Json | null
           preferred_date?: string | null
           start_date?: string
           status?: Database["public"]["Enums"]["announcement_status"]

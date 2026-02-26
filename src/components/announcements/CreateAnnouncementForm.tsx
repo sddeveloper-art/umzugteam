@@ -34,6 +34,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useCreateAnnouncement } from "@/hooks/useAnnouncements";
 import MovingItemsPicker, { MovingItem, calculateEstimatedVolume } from "./MovingItemsPicker";
+import PhotoUploader from "./PhotoUploader";
 
 const formSchema = z.object({
   client_name: z.string().min(2, "Name muss mindestens 2 Zeichen haben").max(100),
@@ -86,6 +87,7 @@ interface CreateAnnouncementFormProps {
 const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [movingItems, setMovingItems] = useState<MovingItem[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const createAnnouncement = useCreateAnnouncement();
 
   const handleItemsChange = (newItems: MovingItem[]) => {
@@ -142,10 +144,12 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
         description: data.description || undefined,
         end_date: endDate.toISOString(),
         items: movingItems.length > 0 ? movingItems : undefined,
+        photos: photos.length > 0 ? photos : undefined,
       });
 
       form.reset();
       setMovingItems([]);
+      setPhotos([]);
       onSuccess?.();
     } finally {
       setIsSubmitting(false);
@@ -360,6 +364,8 @@ const CreateAnnouncementForm = ({ onSuccess }: CreateAnnouncementFormProps) => {
           />
 
           <MovingItemsPicker items={movingItems} onChange={handleItemsChange} />
+
+          <PhotoUploader photos={photos} onChange={setPhotos} />
 
           <FormField
             control={form.control}
