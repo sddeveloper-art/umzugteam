@@ -1,10 +1,11 @@
 import { useState, useMemo, useCallback, useEffect, forwardRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
-import { MapPin, Navigation, ArrowRight, Truck, Clock, Euro, Loader2, LocateFixed } from "lucide-react";
+import { Navigation, ArrowRight, Truck, Clock, Euro, Loader2, LocateFixed } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+import type { AddressResult } from "@/hooks/useAddressSearch";
 import * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -149,8 +150,6 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
     const [toSearch, setToSearch] = useState("");
     const [fromCity, setFromCity] = useState<City | null>(null);
     const [toCity, setToCity] = useState<City | null>(null);
-    const [showFromSuggestions, setShowFromSuggestions] = useState(false);
-    const [showToSuggestions, setShowToSuggestions] = useState(false);
     const [isCalculating, setIsCalculating] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
 
@@ -190,7 +189,6 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
           
           setFromCity(nearestCity);
           setFromSearch(nearestCity.name);
-          setShowFromSuggestions(false);
           setIsLocating(false);
 
           toast({
@@ -220,21 +218,6 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
       );
     }, [findNearestCity]);
 
-    // Filter cities based on search
-    const filteredFromCities = useMemo(() => {
-      if (!fromSearch.trim()) return germanCities;
-      return germanCities.filter((c) =>
-        c.name.toLowerCase().includes(fromSearch.toLowerCase())
-      );
-    }, [fromSearch]);
-
-    const filteredToCities = useMemo(() => {
-      if (!toSearch.trim()) return germanCities;
-      return germanCities.filter((c) =>
-        c.name.toLowerCase().includes(toSearch.toLowerCase())
-      );
-    }, [toSearch]);
-
     // Route calculation
     const routeData = useMemo((): RouteData | null => {
       if (!fromCity || !toCity) return null;
@@ -251,18 +234,6 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
         estimatedPrice,
       };
     }, [fromCity, toCity]);
-
-    const handleSelectFrom = useCallback((city: City) => {
-      setFromCity(city);
-      setFromSearch(city.name);
-      setShowFromSuggestions(false);
-    }, []);
-
-    const handleSelectTo = useCallback((city: City) => {
-      setToCity(city);
-      setToSearch(city.name);
-      setShowToSuggestions(false);
-    }, []);
 
     const handleCalculateRoute = useCallback(() => {
       if (!routeData) return;
@@ -336,22 +307,33 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
         <div className="p-4 sm:p-6 space-y-4">
           {/* City inputs */}
           <div className="grid sm:grid-cols-2 gap-4">
-            {/* From City */}
-            <div className="relative">
+            {/* From Address */}
+            <div>
               <Label className="flex items-center gap-2 mb-2">
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 Abholort
               </Label>
               <div className="flex gap-2">
-                <Input
+                <AddressAutocomplete
                   value={fromSearch}
-                  onChange={(e) => {
-                    setFromSearch(e.target.value);
-                    setShowFromSuggestions(true);
-                    if (!e.target.value) setFromCity(null);
+                  onChange={(val) => {
+                    setFromSearch(val);
+                    if (!val) setFromCity(null);
                   }}
-                  onFocus={() => setShowFromSuggestions(true)}
-                  placeholder="Stadt eingeben..."
+                  onSelect={(result: AddressResult) => {
+                    const city: City = {
+                      name: result.address.city || result.display_name.split(",")[0],
+                      lat: result.lat,
+                      lng: result.lng,
+                    };
+                    setFromCity(city);
+                    setFromSearch(
+                      result.address.city
+                        ? `${result.address.road ? result.address.road + (result.address.house_number ? " " + result.address.house_number + ", " : ", ") : ""}${result.address.postcode ? result.address.postcode + " " : ""}${result.address.city}`
+                        : result.display_name.split(",").slice(0, 2).join(",")
+                    );
+                  }}
+                  placeholder="Adresse oder Stadt eingeben..."
                   className="flex-1"
                 />
                 <Button
@@ -370,55 +352,35 @@ const RouteMapCalculator = forwardRef<HTMLDivElement, RouteMapCalculatorProps>(
                   )}
                 </Button>
               </div>
-              {showFromSuggestions && filteredFromCities.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                  {filteredFromCities.slice(0, 8).map((city) => (
-                    <button
-                      key={city.name}
-                      type="button"
-                      onClick={() => handleSelectFrom(city)}
-                      className="w-full px-4 py-2 text-left hover:bg-accent/10 text-sm flex items-center gap-2"
-                    >
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
-                      {city.name}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* To City */}
-            <div className="relative">
+            {/* To Address */}
+            <div>
               <Label className="flex items-center gap-2 mb-2">
                 <div className="w-3 h-3 rounded-full bg-red-500" />
                 Zielort
               </Label>
-              <Input
+              <AddressAutocomplete
                 value={toSearch}
-                onChange={(e) => {
-                  setToSearch(e.target.value);
-                  setShowToSuggestions(true);
-                  if (!e.target.value) setToCity(null);
+                onChange={(val) => {
+                  setToSearch(val);
+                  if (!val) setToCity(null);
                 }}
-                onFocus={() => setShowToSuggestions(true)}
-                placeholder="Stadt eingeben..."
-                className="w-full"
+                onSelect={(result: AddressResult) => {
+                  const city: City = {
+                    name: result.address.city || result.display_name.split(",")[0],
+                    lat: result.lat,
+                    lng: result.lng,
+                  };
+                  setToCity(city);
+                  setToSearch(
+                    result.address.city
+                      ? `${result.address.road ? result.address.road + (result.address.house_number ? " " + result.address.house_number + ", " : ", ") : ""}${result.address.postcode ? result.address.postcode + " " : ""}${result.address.city}`
+                      : result.display_name.split(",").slice(0, 2).join(",")
+                  );
+                }}
+                placeholder="Adresse oder Stadt eingeben..."
               />
-              {showToSuggestions && filteredToCities.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                  {filteredToCities.slice(0, 8).map((city) => (
-                    <button
-                      key={city.name}
-                      type="button"
-                      onClick={() => handleSelectTo(city)}
-                      className="w-full px-4 py-2 text-left hover:bg-accent/10 text-sm flex items-center gap-2"
-                    >
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
-                      {city.name}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
