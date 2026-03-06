@@ -80,6 +80,7 @@ const Header = () => {
   const directLinks = [
     { label: t("nav.checklist"), href: "/checkliste", isRoute: true },
     { label: t("nav.requests"), href: "/anfragen", isRoute: true },
+    { label: "Transporteure", href: "/transporteure", isRoute: true },
   ];
 
   return (

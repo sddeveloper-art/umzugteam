@@ -29,6 +29,11 @@ import RouteLanding from "./pages/RouteLanding";
 import CreateQuote from "./pages/CreateQuote";
 import Verfuegbarkeit from "./pages/Verfuegbarkeit";
 import AIEstimate from "./pages/AIEstimate";
+import TransporterAuth from "./pages/TransporterAuth";
+import TransporterDashboard from "./pages/TransporterDashboard";
+import TransporterProfile from "./pages/TransporterProfile";
+import TransporterList from "./pages/TransporterList";
+import DeliverySearch from "./pages/DeliverySearch";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
@@ -65,6 +70,11 @@ const App = () => (
               <Route path="/angebot-erstellen" element={<CreateQuote />} />
               <Route path="/verfuegbarkeit" element={<Verfuegbarkeit />} />
               <Route path="/ki-schaetzung" element={<AIEstimate />} />
+              <Route path="/transporteur/auth" element={<TransporterAuth />} />
+              <Route path="/transporteur/dashboard" element={<TransporterDashboard />} />
+              <Route path="/transporteur/:id" element={<TransporterProfile />} />
+              <Route path="/transporteure" element={<TransporterList />} />
+              <Route path="/lieferungen-suchen" element={<DeliverySearch />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
