@@ -8,7 +8,7 @@ import { useI18n } from "@/hooks/useI18n";
 interface Message { role: "user" | "bot"; content: string }
 
 const ChatBot = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "bot", content: t("chat.greeting") },
@@ -16,8 +16,17 @@ const ChatBot = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const prevLangRef = useRef(language);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  // Reset greeting when language changes
+  useEffect(() => {
+    if (prevLangRef.current !== language) {
+      prevLangRef.current = language;
+      setMessages([{ role: "bot", content: t("chat.greeting") }]);
+    }
+  }, [language, t]);
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
@@ -26,7 +35,9 @@ const ChatBot = () => {
     setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("chat-bot", { body: { message: userMsg } });
+      const { data, error } = await supabase.functions.invoke("chat-bot", {
+        body: { message: userMsg, language },
+      });
       if (error) throw error;
       setMessages((prev) => [...prev, { role: "bot", content: data.reply }]);
     } catch {
