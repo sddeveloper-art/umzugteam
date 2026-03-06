@@ -165,6 +165,7 @@ export type Database = {
           id: string
           notes: string | null
           price: number
+          transporter_id: string | null
           updated_at: string
         }
         Insert: {
@@ -176,6 +177,7 @@ export type Database = {
           id?: string
           notes?: string | null
           price: number
+          transporter_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -187,6 +189,7 @@ export type Database = {
           id?: string
           notes?: string | null
           price?: number
+          transporter_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -202,6 +205,20 @@ export type Database = {
             columns: ["announcement_id"]
             isOneToOne: false
             referencedRelation: "moving_announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_bids_transporter_id_fkey"
+            columns: ["transporter_id"]
+            isOneToOne: false
+            referencedRelation: "transporters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_bids_transporter_id_fkey"
+            columns: ["transporter_id"]
+            isOneToOne: false
+            referencedRelation: "transporters_public"
             referencedColumns: ["id"]
           },
         ]
@@ -387,6 +404,7 @@ export type Database = {
       moving_announcements: {
         Row: {
           apartment_size: string
+          category: Database["public"]["Enums"]["transport_category"]
           client_email: string
           client_name: string
           client_phone: string | null
@@ -413,6 +431,7 @@ export type Database = {
         }
         Insert: {
           apartment_size: string
+          category?: Database["public"]["Enums"]["transport_category"]
           client_email: string
           client_name: string
           client_phone?: string | null
@@ -439,6 +458,7 @@ export type Database = {
         }
         Update: {
           apartment_size?: string
+          category?: Database["public"]["Enums"]["transport_category"]
           client_email?: string
           client_name?: string
           client_phone?: string | null
@@ -695,6 +715,63 @@ export type Database = {
         }
         Relationships: []
       }
+      transporters: {
+        Row: {
+          categories: Database["public"]["Enums"]["transport_category"][]
+          city: string | null
+          company_name: string
+          completed_deliveries: number
+          contact_name: string
+          country: string
+          created_at: string
+          description: string | null
+          email: string
+          id: string
+          is_active: boolean
+          is_verified: boolean
+          logo_url: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          categories?: Database["public"]["Enums"]["transport_category"][]
+          city?: string | null
+          company_name: string
+          completed_deliveries?: number
+          contact_name: string
+          country?: string
+          created_at?: string
+          description?: string | null
+          email: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          categories?: Database["public"]["Enums"]["transport_category"][]
+          city?: string | null
+          company_name?: string
+          completed_deliveries?: number
+          contact_name?: string
+          country?: string
+          created_at?: string
+          description?: string | null
+          email?: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -721,6 +798,7 @@ export type Database = {
       announcements_public: {
         Row: {
           apartment_size: string | null
+          category: Database["public"]["Enums"]["transport_category"] | null
           created_at: string | null
           end_date: string | null
           floor: number | null
@@ -740,6 +818,7 @@ export type Database = {
         }
         Insert: {
           apartment_size?: string | null
+          category?: Database["public"]["Enums"]["transport_category"] | null
           created_at?: string | null
           end_date?: string | null
           floor?: number | null
@@ -759,6 +838,7 @@ export type Database = {
         }
         Update: {
           apartment_size?: string | null
+          category?: Database["public"]["Enums"]["transport_category"] | null
           created_at?: string | null
           end_date?: string | null
           floor?: number | null
@@ -841,6 +921,24 @@ export type Database = {
         }
         Relationships: []
       }
+      transporters_public: {
+        Row: {
+          avg_rating: number | null
+          categories: Database["public"]["Enums"]["transport_category"][] | null
+          city: string | null
+          company_name: string | null
+          completed_deliveries: number | null
+          contact_name: string | null
+          country: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_verified: boolean | null
+          logo_url: string | null
+          total_ratings: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_webhook_secret: { Args: never; Returns: string }
@@ -854,7 +952,18 @@ export type Database = {
     }
     Enums: {
       announcement_status: "active" | "expired" | "completed"
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "transporter"
+      transport_category:
+        | "demenagement"
+        | "meubles"
+        | "voitures"
+        | "motos"
+        | "palettes"
+        | "colis"
+        | "fret"
+        | "animaux"
+        | "autres_vehicules"
+        | "autres"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -983,7 +1092,19 @@ export const Constants = {
   public: {
     Enums: {
       announcement_status: ["active", "expired", "completed"],
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "transporter"],
+      transport_category: [
+        "demenagement",
+        "meubles",
+        "voitures",
+        "motos",
+        "palettes",
+        "colis",
+        "fret",
+        "animaux",
+        "autres_vehicules",
+        "autres",
+      ],
     },
   },
 } as const
