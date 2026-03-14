@@ -319,6 +319,7 @@ const Dashboard = () => {
                                 {bids.map((b, i) => {
                                   const isWinner = a.winner_bid_id === b.id;
                                   const canRate = a.status === "completed" && isWinner && !ratings[a.id] && user;
+                                  const canAccept = a.status === "active" && !a.winner_bid_id && user;
                                   return (
                                     <div key={b.id} className={`flex items-center justify-between p-3 rounded-xl ${isWinner ? "bg-accent/5 ring-1 ring-accent/20" : i === 0 ? "bg-accent/5 ring-1 ring-accent/20" : "bg-secondary"}`}>
                                       <div>
@@ -329,6 +330,20 @@ const Dashboard = () => {
                                         {b.notes && <p className="text-xs text-muted-foreground mt-0.5">{b.notes}</p>}
                                       </div>
                                       <div className="flex items-center gap-3">
+                                        {canAccept && (
+                                          <AcceptBidDialog
+                                            announcementId={a.id}
+                                            bidId={b.id}
+                                            companyName={b.company_name}
+                                            price={b.price}
+                                            onAccepted={() => {
+                                              // Refresh announcements
+                                              setAnnouncements(prev => prev.map(ann =>
+                                                ann.id === a.id ? { ...ann, status: "completed" as const, winner_bid_id: b.id } : ann
+                                              ));
+                                            }}
+                                          />
+                                        )}
                                         {canRate && (
                                           <RateCompanyDialog
                                             announcementId={a.id}
@@ -336,7 +351,6 @@ const Dashboard = () => {
                                             companyName={b.company_name}
                                             userId={user!.id}
                                             onRated={() => {
-                                              // Refresh ratings
                                               supabase.from("company_ratings").select("id, announcement_id, rating, comment, company_name").eq("user_id", user!.id).then(({ data }) => {
                                                 if (data) {
                                                   const rm: Record<string, CompanyRating> = {};
