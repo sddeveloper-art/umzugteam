@@ -10,6 +10,8 @@ import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
 import QuoteSection from "@/components/sections/QuoteSection";
 import PriceComparisonSection from "@/components/sections/PriceComparisonSection";
+import RecentDeliveriesSection from "@/components/sections/RecentDeliveriesSection";
+import TopTransportersSection from "@/components/sections/TopTransportersSection";
 
 const Index = () => {
   return (
