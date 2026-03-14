@@ -46,7 +46,8 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const location = useLocation();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const de = language === "de";
 
   const navGroups: NavGroup[] = [
     {
@@ -78,10 +79,12 @@ const Header = () => {
   ];
 
   const directLinks = [
+    { label: de ? "So funktioniert's" : "Comment ça marche", href: "/so-funktionierts", isRoute: true },
     { label: t("nav.checklist"), href: "/checkliste", isRoute: true },
     { label: t("nav.requests"), href: "/anfragen", isRoute: true },
     { label: "Transporteure", href: "/transporteure", isRoute: true },
   ];
+
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">

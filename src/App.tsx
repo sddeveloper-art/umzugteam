@@ -34,6 +34,7 @@ import TransporterDashboard from "./pages/TransporterDashboard";
 import TransporterProfile from "./pages/TransporterProfile";
 import TransporterList from "./pages/TransporterList";
 import DeliverySearch from "./pages/DeliverySearch";
+import HowItWorks from "./pages/HowItWorks";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="/transporteur/:id" element={<TransporterProfile />} />
               <Route path="/transporteure" element={<TransporterList />} />
               <Route path="/lieferungen-suchen" element={<DeliverySearch />} />
+              <Route path="/so-funktionierts" element={<HowItWorks />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
