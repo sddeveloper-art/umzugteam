@@ -16,6 +16,7 @@ import type { User as SupaUser } from "@supabase/supabase-js";
 import { useI18n } from "@/hooks/useI18n";
 import { formatTimeRemaining } from "@/hooks/useAnnouncements";
 import RateCompanyDialog from "@/components/announcements/RateCompanyDialog";
+import AcceptBidDialog from "@/components/announcements/AcceptBidDialog";
 
 interface Announcement {
   id: string;
