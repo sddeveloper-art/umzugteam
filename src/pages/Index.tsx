@@ -67,6 +67,8 @@ const Index = () => {
         <QuoteSection />
         <PriceComparisonSection />
         <AdvantagesSection />
+        <RecentDeliveriesSection />
+        <TopTransportersSection />
         <TestimonialsSection />
         <FAQSection />
         <ContactSection />
