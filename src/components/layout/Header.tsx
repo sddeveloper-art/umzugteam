@@ -46,7 +46,8 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const location = useLocation();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
+  const de = language === "de";
 
   const navGroups: NavGroup[] = [
     {
