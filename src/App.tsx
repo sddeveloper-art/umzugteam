@@ -34,6 +34,7 @@ import TransporterDashboard from "./pages/TransporterDashboard";
 import TransporterProfile from "./pages/TransporterProfile";
 import TransporterList from "./pages/TransporterList";
 import DeliverySearch from "./pages/DeliverySearch";
+import HowItWorks from "./pages/HowItWorks";
 import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient();
